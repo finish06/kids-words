@@ -46,6 +46,7 @@ docker-compose.override.yml
 .coverage
 htmlcov/
 .pytest_cache/
+*.db
 
 # ADD — ephemeral artifacts (don't commit)
 .add/away-logs/
