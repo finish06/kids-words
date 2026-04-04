@@ -14,23 +14,29 @@
 > **Humans:** Review with `/add:retro --agent-summary` or during full `/add:retro`.
 
 ## Technical Discoveries
-<!-- Things learned about the tech stack, libraries, APIs, infrastructure -->
-<!-- Format: - {date}: {discovery}. Source: {how we learned this}. -->
+- 2026-04-04: OpenMoji CDN correct path is `cdn.jsdelivr.net/gh/hfg-gmuend/openmoji/color/618x618/{code}.png` — the npm path (`cdn.jsdelivr.net/npm/openmoji@15.1/`) returns 404. Source: trial and error with curl.
+- 2026-04-04: SQLAlchemy `Word.results` relationship needs explicit `foreign_keys` when MatchResult has two FKs to words table. Source: mapper configuration error on first test run.
+- 2026-04-04: Playwright E2E tests must live outside the frontend package (project root `tests/e2e/`) — Vitest's `globals: true` contaminates the Playwright runner with `@vitest/expect` Symbol conflicts. Source: runtime error on first Playwright run.
+- 2026-04-04: Hatchling needs `[tool.hatch.build.targets.wheel] packages = ["app"]` when the package name doesn't match the directory name. Source: Docker build failure.
 
 ## Architecture Decisions
-<!-- Decisions made and their rationale -->
-<!-- Format: - {date}: Chose {X} over {Y} because {reason}. -->
+- 2026-04-04: Chose OpenMoji (CC BY-SA 4.0) over Pixabay/Unsplash for word images because emoji style is consistent, colorful, kid-friendly, and requires no API key or local storage.
+- 2026-04-04: Chose `Annotated[AsyncSession, Depends(get_db)]` pattern over bare `Depends()` in route params to satisfy ruff B008 rule.
+- 2026-04-04: Quiz length picker (5/10/20) added client-side — full word list fetched from API, then sliced to chosen length. No backend changes needed.
 
 ## What Worked
-<!-- Patterns, approaches, tools that proved effective -->
+- Away mode: completed Phase 0 + Phase 1 + Phase 2 (24/32 tasks) in a single session
+- OpenMoji CDN for images: zero local storage, instant availability, kid-friendly style
+- Vitest + React Testing Library for frontend unit tests: fast, integrates with Vite config
+- Docker Compose with volume mounts for hot reload during development
 
 ## What Didn't Work
-<!-- Patterns, approaches, tools that caused problems -->
+- `npm ci` in Docker fails when local Node version (v25) differs from container (v22) — lock file incompatibility. Switched to `npm install` in Dockerfile.
+- Port 5432 already in use on dev machine — had to remap postgres to 5433.
+- Vite dev server in Docker needs explicit `host: '0.0.0.0'` in config + `usePolling: true` for file watching.
 
 ## Agent Checkpoints
-<!-- Automatic entries from verification, TDD cycles, deploys, away sessions -->
-<!-- These are processed and archived during /add:retro -->
+- 2026-04-04 [cycle-1 complete]: Frontend tests + E2E. 27 unit tests (84% coverage) + 6 E2E tests. All quality gates passing. Backend 19 tests at 90% — no regressions. Cycle completed in ~2 hours vs 3-4 hour budget. Remaining for M1: CI/CD pipeline.
 
 ## Profile Update Candidates
-<!-- Cross-project patterns flagged for promotion to ~/.claude/add/profile.md -->
-<!-- Only promoted during /add:retro with human confirmation -->
+- Playwright E2E tests must be isolated from Vitest globals — separate directory, separate config. Applies to any project using Vite + Vitest + Playwright together.
