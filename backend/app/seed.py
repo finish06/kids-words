@@ -94,10 +94,7 @@ async def seed(db_url: str | None = None) -> None:
                 total_words += 1
 
         await session.commit()
-        print(
-            f"Seeded {len(SEED_DATA)} categories "
-            f"with {total_words} words."
-        )
+        print(f"Seeded {len(SEED_DATA)} categories with {total_words} words.")
 
     await engine.dispose()
 

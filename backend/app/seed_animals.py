@@ -131,7 +131,9 @@ for word, code in ANIMALS:
         _seen.add(word)
         ANIMALS_UNIQUE.append((word, code))
 
-OPENMOJI_CDN = "https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji/color/618x618/{code}.png"
+OPENMOJI_CDN = (
+    "https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji/color/618x618/{code}.png"
+)
 
 
 def get_image_url(emoji_code: str) -> str:
