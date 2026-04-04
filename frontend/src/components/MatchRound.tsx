@@ -5,6 +5,42 @@ import { useRound } from "../hooks/useRound";
 import type { CategoryDetail, Word } from "../types";
 import { RoundComplete } from "./RoundComplete";
 
+const QUIZ_LENGTHS = [5, 10, 20] as const;
+
+function QuizLengthPicker({
+  categoryName,
+  maxWords,
+  onPick,
+  onBack,
+}: {
+  categoryName: string;
+  maxWords: number;
+  onPick: (count: number) => void;
+  onBack: () => void;
+}) {
+  return (
+    <div className="quiz-picker">
+      <button className="back-button" onClick={onBack}>
+        ← Back
+      </button>
+      <h1 className="picker-title">{categoryName}</h1>
+      <p className="picker-subtitle">How many words?</p>
+      <div className="picker-options">
+        {QUIZ_LENGTHS.map((count) => (
+          <button
+            key={count}
+            className="picker-button"
+            onClick={() => onPick(count)}
+            disabled={count > maxWords}
+          >
+            {count}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function MatchGame({
   words,
   category,
@@ -95,7 +131,8 @@ function MatchGame({
 
 export function MatchRound() {
   const { slug } = useParams<{ slug: string }>();
-  const [words, setWords] = useState<Word[]>([]);
+  const [allWords, setAllWords] = useState<Word[]>([]);
+  const [quizWords, setQuizWords] = useState<Word[] | null>(null);
   const [category, setCategory] = useState<CategoryDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -105,7 +142,7 @@ export function MatchRound() {
     if (!slug) return;
     getCategoryWords(slug)
       .then((data) => {
-        setWords(data.words);
+        setAllWords(data.words);
         setCategory(data.category);
         setLoading(false);
       })
@@ -134,5 +171,19 @@ export function MatchRound() {
     );
   }
 
-  return <MatchGame words={words} category={category} />;
+  if (!quizWords) {
+    return (
+      <QuizLengthPicker
+        categoryName={category.name}
+        maxWords={allWords.length}
+        onPick={(count) => {
+          const shuffled = [...allWords].sort(() => Math.random() - 0.5);
+          setQuizWords(shuffled.slice(0, count));
+        }}
+        onBack={() => navigate("/")}
+      />
+    );
+  }
+
+  return <MatchGame words={quizWords} category={category} />;
 }
