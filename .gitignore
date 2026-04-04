@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Vite
+dist/
+
+# Capacitor
+ios/App/Pods/
+ios/.symlinks/
+
+# Environment
+.env
+.env.local
+.env.staging
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ADD — ephemeral artifacts (don't commit)
+.add/away-logs/
+tests/screenshots/errors/
+
+# ADD — these SHOULD be committed (don't ignore)
+# .add/config.json
+# .add/learnings.md
+# .add/retros/
+# specs/
+# docs/plans/
+# tests/screenshots/{feature}/
