@@ -1,6 +1,7 @@
 """Seed the database with initial word categories and words."""
 
 import asyncio
+from typing import Any
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import (
@@ -13,11 +14,11 @@ from app.config import settings
 from app.models import Base, Category, Word
 from app.seed_animals import ANIMALS_UNIQUE, get_image_url
 
-SEED_DATA = [
+SEED_DATA: list[dict[str, Any]] = [
     {
         "name": "Animals",
         "slug": "animals",
-        "icon_url": get_image_url("1F43B"),  # bear emoji
+        "icon_url": get_image_url("1F43B"),
         "display_order": 1,
         "words": [
             {"text": word, "image_url": get_image_url(code)}
@@ -27,7 +28,7 @@ SEED_DATA = [
     {
         "name": "Colors",
         "slug": "colors",
-        "icon_url": get_image_url("1F308"),  # rainbow
+        "icon_url": get_image_url("1F308"),
         "display_order": 2,
         "words": [
             {"text": "RED", "image_url": get_image_url("1F534")},
@@ -45,7 +46,7 @@ SEED_DATA = [
     {
         "name": "Food",
         "slug": "food",
-        "icon_url": get_image_url("1F34E"),  # apple
+        "icon_url": get_image_url("1F34E"),
         "display_order": 3,
         "words": [
             {"text": "APPLE", "image_url": get_image_url("1F34E")},
