@@ -264,6 +264,13 @@ body {
   object-fit: contain;
 }
 
+.color-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 .fallback {
   font-size: 1.3rem;
   font-weight: 700;
