@@ -1,5 +1,15 @@
 import { describe, expect, it, vi } from "vitest";
-import { getCategories, getCategoryWords, postResult } from "../client";
+import {
+  getActiveProfileId,
+  getCategories,
+  getCategoryProgress,
+  getCategoryWords,
+  getProfiles,
+  postResult,
+  setActiveProfile,
+  setupPin,
+  verifyPin,
+} from "../client";
 
 const mockFetch = vi.fn();
 globalThis.fetch = mockFetch;
@@ -7,6 +17,7 @@ globalThis.fetch = mockFetch;
 describe("API client", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    setActiveProfile(null);
   });
 
   it("getCategories fetches from /api/categories", async () => {
@@ -21,12 +32,14 @@ describe("API client", () => {
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining("/api/categories"),
       expect.objectContaining({
-        headers: { "Content-Type": "application/json" },
+        headers: expect.objectContaining({
+          "Content-Type": "application/json",
+        }),
       }),
     );
   });
 
-  it("getCategoryWords fetches from /api/categories/{slug}/words", async () => {
+  it("getCategoryWords fetches words for a slug", async () => {
     const data = { category: { id: "1" }, words: [] };
     mockFetch.mockResolvedValue({
       ok: true,
@@ -70,5 +83,83 @@ describe("API client", () => {
     });
 
     await expect(getCategories()).rejects.toThrow("API error: 404 Not Found");
+  });
+
+  it("setActiveProfile sets X-Profile-ID header", async () => {
+    setActiveProfile("profile-123");
+    expect(getActiveProfileId()).toBe("profile-123");
+
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ categories: [] }),
+    });
+
+    await getCategories();
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "X-Profile-ID": "profile-123",
+        }),
+      }),
+    );
+  });
+
+  it("getProfiles fetches profiles", async () => {
+    const data = { profiles: [], pin_set: false, max_profiles: 3 };
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(data),
+    });
+
+    const result = await getProfiles();
+    expect(result).toEqual(data);
+  });
+
+  it("setupPin sends POST", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ message: "ok" }),
+    });
+
+    await setupPin("1234");
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining("/api/profiles/setup"),
+      expect.objectContaining({ method: "POST" }),
+    );
+  });
+
+  it("verifyPin returns true on success", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ verified: true }),
+    });
+
+    expect(await verifyPin("1234")).toBe(true);
+  });
+
+  it("verifyPin returns false on failure", async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 401,
+      statusText: "Unauthorized",
+    });
+
+    expect(await verifyPin("9999")).toBe(false);
+  });
+
+  it("getCategoryProgress fetches progress", async () => {
+    const data = {
+      category: { id: "1" },
+      words: [],
+      summary: { total_words: 0, mastered: 0, mastery_percentage: 0 },
+    };
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(data),
+    });
+
+    const result = await getCategoryProgress("animals");
+    expect(result).toEqual(data);
   });
 });
