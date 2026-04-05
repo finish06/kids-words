@@ -55,6 +55,7 @@ function MatchGame({
     selectedId,
     isComplete,
     progress,
+    wordResults,
     handleSelect,
   } = useRound(words);
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ function MatchGame({
     return (
       <RoundComplete
         categoryName={category.name}
+        wordResults={wordResults}
         onPlayAgain={() => window.location.reload()}
         onHome={() => navigate("/")}
       />

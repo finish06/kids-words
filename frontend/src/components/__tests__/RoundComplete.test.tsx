@@ -6,6 +6,10 @@ import { RoundComplete } from "../RoundComplete";
 describe("RoundComplete", () => {
   const defaultProps = {
     categoryName: "Animals",
+    wordResults: [
+      { text: "CAT", starUpdate: { word_id: "1", new_count: 3, new_star_level: 1, just_mastered: false } },
+      { text: "DOG", starUpdate: null },
+    ],
     onPlayAgain: vi.fn(),
     onHome: vi.fn(),
   };
@@ -24,7 +28,7 @@ describe("RoundComplete", () => {
 
   it("displays stars", () => {
     render(<RoundComplete {...defaultProps} />);
-    expect(screen.getByText(/⭐/)).toBeInTheDocument();
+    expect(screen.getByText("⭐ ⭐ ⭐")).toBeInTheDocument();
   });
 
   it("calls onPlayAgain when Play Again is clicked", async () => {
@@ -37,5 +41,22 @@ describe("RoundComplete", () => {
     render(<RoundComplete {...defaultProps} />);
     await userEvent.click(screen.getByText("More Categories"));
     expect(defaultProps.onHome).toHaveBeenCalledOnce();
+  });
+
+  it("shows word summary with stars", () => {
+    render(<RoundComplete {...defaultProps} />);
+    expect(screen.getByText("CAT")).toBeInTheDocument();
+    expect(screen.getByText("DOG")).toBeInTheDocument();
+  });
+
+  it("shows mastery message when words are mastered", () => {
+    const props = {
+      ...defaultProps,
+      wordResults: [
+        { text: "CAT", starUpdate: { word_id: "1", new_count: 7, new_star_level: 3, just_mastered: true } },
+      ],
+    };
+    render(<RoundComplete {...props} />);
+    expect(screen.getByText(/Mastered 1 word/)).toBeInTheDocument();
   });
 });

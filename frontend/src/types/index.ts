@@ -5,6 +5,7 @@ export interface CategorySummary {
   icon_url: string | null;
   display_order: number;
   word_count: number;
+  mastery_percentage?: number;
 }
 
 export interface CategoryListResponse {
@@ -28,6 +29,13 @@ export interface CategoryWordsResponse {
   words: Word[];
 }
 
+export interface StarUpdate {
+  word_id: string;
+  new_count: number;
+  new_star_level: number;
+  just_mastered: boolean;
+}
+
 export interface MatchResultCreate {
   word_id: string;
   selected_word_id: string;
@@ -39,4 +47,44 @@ export interface MatchResultResponse {
   id: string;
   recorded: boolean;
   responded_at: string;
+  star_update: StarUpdate | null;
+}
+
+// Profiles
+
+export interface Profile {
+  id: string;
+  name: string;
+  color: string;
+  is_guest: boolean;
+}
+
+export interface ProfileListResponse {
+  profiles: Profile[];
+  pin_set: boolean;
+  max_profiles: number;
+}
+
+// Progress
+
+export interface WordProgressItem {
+  word_id: string;
+  word_text: string;
+  image_url: string;
+  category_slug: string;
+  first_attempt_correct_count: number;
+  star_level: number;
+  mastered_at: string | null;
+}
+
+export interface ProgressSummary {
+  total_words: number;
+  mastered: number;
+  mastery_percentage: number;
+}
+
+export interface CategoryProgressResponse {
+  category: CategoryDetail;
+  words: WordProgressItem[];
+  summary: ProgressSummary;
 }

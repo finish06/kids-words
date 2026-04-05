@@ -55,16 +55,23 @@ export function CategoryList() {
       <p className="subtitle">Pick a category!</p>
       <div className="categories-grid">
         {categories.map((cat) => (
-          <button
-            key={cat.id}
-            className="category-card"
-            onClick={() => navigate(`/play/${cat.slug}`)}
-          >
-            <span className="category-name">{cat.name}</span>
-            <span className="category-count">
-              {cat.word_count} words
-            </span>
-          </button>
+          <div key={cat.id} className="category-card-wrapper">
+            <button
+              className="category-card"
+              onClick={() => navigate(`/play/${cat.slug}`)}
+            >
+              <span className="category-name">{cat.name}</span>
+              <span className="category-count">
+                {cat.word_count} words
+              </span>
+            </button>
+            <button
+              className="view-words-link"
+              onClick={() => navigate(`/words/${cat.slug}`)}
+            >
+              View Words
+            </button>
+          </div>
         ))}
       </div>
     </div>

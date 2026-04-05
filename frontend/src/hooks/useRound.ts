@@ -1,6 +1,6 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { postResult } from "../api/client";
-import type { Word } from "../types";
+import type { StarUpdate, Word } from "../types";
 
 interface RoundState {
   currentIndex: number;
@@ -28,6 +28,11 @@ function pickOptions(
   return options.sort(() => Math.random() - 0.5);
 }
 
+export interface WordResult {
+  text: string;
+  starUpdate: StarUpdate | null;
+}
+
 export function useRound(words: Word[]) {
   const shuffledWords = useMemo(
     () => [...words].sort(() => Math.random() - 0.5),
@@ -46,6 +51,8 @@ export function useRound(words: Word[]) {
     isComplete: false,
     lastTapTime: 0,
   });
+
+  const wordResultsRef = useRef<WordResult[]>([]);
 
   const currentWord = state.words[state.currentIndex] ?? null;
 
@@ -66,14 +73,33 @@ export function useRound(words: Word[]) {
       }));
 
       if (currentWord) {
-        postResult({
-          word_id: currentWord.id,
-          selected_word_id: selectedWord.id,
-          is_correct: correct,
-          attempt_number: state.attemptNumber,
-        }).catch(() => {
-          // Silently fail — don't interrupt the child's experience
-        });
+        try {
+          const result = await postResult({
+            word_id: currentWord.id,
+            selected_word_id: selectedWord.id,
+            is_correct: correct,
+            attempt_number: state.attemptNumber,
+          });
+
+          if (correct && result.star_update) {
+            wordResultsRef.current.push({
+              text: currentWord.text,
+              starUpdate: result.star_update,
+            });
+          } else if (correct) {
+            wordResultsRef.current.push({
+              text: currentWord.text,
+              starUpdate: null,
+            });
+          }
+        } catch {
+          if (correct) {
+            wordResultsRef.current.push({
+              text: currentWord.text,
+              starUpdate: null,
+            });
+          }
+        }
       }
 
       if (correct) {
@@ -117,6 +143,7 @@ export function useRound(words: Word[]) {
       current: state.currentIndex + 1,
       total: state.words.length,
     },
+    wordResults: wordResultsRef.current,
     handleSelect,
   };
 }
