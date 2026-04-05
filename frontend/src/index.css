@@ -664,16 +664,22 @@ body {
 }
 
 .pin-back {
-  background: none;
-  border: none;
-  color: var(--color-text-light);
-  font-size: 1rem;
+  background: var(--color-card);
+  border: 2px solid #e2e8f0;
+  color: var(--color-text);
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  text-decoration: underline;
   font-family: inherit;
   min-height: 48px;
-  min-width: 48px;
-  padding: 0.5rem 1rem;
+  min-width: 120px;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius);
+  transition: transform 0.15s;
+}
+
+.pin-back:hover {
+  transform: scale(1.05);
 }
 
 /* Profile Management */
