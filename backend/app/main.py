@@ -3,6 +3,7 @@ import platform
 import sys
 import time
 from datetime import UTC, datetime
+from typing import Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -43,11 +44,15 @@ app.include_router(progress_router)
 
 
 @app.get("/api/health")
-async def health() -> dict:
+async def health() -> dict[str, Any]:
     uptime = time.monotonic() - START_MONO
 
     # Check database
-    db_dep = {"name": "database", "status": "healthy", "latency_ms": None}
+    db_dep: dict[str, Any] = {
+        "name": "database",
+        "status": "healthy",
+        "latency_ms": None,
+    }
     try:
         t0 = time.monotonic()
         async with async_session() as session:
@@ -70,7 +75,7 @@ async def health() -> dict:
 
 
 @app.get("/api/version")
-async def version() -> dict:
+async def version() -> dict[str, Any]:
     return {
         "version": APP_VERSION,
         "git_commit": os.environ.get("GIT_COMMIT", "dev"),
