@@ -101,14 +101,15 @@ function App() {
   return (
     <div className="app">
       <div className="app-header">
-        <button className="profile-indicator" onClick={handleSwitchProfile}>
+        <div className="profile-indicator">
           <div
             className="profile-avatar-small"
             style={{ backgroundColor: profileColor }}
           >
             {profileName[0].toUpperCase()}
           </div>
-        </button>
+          <span className="profile-label">{profileName}</span>
+        </div>
         <button className="settings-gear" onClick={() => setScreen("manage")}>
           <Icon name="gear" size={24} />
         </button>
