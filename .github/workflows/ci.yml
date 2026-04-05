@@ -42,7 +42,7 @@ jobs:
         run: . .venv/bin/activate && mypy app/ --ignore-missing-imports
 
       - name: Tests with coverage
-        run: . .venv/bin/activate && pytest tests/ --cov=app --cov-report=term-missing --cov-fail-under=80
+        run: . .venv/bin/activate && PYTHONPATH=. pytest tests/ --cov=app --cov-report=term-missing --cov-fail-under=80
 
   frontend:
     name: Frontend (TypeScript)
