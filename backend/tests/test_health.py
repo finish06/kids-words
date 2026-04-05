@@ -16,9 +16,7 @@ async def test_health_endpoint(client: AsyncClient) -> None:
 async def test_health_has_database_dependency(client: AsyncClient) -> None:
     response = await client.get("/api/health")
     data = response.json()
-    db_dep = next(
-        (d for d in data["dependencies"] if d["name"] == "database"), None
-    )
+    db_dep = next((d for d in data["dependencies"] if d["name"] == "database"), None)
     assert db_dep is not None
     assert db_dep["status"] in ("healthy", "unhealthy")
 
