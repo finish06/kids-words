@@ -47,10 +47,15 @@ jobs:
         run: |
           docker build -f frontend/Dockerfile.prod -t dockerhub.calebdunn.tech/kids-words-frontend:${{ steps.tags.outputs.sha_tag }} frontend/
 
-      - name: Push beta images
+      - name: Push beta + latest images
         run: |
           docker push dockerhub.calebdunn.tech/kids-words-backend:${{ steps.tags.outputs.sha_tag }}
           docker push dockerhub.calebdunn.tech/kids-words-frontend:${{ steps.tags.outputs.sha_tag }}
+
+          docker tag dockerhub.calebdunn.tech/kids-words-backend:${{ steps.tags.outputs.sha_tag }} dockerhub.calebdunn.tech/kids-words-backend:latest
+          docker tag dockerhub.calebdunn.tech/kids-words-frontend:${{ steps.tags.outputs.sha_tag }} dockerhub.calebdunn.tech/kids-words-frontend:latest
+          docker push dockerhub.calebdunn.tech/kids-words-backend:latest
+          docker push dockerhub.calebdunn.tech/kids-words-frontend:latest
 
       - name: Tag and push versioned images
         if: steps.tags.outputs.is_release == 'true'
