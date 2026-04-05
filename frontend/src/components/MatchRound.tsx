@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCategoryWords } from "../api/client";
 import { useRound } from "../hooks/useRound";
 import type { CategoryDetail, Word } from "../types";
+import { ColorCircle, isColorUrl, parseColorHex } from "./ColorCircle";
 import { RoundComplete } from "./RoundComplete";
 
 const QUIZ_LENGTHS = [5, 10, 20] as const;
@@ -107,22 +108,26 @@ function MatchGame({
               onClick={() => handleSelect(option)}
               disabled={isCorrect === true}
             >
-              <img
-                src={option.image_url}
-                alt={option.text}
-                className="card-image"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = "none";
-                  const parent = target.parentElement;
-                  if (parent && !parent.querySelector(".fallback")) {
-                    const fallback = document.createElement("span");
-                    fallback.className = "fallback";
-                    fallback.textContent = option.text;
-                    parent.appendChild(fallback);
-                  }
-                }}
-              />
+              {isColorUrl(option.image_url) ? (
+                <ColorCircle color={parseColorHex(option.image_url)} />
+              ) : (
+                <img
+                  src={option.image_url}
+                  alt={option.text}
+                  className="card-image"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = "none";
+                    const parent = target.parentElement;
+                    if (parent && !parent.querySelector(".fallback")) {
+                      const fallback = document.createElement("span");
+                      fallback.className = "fallback";
+                      fallback.textContent = option.text;
+                      parent.appendChild(fallback);
+                    }
+                  }}
+                />
+              )}
             </button>
           );
         })}

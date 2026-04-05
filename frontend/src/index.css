@@ -22,6 +22,8 @@
 
 html {
   font-size: 18px;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
 }
 
 body {
@@ -30,13 +32,30 @@ body {
   color: var(--color-text);
   min-height: 100dvh;
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   user-select: none;
+  overscroll-behavior: none;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .app {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 1rem;
+  padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+  padding-right: calc(1rem + env(safe-area-inset-right, 0px));
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -74,25 +93,52 @@ body {
 .category-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 2rem 1.5rem;
   background: var(--color-card);
   border: 3px solid var(--color-primary-light);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  cursor: pointer;
+  overflow: hidden;
   transition: transform 0.15s, box-shadow 0.15s;
-  min-height: 120px;
-  min-width: 44px;
-  font-family: inherit;
 }
 
-.category-card:hover,
-.category-card:active {
+.category-card:hover {
   transform: scale(1.03);
   box-shadow: var(--shadow-lg);
+}
+
+.category-play-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  min-height: 140px;
+  min-width: 48px;
+  font-family: inherit;
+  flex: 1;
+}
+
+.category-words-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--color-primary-light);
+  color: white;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  min-height: 48px;
+  transition: background 0.15s;
+}
+
+.category-words-btn:hover {
+  background: var(--color-primary);
 }
 
 .category-name {
@@ -129,8 +175,8 @@ body {
   color: var(--color-primary);
   cursor: pointer;
   padding: 0.5rem;
-  min-width: 44px;
-  min-height: 44px;
+  min-width: 48px;
+  min-height: 48px;
   font-family: inherit;
 }
 
@@ -157,7 +203,7 @@ body {
 }
 
 .word-text {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   color: var(--color-text);
@@ -187,8 +233,8 @@ body {
   cursor: pointer;
   transition: transform 0.15s, border-color 0.15s;
   padding: 1rem;
-  min-height: 150px;
-  min-width: 44px;
+  min-height: 180px;
+  min-width: 48px;
   font-family: inherit;
   overflow: hidden;
 }
@@ -216,6 +262,13 @@ body {
   max-width: 100%;
   max-height: 120px;
   object-fit: contain;
+}
+
+.color-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .fallback {
@@ -256,8 +309,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   font-size: 2.5rem;
   font-weight: 800;
   background: var(--color-card);
@@ -330,8 +383,8 @@ body {
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
-  min-width: 44px;
-  min-height: 44px;
+  min-width: 48px;
+  min-height: 48px;
   font-family: inherit;
   transition: transform 0.15s;
 }
@@ -384,8 +437,8 @@ body {
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
-  min-width: 44px;
-  min-height: 44px;
+  min-width: 48px;
+  min-height: 48px;
   font-family: inherit;
 }
 
@@ -449,15 +502,16 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1.5rem;
+  gap: 0.75rem;
+  padding: 2rem 1.5rem;
   background: var(--color-card);
   border: 3px solid #e2e8f0;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   cursor: pointer;
   transition: transform 0.15s;
-  min-width: 100px;
+  min-width: 140px;
+  min-height: 160px;
   font-family: inherit;
 }
 
@@ -466,8 +520,8 @@ body {
 }
 
 .profile-avatar {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -478,19 +532,27 @@ body {
 }
 
 .profile-name {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 700;
   color: var(--color-text);
 }
 
 .settings-link {
-  background: none;
-  border: none;
-  color: var(--color-text-light);
-  font-size: 0.9rem;
+  background: var(--color-card);
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  text-decoration: underline;
   font-family: inherit;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius);
+  min-height: 48px;
+  transition: transform 0.15s;
+}
+
+.settings-link:hover {
+  transform: scale(1.05);
 }
 
 .profile-indicator {
@@ -527,9 +589,9 @@ body {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  padding: 0.25rem;
-  min-width: 44px;
-  min-height: 44px;
+  padding: 0.5rem;
+  min-width: 48px;
+  min-height: 48px;
   opacity: 0.5;
 }
 
@@ -580,8 +642,8 @@ body {
 }
 
 .pin-key {
-  width: 70px;
-  height: 70px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   border: 2px solid #e2e8f0;
   background: var(--color-card);
@@ -609,14 +671,22 @@ body {
 }
 
 .pin-back {
-  background: none;
-  border: none;
-  color: var(--color-text-light);
-  font-size: 1rem;
+  background: var(--color-card);
+  border: 2px solid #e2e8f0;
+  color: var(--color-text);
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  text-decoration: underline;
   font-family: inherit;
-  min-height: 44px;
+  min-height: 48px;
+  min-width: 120px;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius);
+  transition: transform 0.15s;
+}
+
+.pin-back:hover {
+  transform: scale(1.05);
 }
 
 /* Profile Management */
@@ -640,8 +710,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  min-width: 130px;
 }
 
 .profile-name-input {
@@ -667,8 +741,8 @@ body {
 }
 
 .color-dot {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 3px solid transparent;
   cursor: pointer;
@@ -680,23 +754,7 @@ body {
   transform: scale(1.15);
 }
 
-/* Category Card Wrapper */
-.category-card-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.view-words-link {
-  background: none;
-  border: none;
-  color: var(--color-text-light);
-  font-size: 0.8rem;
-  cursor: pointer;
-  text-decoration: underline;
-  font-family: inherit;
-  padding: 0.25rem;
-}
+/* (category card styles above) */
 
 /* Word List */
 .word-list {
@@ -787,18 +845,24 @@ body {
   animation: mastery-pulse 0.6s ease 2;
 }
 
-/* Tablet responsive */
+/* iPad portrait (768px+) */
 @media (min-width: 768px) {
   html {
     font-size: 20px;
   }
 
   .app {
-    padding: 2rem;
+    padding: 1.5rem;
+    padding-top: calc(1.5rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   .word-text {
-    font-size: 4.5rem;
+    font-size: 4rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .image-grid {
@@ -807,5 +871,54 @@ body {
 
   .image-card {
     min-height: 200px;
+  }
+
+  .word-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .picker-button {
+    width: 140px;
+    height: 140px;
+    font-size: 3rem;
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    font-size: 2.5rem;
+  }
+
+  .pin-key {
+    width: 80px;
+    height: 80px;
+    font-size: 1.8rem;
+  }
+}
+
+/* iPad landscape (1024px+) */
+@media (min-width: 1024px) {
+  html {
+    font-size: 22px;
+  }
+
+  .app {
+    max-width: 1100px;
+  }
+
+  .word-text {
+    font-size: 4.5rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .image-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .word-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }

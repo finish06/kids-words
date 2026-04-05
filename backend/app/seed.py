@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import (
 from app.config import settings
 from app.models import Base, Category, Word
 from app.seed_animals import ANIMALS_UNIQUE, get_image_url
+from app.seed_foods import FOODS_UNIQUE
 
 SEED_DATA: list[dict[str, Any]] = [
     {
@@ -31,16 +32,16 @@ SEED_DATA: list[dict[str, Any]] = [
         "icon_url": get_image_url("1F308"),
         "display_order": 2,
         "words": [
-            {"text": "RED", "image_url": get_image_url("1F534")},
-            {"text": "BLUE", "image_url": get_image_url("1F535")},
-            {"text": "GREEN", "image_url": get_image_url("1F7E2")},
-            {"text": "YELLOW", "image_url": get_image_url("1F7E1")},
-            {"text": "PINK", "image_url": get_image_url("1F338")},
-            {"text": "ORANGE", "image_url": get_image_url("1F7E0")},
-            {"text": "PURPLE", "image_url": get_image_url("1F7E3")},
-            {"text": "BROWN", "image_url": get_image_url("1F7EB")},
-            {"text": "BLACK", "image_url": get_image_url("26AB")},
-            {"text": "WHITE", "image_url": get_image_url("26AA")},
+            {"text": "RED", "image_url": "color://#ef4444"},
+            {"text": "BLUE", "image_url": "color://#3b82f6"},
+            {"text": "GREEN", "image_url": "color://#22c55e"},
+            {"text": "YELLOW", "image_url": "color://#eab308"},
+            {"text": "PINK", "image_url": "color://#ec4899"},
+            {"text": "ORANGE", "image_url": "color://#f97316"},
+            {"text": "PURPLE", "image_url": "color://#8b5cf6"},
+            {"text": "BROWN", "image_url": "color://#92400e"},
+            {"text": "BLACK", "image_url": "color://#1e293b"},
+            {"text": "WHITE", "image_url": "color://#f8fafc"},
         ],
     },
     {
@@ -49,18 +50,8 @@ SEED_DATA: list[dict[str, Any]] = [
         "icon_url": get_image_url("1F34E"),
         "display_order": 3,
         "words": [
-            {"text": "APPLE", "image_url": get_image_url("1F34E")},
-            {"text": "BANANA", "image_url": get_image_url("1F34C")},
-            {"text": "BREAD", "image_url": get_image_url("1F35E")},
-            {"text": "MILK", "image_url": get_image_url("1F95B")},
-            {"text": "EGG", "image_url": get_image_url("1F95A")},
-            {"text": "CAKE", "image_url": get_image_url("1F370")},
-            {"text": "PIZZA", "image_url": get_image_url("1F355")},
-            {"text": "COOKIE", "image_url": get_image_url("1F36A")},
-            {"text": "GRAPE", "image_url": get_image_url("1F347")},
-            {"text": "CORN", "image_url": get_image_url("1F33D")},
-            {"text": "CARROT", "image_url": get_image_url("1F955")},
-            {"text": "CHEESE", "image_url": get_image_url("1F9C0")},
+            {"text": word, "image_url": get_image_url(code)}
+            for word, code in FOODS_UNIQUE
         ],
     },
 ]

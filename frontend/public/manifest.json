@@ -1,0 +1,16 @@
+{
+  "name": "Kids Words",
+  "short_name": "Kids Words",
+  "description": "Word recognition learning app for ages 4-6",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0f4ff",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

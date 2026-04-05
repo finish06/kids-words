@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCategoryProgress } from "../api/client";
 import type { CategoryDetail, WordProgressItem } from "../types";
+import { ColorCircle, isColorUrl, parseColorHex } from "./ColorCircle";
 import { Stars } from "./Stars";
 
 export function WordList() {
@@ -45,14 +46,18 @@ export function WordList() {
       <div className="word-grid">
         {words.map((word) => (
           <div key={word.word_id} className="word-card">
-            <img
-              src={word.image_url}
-              alt={word.word_text}
-              className="word-card-image"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
-            />
+            {isColorUrl(word.image_url) ? (
+              <ColorCircle color={parseColorHex(word.image_url)} />
+            ) : (
+              <img
+                src={word.image_url}
+                alt={word.word_text}
+                className="word-card-image"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
+            )}
             <span className="word-card-text">{word.word_text}</span>
             <Stars level={word.star_level} size="small" />
           </div>

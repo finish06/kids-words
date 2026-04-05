@@ -39,7 +39,9 @@ async def verify_pin(db: AsyncSession, pin: str) -> bool:
 
 
 async def get_or_create_guest(db: AsyncSession) -> Profile:
-    result = await db.execute(select(Profile).where(Profile.is_guest.is_(True)))
+    result = await db.execute(
+        select(Profile).where(Profile.is_guest.is_(True)).limit(1)
+    )
     guest = result.scalar_one_or_none()
     if guest is None:
         guest = Profile(name="Guest", color="#9ca3af", is_guest=True)
