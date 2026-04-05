@@ -37,7 +37,11 @@ jobs:
 
       - name: Build backend image
         run: |
-          docker build -f backend/Dockerfile.prod -t dockerhub.calebdunn.tech/kids-words-backend:${{ steps.tags.outputs.sha_tag }} backend/
+          docker build -f backend/Dockerfile.prod \
+            --build-arg GIT_COMMIT=$(echo ${{ github.sha }} | cut -c1-7) \
+            --build-arg GIT_BRANCH=${{ github.ref_name }} \
+            --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
+            -t dockerhub.calebdunn.tech/kids-words-backend:${{ steps.tags.outputs.sha_tag }} backend/
 
       - name: Build frontend image
         run: |
