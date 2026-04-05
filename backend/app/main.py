@@ -2,12 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes.categories import router as categories_router
+from app.routes.profiles import router as profiles_router
+from app.routes.progress import router as progress_router
 from app.routes.results import router as results_router
 
 app = FastAPI(
     title="Kids Words API",
     description="Word recognition learning app for ages 4-6",
-    version="0.1.0",
+    version="0.2.0",
 )
 
 app.add_middleware(
@@ -24,6 +26,8 @@ app.add_middleware(
 
 app.include_router(categories_router)
 app.include_router(results_router)
+app.include_router(profiles_router)
+app.include_router(progress_router)
 
 
 @app.get("/api/health")
