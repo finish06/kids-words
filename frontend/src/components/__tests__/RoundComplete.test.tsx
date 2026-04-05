@@ -26,9 +26,9 @@ describe("RoundComplete", () => {
     ).toBeInTheDocument();
   });
 
-  it("displays stars", () => {
+  it("displays celebration icon", () => {
     render(<RoundComplete {...defaultProps} />);
-    expect(screen.getByText("⭐ ⭐ ⭐")).toBeInTheDocument();
+    expect(document.querySelector(".celebration-icon")).toBeInTheDocument();
   });
 
   it("calls onPlayAgain when Play Again is clicked", async () => {

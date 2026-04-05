@@ -1,4 +1,5 @@
 import type { StarUpdate } from "../types";
+import { Icon } from "./Icon";
 import { Stars } from "./Stars";
 
 interface RoundCompleteProps {
@@ -21,7 +22,7 @@ export function RoundComplete({
   return (
     <div className="round-complete">
       <div className="celebration">
-        <span className="stars">⭐ ⭐ ⭐</span>
+        <Icon name="sparkles" size={64} className="celebration-icon" />
         <h1 className="great-job">Great Job!</h1>
         <p className="complete-message">
           You finished all the {categoryName} words!
@@ -48,17 +49,18 @@ export function RoundComplete({
 
       {masteredThisRound.length > 0 && (
         <p className="mastery-message">
-          🎉 Mastered {masteredThisRound.length} word
+          <Icon name="party" size={24} className="party-icon" />
+          {" "}Mastered {masteredThisRound.length} word
           {masteredThisRound.length > 1 ? "s" : ""}!
         </p>
       )}
 
       <div className="complete-actions">
         <button className="play-again-button" onClick={onPlayAgain}>
-          Play Again
+          <Icon name="refresh" size={20} /> Play Again
         </button>
         <button className="home-button" onClick={onHome}>
-          More Categories
+          <Icon name="home" size={20} /> More Categories
         </button>
       </div>
     </div>

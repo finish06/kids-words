@@ -4,6 +4,7 @@ import { getCategoryWords } from "../api/client";
 import { useRound } from "../hooks/useRound";
 import type { CategoryDetail, Word } from "../types";
 import { ColorCircle, isColorUrl, parseColorHex } from "./ColorCircle";
+import { Icon } from "./Icon";
 import { RoundComplete } from "./RoundComplete";
 
 const QUIZ_LENGTHS = [5, 10, 20] as const;
@@ -22,7 +23,7 @@ function QuizLengthPicker({
   return (
     <div className="quiz-picker">
       <button className="back-button" onClick={onBack}>
-        ← Back
+        <Icon name="arrow-left" size={20} /> Back
       </button>
       <h1 className="picker-title">{categoryName}</h1>
       <p className="picker-subtitle">How many words?</p>
@@ -78,7 +79,7 @@ function MatchGame({
     <div className="match-round">
       <div className="round-header">
         <button className="back-button" onClick={() => navigate("/")}>
-          ← Back
+          <Icon name="arrow-left" size={20} /> Back
         </button>
         <span className="category-label">{category.name}</span>
         <span className="progress">

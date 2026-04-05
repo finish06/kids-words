@@ -2,6 +2,19 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "../api/client";
 import type { CategorySummary } from "../types";
+import { Icon } from "./Icon";
+
+const CATEGORY_ICONS: Record<string, string> = {
+  animals: "paw",
+  foods: "apple",
+  colors: "palette",
+};
+
+const CATEGORY_ILLUSTRATIONS: Record<string, string> = {
+  animals: "/illustrations/cat-animals.svg",
+  foods: "/illustrations/cat-foods.svg",
+  colors: "/illustrations/cat-colors.svg",
+};
 
 export function CategoryList() {
   const [categories, setCategories] = useState<CategorySummary[]>([]);
@@ -56,10 +69,20 @@ export function CategoryList() {
       <div className="categories-grid">
         {categories.map((cat) => (
           <div key={cat.id} className="category-card">
+            {CATEGORY_ILLUSTRATIONS[cat.slug] && (
+              <img
+                src={CATEGORY_ILLUSTRATIONS[cat.slug]}
+                alt=""
+                className="category-illustration"
+              />
+            )}
             <button
               className="category-play-btn"
               onClick={() => navigate(`/play/${cat.slug}`)}
             >
+              {CATEGORY_ICONS[cat.slug] && (
+                <Icon name={CATEGORY_ICONS[cat.slug]} size={32} className="category-icon" />
+              )}
               <span className="category-name">{cat.name}</span>
               <span className="category-count">
                 {cat.word_count} words
@@ -72,7 +95,7 @@ export function CategoryList() {
                 navigate(`/words/${cat.slug}`);
               }}
             >
-              View Words
+              <Icon name="book" size={16} /> View Words
             </button>
           </div>
         ))}

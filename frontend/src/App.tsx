@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { getProfiles, setActiveProfile } from "./api/client";
 import { CategoryList } from "./components/CategoryList";
+import { Icon } from "./components/Icon";
 import { MatchRound } from "./components/MatchRound";
 import { PinGate } from "./components/PinGate";
 import { ProfileManager } from "./components/ProfileManager";
@@ -109,7 +110,7 @@ function App() {
           </div>
         </button>
         <button className="settings-gear" onClick={() => setScreen("manage")}>
-          ⚙
+          <Icon name="gear" size={24} />
         </button>
       </div>
       <Routes>

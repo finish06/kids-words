@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCategoryProgress } from "../api/client";
 import type { CategoryDetail, WordProgressItem } from "../types";
 import { ColorCircle, isColorUrl, parseColorHex } from "./ColorCircle";
+import { Icon } from "./Icon";
 import { Stars } from "./Stars";
 
 export function WordList() {
@@ -35,7 +36,7 @@ export function WordList() {
     <div className="word-list">
       <div className="round-header">
         <button className="back-button" onClick={() => navigate("/")}>
-          ← Back
+          <Icon name="arrow-left" size={20} /> Back
         </button>
         <span className="category-label">{category?.name} Words</span>
         <span className="progress">

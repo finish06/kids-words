@@ -1,3 +1,5 @@
+import { Icon } from "./Icon";
+
 interface StarsProps {
   level: number;
   size?: "small" | "medium" | "large";
@@ -5,21 +7,20 @@ interface StarsProps {
 }
 
 export function Stars({ level, size = "medium", animated = false }: StarsProps) {
-  const sizes = { small: "1rem", medium: "1.5rem", large: "2rem" };
-  const fontSize = sizes[size];
+  const iconSizes = { small: 16, medium: 24, large: 32 };
+  const iconSize = iconSizes[size];
 
   return (
     <span
       className={`stars-display ${animated && level === 3 ? "mastery-burst" : ""}`}
-      style={{ fontSize }}
     >
       {[1, 2, 3].map((i) => (
-        <span
+        <Icon
           key={i}
+          name={i <= level ? "star-filled" : "star-empty"}
+          size={iconSize}
           className={i <= level ? "star-filled" : "star-empty"}
-        >
-          {i <= level ? "\u2B50" : "\u2606"}
-        </span>
+        />
       ))}
     </span>
   );

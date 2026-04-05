@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none">
+  <!-- Background -->
+  <ellipse cx="100" cy="85" rx="90" ry="65" fill="#f0f4ff" opacity="0.5"/>
+
+  <!-- Rainbow arc -->
+  <g transform="translate(20, 20)">
+    <path d="M0 110 Q80-30 160 110" stroke="#ef4444" stroke-width="14" fill="none" stroke-linecap="round"/>
+    <path d="M8 110 Q80-18 152 110" stroke="#f97316" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M16 110 Q80-6 144 110" stroke="#fbbf24" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M24 110 Q80 6 136 110" stroke="#22c55e" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <path d="M30 110 Q80 16 130 110" stroke="#3b82f6" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M36 110 Q80 24 124 110" stroke="#8b5cf6" stroke-width="7" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Paint splashes -->
+  <circle cx="30" cy="125" r="12" fill="#ef4444" opacity="0.7"/>
+  <circle cx="60" cy="130" r="10" fill="#f97316" opacity="0.7"/>
+  <circle cx="90" cy="128" r="11" fill="#fbbf24" opacity="0.7"/>
+  <circle cx="115" cy="130" r="10" fill="#22c55e" opacity="0.7"/>
+  <circle cx="142" cy="128" r="11" fill="#3b82f6" opacity="0.7"/>
+  <circle cx="170" cy="125" r="12" fill="#8b5cf6" opacity="0.7"/>
+
+  <!-- Paint brush -->
+  <g transform="translate(135, 40) rotate(35)">
+    <!-- Handle -->
+    <rect x="0" y="0" width="8" height="40" rx="2" fill="#d97706"/>
+    <rect x="0" y="0" width="8" height="8" rx="2" fill="#92400e"/>
+    <!-- Ferrule -->
+    <rect x="-1" y="38" width="10" height="6" rx="1" fill="#9ca3af"/>
+    <!-- Bristles -->
+    <path d="M-2 44l-2 14q5 3 14 0l-2-14z" fill="#fbbf24"/>
+    <!-- Paint drip -->
+    <circle cx="4" cy="62" r="3" fill="#8b5cf6"/>
+  </g>
+
+  <!-- Sparkles -->
+  <g fill="white" opacity="0.8">
+    <path d="M50 50l1.5 3 3 1.5-3 1.5L50 59l-1.5-3-3-1.5 3-1.5z"/>
+    <path d="M120 30l1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/>
+    <path d="M80 45l1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/>
+  </g>
+</svg>

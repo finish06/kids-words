@@ -61,6 +61,13 @@ body {
   flex-direction: column;
 }
 
+/* Icons */
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
 /* Category List */
 .category-list {
   display: flex;
@@ -101,6 +108,18 @@ body {
   transition: transform 0.15s, box-shadow 0.15s;
 }
 
+.category-illustration {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  object-position: center;
+  background: linear-gradient(135deg, #f0f4ff 0%, #ede9fe 100%);
+}
+
+.category-icon {
+  color: var(--color-primary);
+}
+
 .category-card:hover {
   transform: scale(1.03);
   box-shadow: var(--shadow-lg);
@@ -123,7 +142,10 @@ body {
 }
 
 .category-words-btn {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
   width: 100%;
   padding: 0.75rem;
   background: var(--color-primary-light);
@@ -168,6 +190,9 @@ body {
 }
 
 .back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   background: none;
   border: none;
   font-size: 1.2rem;
@@ -213,6 +238,7 @@ body {
 .word-text.correct {
   color: var(--color-success);
   transform: scale(1.1);
+  text-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
 }
 
 .image-grid {
@@ -250,12 +276,14 @@ body {
 .image-card.correct {
   border-color: var(--color-success);
   background: #f0fdf4;
-  animation: bounce 0.5s ease;
+  animation: correctPop 0.5s ease;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2), var(--shadow);
 }
 
 .image-card.shake {
   border-color: var(--color-error);
   animation: shake 0.4s ease;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
 }
 
 .card-image {
@@ -352,6 +380,15 @@ body {
   gap: 1rem;
 }
 
+.celebration-icon {
+  animation: bounce 1s infinite;
+  filter: drop-shadow(0 4px 8px rgba(251, 191, 36, 0.4));
+}
+
+.party-icon {
+  vertical-align: -3px;
+}
+
 .stars {
   font-size: 3rem;
   animation: bounce 1s infinite;
@@ -377,6 +414,9 @@ body {
 
 .play-again-button,
 .home-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   padding: 1rem 2rem;
   font-size: 1.2rem;
   font-weight: 700;
@@ -478,6 +518,35 @@ body {
   }
   100% {
     background-position: 200% 0;
+  }
+}
+
+@keyframes correctPop {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.12);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 
@@ -585,14 +654,22 @@ body {
 }
 
 .settings-gear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  font-size: 1.5rem;
   cursor: pointer;
   padding: 0.5rem;
   min-width: 48px;
   min-height: 48px;
-  opacity: 0.5;
+  color: var(--color-text-light);
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.settings-gear:hover {
+  opacity: 1;
 }
 
 /* PIN Screen */
@@ -911,6 +988,11 @@ body {
 
   .categories-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .category-illustration {
+    height: 130px;
   }
 
   .image-grid {
@@ -926,21 +1008,30 @@ body {
   }
 
   .picker-button {
-    width: 140px;
-    height: 140px;
+    width: 160px;
+    height: 160px;
     font-size: 3rem;
   }
 
   .profile-avatar {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
     font-size: 2.5rem;
   }
 
   .pin-key {
+    width: 85px;
+    height: 85px;
+    font-size: 1.8rem;
+  }
+
+  .celebration-icon {
     width: 80px;
     height: 80px;
-    font-size: 1.8rem;
+  }
+
+  .great-job {
+    font-size: 3.5rem;
   }
 }
 
@@ -960,13 +1051,28 @@ body {
 
   .categories-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .category-illustration {
+    height: 150px;
   }
 
   .image-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 
+  .image-card {
+    min-height: 220px;
+  }
+
   .word-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .picker-button {
+    width: 180px;
+    height: 180px;
+    font-size: 3.5rem;
   }
 }

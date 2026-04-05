@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createProfile, deleteProfile, setupPin, updateProfile, verifyPin } from "../api/client";
 import type { Profile } from "../types";
+import { Icon } from "./Icon";
 
 const COLORS = [
   "#3b82f6", // blue
@@ -304,7 +305,7 @@ export function ProfileManager({
           className="play-again-button"
           onClick={() => setStep("add")}
         >
-          + Add Child
+          <Icon name="plus" size={20} /> Add Child
         </button>
       )}
       <button className="home-button" onClick={onDone}>
@@ -329,7 +330,7 @@ function PinPad({
             <div key="empty" className="pin-key empty" />
           ) : key === "←" ? (
             <button key="del" className="pin-key" onClick={onDelete}>
-              ←
+              <Icon name="arrow-left" size={18} />
             </button>
           ) : (
             <button

@@ -92,10 +92,10 @@ describe("MatchRound", () => {
     renderWithRoute();
 
     await waitFor(() => {
-      expect(screen.getByText("← Back")).toBeInTheDocument();
+      expect(document.querySelector(".back-button")).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByText("← Back"));
+    await userEvent.click(document.querySelector(".back-button")!);
 
     await waitFor(() => {
       expect(screen.getByText("Home")).toBeInTheDocument();
