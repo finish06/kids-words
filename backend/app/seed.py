@@ -1,4 +1,10 @@
-"""Seed the database with initial word categories and words."""
+"""Seed the database with initial word categories and words.
+
+Idempotent: safe to run multiple times.
+- Adds missing categories and words
+- Updates image_url if changed
+- Never duplicates or deletes existing data
+"""
 
 import asyncio
 from typing import Any
@@ -11,7 +17,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from app.config import settings
-from app.models import Base, Category, Word
+from app.models import Category, Word
 from app.seed_animals import ANIMALS_UNIQUE, get_image_url
 from app.seed_foods import FOODS_UNIQUE
 
@@ -64,29 +70,70 @@ async def seed(db_url: str | None = None) -> None:
         engine, class_=AsyncSession, expire_on_commit=False
     )
 
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-
     async with session_factory() as session:
-        result = await session.execute(select(Category).limit(1))
-        if result.scalar_one_or_none() is not None:
-            print("Database already seeded, skipping.")
-            return
+        added_cats = 0
+        added_words = 0
+        updated_words = 0
 
-        total_words = 0
         for cat_data in SEED_DATA:
-            words_data = cat_data.pop("words")
-            category = Category(**cat_data)
-            session.add(category)
-            await session.flush()
+            words_data: list[dict[str, str]] = cat_data["words"]
 
+            # Upsert category
+            result = await session.execute(
+                select(Category).where(Category.slug == cat_data["slug"])
+            )
+            category = result.scalar_one_or_none()
+
+            if category is None:
+                category = Category(
+                    name=cat_data["name"],
+                    slug=cat_data["slug"],
+                    icon_url=cat_data["icon_url"],
+                    display_order=cat_data["display_order"],
+                )
+                session.add(category)
+                await session.flush()
+                added_cats += 1
+            else:
+                # Update icon_url if changed
+                if category.icon_url != cat_data["icon_url"]:
+                    category.icon_url = cat_data["icon_url"]
+
+            # Upsert words
             for word_data in words_data:
-                word = Word(**word_data, category_id=category.id)
-                session.add(word)
-                total_words += 1
+                word_result = await session.execute(
+                    select(Word).where(
+                        Word.text == word_data["text"],
+                        Word.category_id == category.id,
+                    )
+                )
+                existing = word_result.scalar_one_or_none()
+
+                if existing is None:
+                    word = Word(
+                        text=word_data["text"],
+                        image_url=word_data["image_url"],
+                        category_id=category.id,
+                    )
+                    session.add(word)
+                    added_words += 1
+                elif existing.image_url != word_data["image_url"]:
+                    existing.image_url = word_data["image_url"]
+                    updated_words += 1
 
         await session.commit()
-        print(f"Seeded {len(SEED_DATA)} categories with {total_words} words.")
+
+        if added_cats == 0 and added_words == 0 and updated_words == 0:
+            print("Database already up to date.")
+        else:
+            parts = []
+            if added_cats:
+                parts.append(f"{added_cats} categories")
+            if added_words:
+                parts.append(f"{added_words} words")
+            if updated_words:
+                parts.append(f"{updated_words} words updated")
+            print(f"Seed complete: {', '.join(parts)}.")
 
     await engine.dispose()
 
