@@ -25,6 +25,7 @@ As a child, I want to tap my name to start playing, so that I see my own stars a
 | AC-003 | Parent can create up to 3 child profiles (name + color) | Must |
 | AC-004 | Each profile displays as a colored circle with the child's initial | Must |
 | AC-005 | Launch screen shows profile picker when profiles exist (name + avatar for each child, plus Guest) | Must |
+| AC-005b | Switching profiles after initial selection requires entering the parent PIN (prevents kids from accessing other kids' profiles) | Must |
 | AC-006 | Selecting a profile loads that child's progress (stars, WordProgress) | Must |
 | AC-007 | All API calls include the active profile ID so progress is scoped per child | Must |
 | AC-008 | Guest progress is stored under a special "guest" profile (no name required) | Must |

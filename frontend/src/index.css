@@ -514,6 +514,172 @@ body {
   box-shadow: var(--shadow);
 }
 
+/* App Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.settings-gear {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  min-width: 44px;
+  min-height: 44px;
+  opacity: 0.5;
+}
+
+/* PIN Screen */
+.pin-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 3rem;
+  flex: 1;
+}
+
+.pin-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.pin-subtitle {
+  color: var(--color-text-light);
+  font-size: 1rem;
+}
+
+.pin-dots {
+  display: flex;
+  gap: 1rem;
+}
+
+.pin-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary);
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.pin-dot.filled {
+  background: var(--color-primary);
+}
+
+.pin-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  max-width: 280px;
+}
+
+.pin-key {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid #e2e8f0;
+  background: var(--color-card);
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  transition: transform 0.1s;
+}
+
+.pin-key:active {
+  transform: scale(0.95);
+}
+
+.pin-key.empty {
+  visibility: hidden;
+}
+
+.pin-error {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.pin-back {
+  background: none;
+  border: none;
+  color: var(--color-text-light);
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: inherit;
+  min-height: 44px;
+}
+
+/* Profile Management */
+.profile-manage-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 2rem;
+  flex: 1;
+}
+
+.managed-profiles {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.managed-profile-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.profile-name-input {
+  padding: 0.75rem 1rem;
+  font-size: 1.2rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  text-align: center;
+  font-family: inherit;
+  width: 250px;
+}
+
+.profile-name-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.color-picker {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.color-dot {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.color-dot.selected {
+  border-color: var(--color-text);
+  transform: scale(1.15);
+}
+
 /* Category Card Wrapper */
 .category-card-wrapper {
   display: flex;
