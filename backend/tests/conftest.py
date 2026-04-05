@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import (
 
 from app.database import get_db
 from app.main import app
-from app.models import Base, Category, Word
+from app.models import Base, Category, Profile, Word
 
 TEST_DB_URL = "sqlite+aiosqlite:///./test.db"
 
@@ -54,6 +54,15 @@ async def seeded_db(
     db: AsyncSession,
 ) -> dict[str, Category | list[Word]]:
     """Seed test database with sample categories and words."""
+    guest = Profile(
+        id=uuid.uuid4(),
+        name="Guest",
+        color="#9ca3af",
+        is_guest=True,
+    )
+    db.add(guest)
+    await db.flush()
+
     animals = Category(
         id=uuid.uuid4(),
         name="Animals",
@@ -114,6 +123,7 @@ async def seeded_db(
         "fish": fish_word,
         "red": red_word,
         "blue": blue_word,
+        "guest": guest,
     }
 
 
