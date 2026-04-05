@@ -58,3 +58,25 @@ jobs:
 
           docker push dockerhub.calebdunn.tech/kids-words-backend:${VERSION}
           docker push dockerhub.calebdunn.tech/kids-words-frontend:${VERSION}
+
+      - name: Trigger staging deploy
+        id: deploy
+        if: steps.tags.outputs.is_release == 'false' && success()
+        run: |
+          BODY='{"app":"kids-words","ref":"${{ github.ref }}","sha":"${{ github.sha }}","tag":"${{ steps.tags.outputs.sha_tag }}"}'
+          SIGNATURE="sha256=$(echo -n "$BODY" | openssl dgst -sha256 -hmac "${{ secrets.WEBHOOK_SECRET }}" | awk '{print $NF}')"
+          echo "Triggering staging deploy..."
+          HTTP_CODE=$(curl -s -o /tmp/deploy-response.json -w "%{http_code}" \
+            -X POST "${{ secrets.STAGING_WEBHOOK_URL }}/deploy" \
+            -H "Content-Type: application/json" \
+            -H "X-Hub-Signature-256: $SIGNATURE" \
+            -d "$BODY")
+          echo "Deploy response (HTTP $HTTP_CODE):"
+          cat /tmp/deploy-response.json
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "::warning::Staging deploy returned HTTP $HTTP_CODE"
+            echo "deploy_ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy_ok=true" >> "$GITHUB_OUTPUT"
+          fi
+        continue-on-error: true
