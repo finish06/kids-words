@@ -22,6 +22,8 @@
 
 html {
   font-size: 18px;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
 }
 
 body {
@@ -30,13 +32,30 @@ body {
   color: var(--color-text);
   min-height: 100dvh;
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   user-select: none;
+  overscroll-behavior: none;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .app {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 1rem;
+  padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+  padding-right: calc(1rem + env(safe-area-inset-right, 0px));
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -84,9 +103,10 @@ body {
   box-shadow: var(--shadow);
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
-  min-height: 120px;
-  min-width: 44px;
+  min-height: 140px;
+  min-width: 48px;
   font-family: inherit;
+  width: 100%;
 }
 
 .category-card:hover,
@@ -129,8 +149,8 @@ body {
   color: var(--color-primary);
   cursor: pointer;
   padding: 0.5rem;
-  min-width: 44px;
-  min-height: 44px;
+  min-width: 48px;
+  min-height: 48px;
   font-family: inherit;
 }
 
@@ -157,7 +177,7 @@ body {
 }
 
 .word-text {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   color: var(--color-text);
@@ -187,8 +207,8 @@ body {
   cursor: pointer;
   transition: transform 0.15s, border-color 0.15s;
   padding: 1rem;
-  min-height: 150px;
-  min-width: 44px;
+  min-height: 180px;
+  min-width: 48px;
   font-family: inherit;
   overflow: hidden;
 }
@@ -256,8 +276,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   font-size: 2.5rem;
   font-weight: 800;
   background: var(--color-card);
@@ -466,8 +486,8 @@ body {
 }
 
 .profile-avatar {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -527,9 +547,9 @@ body {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  padding: 0.25rem;
-  min-width: 44px;
-  min-height: 44px;
+  padding: 0.5rem;
+  min-width: 48px;
+  min-height: 48px;
   opacity: 0.5;
 }
 
@@ -580,8 +600,8 @@ body {
 }
 
 .pin-key {
-  width: 70px;
-  height: 70px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   border: 2px solid #e2e8f0;
   background: var(--color-card);
@@ -787,18 +807,24 @@ body {
   animation: mastery-pulse 0.6s ease 2;
 }
 
-/* Tablet responsive */
+/* iPad portrait (768px+) */
 @media (min-width: 768px) {
   html {
     font-size: 20px;
   }
 
   .app {
-    padding: 2rem;
+    padding: 1.5rem;
+    padding-top: calc(1.5rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   .word-text {
-    font-size: 4.5rem;
+    font-size: 4rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .image-grid {
@@ -807,5 +833,54 @@ body {
 
   .image-card {
     min-height: 200px;
+  }
+
+  .word-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .picker-button {
+    width: 140px;
+    height: 140px;
+    font-size: 3rem;
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    font-size: 2.5rem;
+  }
+
+  .pin-key {
+    width: 80px;
+    height: 80px;
+    font-size: 1.8rem;
+  }
+}
+
+/* iPad landscape (1024px+) */
+@media (min-width: 1024px) {
+  html {
+    font-size: 22px;
+  }
+
+  .app {
+    max-width: 1100px;
+  }
+
+  .word-text {
+    font-size: 4.5rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .image-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .word-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
