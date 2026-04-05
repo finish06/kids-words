@@ -39,7 +39,9 @@ jobs:
         run: . .venv/bin/activate && PYTHONPATH=. mypy app/ --ignore-missing-imports
 
       - name: Tests with coverage
-        run: . .venv/bin/activate && PYTHONPATH=. pytest tests/ --cov=app --cov-report=term-missing --cov-fail-under=80
+        env:
+          PYTHONPATH: .
+        run: . .venv/bin/activate && pytest tests/ --import-mode=importlib --cov=app --cov-report=term-missing --cov-fail-under=80
 
   frontend:
     name: Frontend (TypeScript)

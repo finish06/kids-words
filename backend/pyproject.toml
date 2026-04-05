@@ -42,7 +42,7 @@ plugins = ["pydantic.mypy"]
 
 [tool.coverage.run]
 source = ["app"]
-omit = ["app/seed.py"]
+omit = ["app/seed.py", "app/seed_animals.py", "app/seed_foods.py"]
 
 [tool.coverage.report]
 fail_under = 80
