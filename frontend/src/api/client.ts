@@ -97,6 +97,29 @@ export async function createProfile(
   });
 }
 
+export async function updateProfile(
+  id: string,
+  name: string,
+  color: string,
+  pin: string,
+): Promise<Profile> {
+  return fetchJson<Profile>(`/api/profiles/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({ name, color, pin }),
+  });
+}
+
+export async function deleteProfile(
+  id: string,
+  pin: string,
+): Promise<void> {
+  await fetch(`${API_BASE}/api/profiles/${id}`, {
+    method: "DELETE",
+    headers: profileHeaders(),
+    body: JSON.stringify({ pin }),
+  });
+}
+
 // Progress
 export async function getCategoryProgress(
   slug: string,

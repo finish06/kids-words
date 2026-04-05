@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createProfile, setupPin, verifyPin } from "../api/client";
+import { createProfile, deleteProfile, setupPin, updateProfile, verifyPin } from "../api/client";
 import type { Profile } from "../types";
 
 const COLORS = [
@@ -24,7 +24,7 @@ export function ProfileManager({
   profiles,
   onDone,
 }: ProfileManagerProps) {
-  const [step, setStep] = useState<"pin" | "verify" | "manage" | "add">(
+  const [step, setStep] = useState<"pin" | "verify" | "manage" | "add" | "edit">(
     pinSet ? "verify" : "pin",
   );
   const [pin, setPin] = useState("");
@@ -32,9 +32,11 @@ export function ProfileManager({
   const [error, setError] = useState("");
   const [verified, setVerified] = useState(false);
 
-  // Add profile state
+  // Add/edit profile state
   const [newName, setNewName] = useState("");
   const [newColor, setNewColor] = useState(COLORS[0]);
+  const [editingProfile, setEditingProfile] = useState<Profile | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handlePinDigit = (digit: string) => {
     if (pin.length < 4) setPin((p) => p + digit);
@@ -192,6 +194,82 @@ export function ProfileManager({
     );
   }
 
+  // Step: Edit profile
+  if (step === "edit" && editingProfile) {
+    return (
+      <div className="profile-manage-screen">
+        <h2 className="pin-title">Edit {editingProfile.name}</h2>
+        <input
+          className="profile-name-input"
+          type="text"
+          placeholder="Child's name"
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          maxLength={20}
+          autoFocus
+        />
+        <div className="color-picker">
+          {COLORS.map((c) => (
+            <button
+              key={c}
+              className={`color-dot ${c === newColor ? "selected" : ""}`}
+              style={{ backgroundColor: c }}
+              onClick={() => setNewColor(c)}
+            />
+          ))}
+        </div>
+        <button
+          className="play-again-button"
+          disabled={!newName.trim()}
+          onClick={() => {
+            updateProfile(editingProfile.id, newName.trim(), newColor, pin).then(() => {
+              window.location.reload();
+            });
+          }}
+        >
+          Save
+        </button>
+
+        {!showDeleteConfirm ? (
+          <button
+            className="delete-button"
+            onClick={() => setShowDeleteConfirm(true)}
+          >
+            Delete Profile
+          </button>
+        ) : (
+          <div className="delete-confirm">
+            <p className="delete-warning">
+              Delete {editingProfile.name}? This removes all their progress.
+            </p>
+            <div className="delete-actions">
+              <button
+                className="delete-button"
+                onClick={() => {
+                  deleteProfile(editingProfile.id, pin).then(() => {
+                    window.location.reload();
+                  });
+                }}
+              >
+                Confirm Delete
+              </button>
+              <button
+                className="pin-back"
+                onClick={() => setShowDeleteConfirm(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        <button className="pin-back" onClick={() => { setStep("manage"); setShowDeleteConfirm(false); }}>
+          Back
+        </button>
+      </div>
+    );
+  }
+
   // Step: Manage profiles
   return (
     <div className="profile-manage-screen">
@@ -200,7 +278,17 @@ export function ProfileManager({
         {profiles
           .filter((p) => !p.is_guest)
           .map((p) => (
-            <div key={p.id} className="managed-profile-item">
+            <button
+              key={p.id}
+              className="managed-profile-item clickable"
+              onClick={() => {
+                setEditingProfile(p);
+                setNewName(p.name);
+                setNewColor(p.color);
+                setShowDeleteConfirm(false);
+                setStep("edit");
+              }}
+            >
               <div
                 className="profile-avatar"
                 style={{ backgroundColor: p.color }}
@@ -208,7 +296,7 @@ export function ProfileManager({
                 {p.name[0].toUpperCase()}
               </div>
               <span className="profile-name">{p.name}</span>
-            </div>
+            </button>
           ))}
       </div>
       {profiles.filter((p) => !p.is_guest).length < 3 && (

@@ -754,6 +754,54 @@ body {
   transform: scale(1.15);
 }
 
+.managed-profile-item.clickable {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: transform 0.15s;
+}
+
+.managed-profile-item.clickable:hover {
+  transform: scale(1.05);
+}
+
+.delete-button {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  background: var(--color-error);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  min-height: 48px;
+  font-family: inherit;
+  transition: transform 0.15s;
+}
+
+.delete-button:hover {
+  transform: scale(1.05);
+}
+
+.delete-confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.delete-warning {
+  color: var(--color-error);
+  font-weight: 600;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
 /* (category card styles above) */
 
 /* Word List */
