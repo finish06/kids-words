@@ -27,19 +27,22 @@ jobs:
         uses: astral-sh/setup-uv@v4
 
       - name: Install dependencies
-        run: uv pip install --system -e ".[dev]"
+        run: |
+          uv venv .venv
+          . .venv/bin/activate
+          uv pip install fastapi "uvicorn[standard]" "sqlalchemy[asyncio]" asyncpg alembic pydantic pydantic-settings pytest pytest-asyncio httpx pytest-cov ruff mypy aiosqlite
 
       - name: Lint (ruff check)
-        run: ruff check .
+        run: . .venv/bin/activate && ruff check .
 
       - name: Format check (ruff format)
-        run: ruff format --check .
+        run: . .venv/bin/activate && ruff format --check .
 
       - name: Type check (mypy)
-        run: mypy app/ --ignore-missing-imports
+        run: . .venv/bin/activate && mypy app/ --ignore-missing-imports
 
       - name: Tests with coverage
-        run: pytest tests/ --cov=app --cov-report=term-missing --cov-fail-under=80
+        run: . .venv/bin/activate && pytest tests/ --cov=app --cov-report=term-missing --cov-fail-under=80
 
   frontend:
     name: Frontend (TypeScript)
