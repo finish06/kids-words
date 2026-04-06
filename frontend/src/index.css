@@ -664,26 +664,6 @@ body {
   box-shadow: var(--shadow);
 }
 
-/* Theme Toggle */
-.theme-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  min-width: 48px;
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  opacity: 0.6;
-  transition: opacity 0.15s;
-}
-
-.theme-toggle:hover {
-  opacity: 1;
-}
-
 /* App Header */
 .app-header {
   display: flex;
@@ -692,6 +672,7 @@ body {
   padding: 0.25rem 0;
 }
 
+.theme-toggle,
 .settings-gear {
   display: flex;
   align-items: center;
@@ -707,6 +688,7 @@ body {
   transition: opacity 0.15s;
 }
 
+.theme-toggle:hover,
 .settings-gear:hover {
   opacity: 1;
 }
