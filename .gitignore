@@ -47,6 +47,16 @@ docker-compose.override.yml
 htmlcov/
 .pytest_cache/
 *.db
+test-results/
+
+# Generated artifacts
+images/
+reports/
+scripts/
+
+# Root-level tooling (Playwright etc.)
+/package.json
+/package-lock.json
 coverage/
 
 # ADD — ephemeral artifacts (don't commit)
