@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getProfiles, setActiveProfile } from "../api/client";
 import type { Profile } from "../types";
+import { Icon } from "./Icon";
 
 interface ProfilePickerProps {
   onSelect: (profile: Profile) => void;
@@ -63,7 +64,7 @@ export function ProfilePicker({ onSelect, onSettings }: ProfilePickerProps) {
         ))}
       </div>
       <button className="settings-link" onClick={onSettings}>
-        Manage Profiles
+        <Icon name="gear" size={16} /> Manage Profiles
       </button>
     </div>
   );
