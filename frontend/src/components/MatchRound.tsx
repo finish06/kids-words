@@ -46,9 +46,11 @@ function QuizLengthPicker({
 function MatchGame({
   words,
   category,
+  onPlayAgain,
 }: {
   words: Word[];
   category: CategoryDetail;
+  onPlayAgain: () => void;
 }) {
   const {
     currentWord,
@@ -67,7 +69,7 @@ function MatchGame({
       <RoundComplete
         categoryName={category.name}
         wordResults={wordResults}
-        onPlayAgain={() => window.location.reload()}
+        onPlayAgain={onPlayAgain}
         onHome={() => navigate("/")}
       />
     );
@@ -193,5 +195,11 @@ export function MatchRound() {
     );
   }
 
-  return <MatchGame words={quizWords} category={category} />;
+  return (
+    <MatchGame
+      words={quizWords}
+      category={category}
+      onPlayAgain={() => setQuizWords(null)}
+    />
+  );
 }
