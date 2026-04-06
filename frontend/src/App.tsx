@@ -7,9 +7,11 @@ import { MatchRound } from "./components/MatchRound";
 import { ProfileManager } from "./components/ProfileManager";
 import { ProfilePicker } from "./components/ProfilePicker";
 import { WordList } from "./components/WordList";
+import { useTheme } from "./hooks/useTheme";
 import type { Profile } from "./types";
 
 function App() {
+  const { theme, toggle: toggleTheme } = useTheme();
   const [screen, setScreen] = useState<
     "loading" | "picker" | "manage" | "app"
   >("loading");
@@ -42,7 +44,6 @@ function App() {
     setProfileColor(profile.color);
     setScreen("app");
   }, []);
-
 
   if (screen === "loading") {
     return (
@@ -87,9 +88,14 @@ function App() {
           </div>
           <span className="profile-label">{profileName}</span>
         </div>
-        <button className="settings-gear" onClick={() => setScreen("manage")}>
-          <Icon name="gear" size={24} />
-        </button>
+        <div style={{ display: "flex", gap: "0.25rem", alignItems: "center" }}>
+          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle dark mode">
+            <Icon name={theme === "dark" ? "sun" : "moon"} size={22} />
+          </button>
+          <button className="settings-gear" onClick={() => setScreen("manage")}>
+            <Icon name="gear" size={24} />
+          </button>
+        </div>
       </div>
       <Routes>
         <Route path="/" element={<CategoryList />} />
