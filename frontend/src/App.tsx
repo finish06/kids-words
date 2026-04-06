@@ -4,7 +4,6 @@ import { getProfiles, setActiveProfile } from "./api/client";
 import { CategoryList } from "./components/CategoryList";
 import { Icon } from "./components/Icon";
 import { MatchRound } from "./components/MatchRound";
-import { PinGate } from "./components/PinGate";
 import { ProfileManager } from "./components/ProfileManager";
 import { ProfilePicker } from "./components/ProfilePicker";
 import { WordList } from "./components/WordList";
@@ -12,7 +11,7 @@ import type { Profile } from "./types";
 
 function App() {
   const [screen, setScreen] = useState<
-    "loading" | "picker" | "manage" | "switch" | "app"
+    "loading" | "picker" | "manage" | "app"
   >("loading");
   const [profileName, setProfileName] = useState("Guest");
   const [profileColor, setProfileColor] = useState("#9ca3af");
@@ -44,33 +43,11 @@ function App() {
     setScreen("app");
   }, []);
 
-  const handleSwitchProfile = useCallback(() => {
-    if (pinSet) {
-      setScreen("switch");
-    } else {
-      setActiveProfile(null);
-      setScreen("picker");
-    }
-  }, [pinSet]);
 
   if (screen === "loading") {
     return (
       <div className="app">
         <div className="loading">Loading...</div>
-      </div>
-    );
-  }
-
-  if (screen === "switch") {
-    return (
-      <div className="app">
-        <PinGate
-          onSuccess={() => {
-            setActiveProfile(null);
-            setScreen("picker");
-          }}
-          onCancel={() => setScreen("app")}
-        />
       </div>
     );
   }
