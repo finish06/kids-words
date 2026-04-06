@@ -128,7 +128,7 @@ body {
   height: 100px;
   object-fit: cover;
   object-position: center;
-  background: linear-gradient(135deg, #f0f4ff 0%, #ede9fe 100%);
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-card) 100%);
 }
 
 .category-icon {
@@ -311,6 +311,11 @@ body {
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  border: none;
+}
+
+.color-circle-white {
+  border: 3px solid var(--color-card-border);
   flex-shrink: 0;
 }
 
@@ -745,6 +750,7 @@ body {
   border-radius: 50%;
   border: 2px solid var(--color-card-border);
   background: var(--color-card);
+  color: var(--color-text);
   font-size: 1.5rem;
   font-weight: 700;
   cursor: pointer;
@@ -824,6 +830,8 @@ body {
   text-align: center;
   font-family: inherit;
   width: 250px;
+  background: var(--color-card);
+  color: var(--color-text);
 }
 
 .profile-name-input:focus {
@@ -949,7 +957,8 @@ body {
 }
 
 .star-empty {
-  opacity: 0.3;
+  color: var(--color-card-border);
+  opacity: 0.5;
 }
 
 /* Round Word Summary */

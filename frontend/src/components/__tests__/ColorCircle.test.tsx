@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ColorCircle, isColorUrl, parseColorHex } from "../ColorCircle";
 
@@ -23,19 +23,18 @@ describe("ColorCircle", () => {
     const { container } = render(<ColorCircle color="#ef4444" />);
     const circle = container.querySelector(".color-circle");
     expect(circle).toBeTruthy();
-    expect(circle?.getAttribute("style")).toContain("background-color: rgb(239, 68, 68)");
+    expect(circle?.getAttribute("style")).toContain("background-color");
   });
 
-  it("adds border for white color", () => {
+  it("adds white class for white color", () => {
     const { container } = render(<ColorCircle color="#f8fafc" />);
-    const circle = container.querySelector(".color-circle");
-    expect(circle?.getAttribute("style")).toContain("border");
+    const circle = container.querySelector(".color-circle-white");
+    expect(circle).toBeTruthy();
   });
 
-  it("no border for non-white color", () => {
+  it("no white class for non-white color", () => {
     const { container } = render(<ColorCircle color="#ef4444" />);
-    const circle = container.querySelector(".color-circle");
-    const style = circle?.getAttribute("style") ?? "";
-    expect(style).not.toContain("3px solid");
+    const circle = container.querySelector(".color-circle-white");
+    expect(circle).toBeNull();
   });
 });

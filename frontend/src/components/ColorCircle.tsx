@@ -7,13 +7,11 @@ export function parseColorHex(url: string): string {
 }
 
 export function ColorCircle({ color }: { color: string }) {
+  const isWhite = color === "#f8fafc";
   return (
     <div
-      className="color-circle"
-      style={{
-        backgroundColor: color,
-        border: color === "#f8fafc" ? "3px solid #cbd5e1" : "none",
-      }}
+      className={`color-circle ${isWhite ? "color-circle-white" : ""}`}
+      style={{ backgroundColor: color }}
     />
   );
 }
