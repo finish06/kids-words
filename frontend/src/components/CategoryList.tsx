@@ -6,13 +6,13 @@ import { Icon } from "./Icon";
 
 const CATEGORY_ICONS: Record<string, string> = {
   animals: "paw",
-  foods: "apple",
+  food: "apple",
   colors: "palette",
 };
 
 const CATEGORY_ILLUSTRATIONS: Record<string, string> = {
   animals: "/illustrations/cat-animals.svg",
-  foods: "/illustrations/cat-foods.svg",
+  food: "/illustrations/cat-foods.svg",
   colors: "/illustrations/cat-colors.svg",
 };
 
