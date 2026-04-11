@@ -9,35 +9,37 @@
 ## Hill Chart
 
 ```
-Alembic Migrations     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0% — spec ready
-Idempotent Seed        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0% — spec ready
-CI Coverage Fix        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0% — not started
-Frontend Test Coverage ████████████████████████████████  100% — 75 tests, 86.2% coverage
-v0.1.0 Release Tag     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0% — not started
+Alembic Migrations     ████████████████████████████████  100% — merged + integration tests (cycle-9)
+Idempotent Seed        ████████████████████████████████  100% — merged + integration tests (cycle-9)
+Frontend Test Coverage ████████████████████████████████  100% — 75 tests, 86.2% coverage (cycle-8)
+CI Coverage Fix        ████████████░░░░░░░░░░░░░░░░░░░░   ~40% — threshold lifted to 75% (was 65%); root-cause fix deferred
+v0.1.0 Release Tag     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    0% — not started
 ```
 
 ## Features
 
 | Feature | Spec | Position | Notes |
 |---------|------|----------|-------|
-| Alembic Migrations | specs/database-migrations.md | SPECCED | Initial baseline + auto-run on container start |
-| Idempotent Seed | specs/database-migrations.md | SPECCED | Upsert logic, no duplicates |
-| CI Coverage Fix | — | NOT_STARTED | Fix session isolation in CI tests |
-| Frontend Test Coverage | — | COMPLETE | 75 tests, 86.2% line coverage (cycle-8) |
+| Alembic Migrations | specs/database-migrations.md | VERIFIED | Merged via PR #7; integration tests added cycle-9 (PR #14) |
+| Idempotent Seed | specs/database-migrations.md | VERIFIED | Merged via PR #7; 6 integration tests added cycle-9 (PR #14) |
+| Frontend Test Coverage | — | COMPLETE | 75 tests, 86.2% line coverage (cycle-8, PR #13) |
+| CI Coverage Fix | — | IN_PROGRESS | CI threshold raised from 65% → 75% by adding migration/seed tests + removing seed omit. Root cause (FastAPI dep_overrides not taking effect in CI for route files) still needs a dedicated fix to reach 80%. |
 | v0.1.0 Release Tag | — | NOT_STARTED | First semver tag, triggers versioned image push |
 
 ## Success Criteria
 
-- [ ] `alembic upgrade head` applies schema changes without data loss
-- [ ] Seed script is idempotent (run multiple times, same result)
-- [ ] Docker entrypoint auto-runs migrations on start
-- [ ] CI backend coverage >= 80% (fix session isolation)
+- [x] `alembic upgrade head` applies schema changes without data loss (integration tests cycle-9)
+- [x] Seed script is idempotent (6 integration tests cycle-9: AC-003, AC-004, AC-005, TC-001, TC-003, TC-004)
+- [x] Docker entrypoint auto-runs migrations on start (backend/entrypoint.sh with smart stamping)
+- [ ] CI backend coverage >= 80% (currently 75% threshold as workaround for known FastAPI dep_override bug)
 - [x] Frontend coverage >= 80% (86.2% — 75 tests)
 - [ ] v0.1.0 tag pushed, versioned images in registry
-- [ ] Staging deploy works without manual DB reset
+- [ ] Staging deploy works without manual DB reset (untested, pending CI fix + v0.1.0)
 
 ## Cycle Tracking
 
 | Cycle | Features | Status | Notes |
 |-------|----------|--------|-------|
-| cycle-8 | Frontend Test Coverage (6 components + api client) | COMPLETE | 75 tests passing, 86.2% line coverage |
+| cycle-7 | Alembic + Seed + Docker entrypoint (code) | COMPLETE | Merged PR #7 — but no tests shipped |
+| cycle-8 | Frontend Test Coverage | COMPLETE | 75 tests, 86.2% coverage — PR #13 merged |
+| cycle-9 | Alembic + Seed integration tests + CI threshold lift | PARTIAL | 11 new tests, CI 68%→76%, threshold to 75%; root-cause fix + v0.1.0 deferred |
