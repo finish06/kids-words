@@ -2,10 +2,10 @@
 
 **Milestone:** M3 — Infrastructure Hardening
 **Maturity:** Beta
-**Status:** IN_PROGRESS (partial — 4h away session, items 1+2 only)
+**Status:** COMPLETE (partial — 4h away session; items 1-3 advanced via one PR, item 4 deferred)
 **Started:** 2026-04-11
-**Completed:** TBD
-**Duration Budget:** 1 day autonomous (human away ~24h)
+**Completed:** 2026-04-11
+**Duration Budget:** Originally 1 day; trimmed to 4h when `/add:away 4h` was declared
 **Branch Strategy:** One feature branch per work item, PRs left open for human review on return
 
 ## Goal
@@ -189,3 +189,37 @@ Agent will write/update `.add/handoff.md` after each work item completes (or is 
 - 6 milestones are currently marked IN_PROGRESS. Out of scope for this cycle but flagged for next retro — most of M1, M4, M5 look effectively done and should be closed.
 - Pre-existing frontend lint errors in `useRound.ts` (Math.random purity) are still not fixed — also out of scope for this cycle.
 - Previous cycle (cycle-8) proved that mid-flight pause + audit-on-resume is a working recovery strategy. If this cycle is interrupted, do the same: audit before re-running.
+
+## Execution Outcome (2026-04-11 away session, 4h)
+
+**Bigger audit finding than expected:** items 1 and 2 of the cycle had already been implemented and merged via PR #7 (`6daf282 feat: Alembic migrations + idempotent seed`) weeks ago — they just shipped without integration tests. The M3 milestone file hadn't been updated to reflect reality. This is the same pattern as cycle-8.
+
+Shipped in PR [finish06/kids-words#14](https://github.com/finish06/kids-words/pull/14) (`feat/migration-seed-tests`):
+
+- **Item 1 — Alembic Migrations: VERIFIED**
+  - 5 integration tests: `backend/tests/test_migrations.py`
+  - Covers AC-001 (all tables), AC-002 (idempotent upgrade), AC-008 (data survives re-upgrade)
+  - Full upgrade → downgrade → upgrade roundtrip test (strict rollback)
+  - Drives Alembic programmatically against a temp SQLite DB
+- **Item 2 — Idempotent Seed: VERIFIED**
+  - 6 integration tests: `backend/tests/test_seed_idempotency.py`
+  - Covers TC-001, TC-003, TC-004, AC-003, AC-004, AC-005, and an additive-semantics edge case
+  - Uses `monkeypatch.setattr(seed_module, "SEED_DATA", ...)` to test source mutations
+- **Item 3 — CI Coverage Fix: ATTEMPTED (root cause + fix in same PR)**
+  - Root cause was already documented in `ci.yml` comment: *FastAPI dependency_overrides don't take effect in CI due to module resolution*
+  - Fix in this PR: removed `--import-mode=importlib` from CI pytest command, removed `omit = [seed*]` from `pyproject.toml [tool.coverage.run]`, restored 80% threshold via `[tool.coverage.report] fail_under`
+  - Works because new migration/seed tests don't depend on `dependency_overrides` at all — they use their own engines
+  - **Unverified in CI** because CI didn't run (see handoff — repo default branch is misconfigured)
+- **Item 4 — v0.1.0 Release Tag: DEFERRED** (next cycle)
+- **Spec header `Milestone: M2` → `M3` fix:** shipped in same PR
+- **M3 milestone hill chart + success criteria:** updated to reflect reality (3/7 criteria now ✅ that were previously ❌)
+
+### Local Verification
+- 48/48 backend tests pass (37 existing + 11 new)
+- Local coverage: 93.09% (with new config, no omit)
+- ruff check / ruff format / mypy: all clean on new files
+
+### Blockers Discovered
+1. **Repo default branch is `feat/word-image-matching`, not `main`.** `.github/workflows/ci.yml` does not exist on that branch, only on `main`. This may be why CI is not triggering on pull_requests. Recommended fix: set default branch to `main` in repo settings. **Not done autonomously** — this is a repo config change with side effects.
+2. **PR #13 (cycle-8, ProfileManager tests) and PR #14 (cycle-9, migration/seed tests) both show `CONFLICTING` mergeable state.** Both touch `docs/milestones/M3-infrastructure-hardening.md` and will need one-or-the-other merged first, then the other rebased. Minor conflict, not a real issue.
+3. **Stale unmerged branches discovered:** `feat/alembic-migrations`, `feat/ci-fix-and-release`, `feat/frontend-test-coverage`. Their content is either already on main via different PR numbers, or superseded. Flagged for cleanup at next retro.
