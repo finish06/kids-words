@@ -37,6 +37,7 @@
 
 ## Agent Checkpoints
 - 2026-04-04 [cycle-1 complete]: Frontend tests + E2E. 27 unit tests (84% coverage) + 6 E2E tests. All quality gates passing. Backend 19 tests at 90% — no regressions. Cycle completed in ~2 hours vs 3-4 hour budget. Remaining for M1: CI/CD pipeline.
+- 2026-04-11 [cycle-8 complete, retro]: Frontend coverage expansion for M3. Cycle was paused 7 days mid-flight; on resume, audited the codebase first and found 5 of 6 items already done — only `ProfileManager.test.tsx` remained. Added 19 tests covering setup/verify PIN flows, manage screen filtering, add/edit/delete profile flows. Totals: 75 tests / 86.2% line coverage (above 80% threshold). Non-obvious finding: the ProfileManager "PINs don't match" error string is dead code — the mismatch handler clears `pin`/`confirmPin`, which routes rendering back to the initial "Set a Parent PIN" screen, a screen that does not display the error. Functional UX, but worth cleaning up. Pre-existing lint errors (Math.random in useRound.ts, react-refresh warnings) left untouched — out of scope for a test-writing cycle.
 
 ## Profile Update Candidates
 - Playwright E2E tests must be isolated from Vitest globals — separate directory, separate config. Applies to any project using Vite + Vitest + Playwright together.

@@ -12,7 +12,7 @@
 Alembic Migrations     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0% — spec ready
 Idempotent Seed        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0% — spec ready
 CI Coverage Fix        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0% — not started
-Frontend Test Coverage ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0% — not started
+Frontend Test Coverage ████████████████████████████████  100% — 75 tests, 86.2% coverage
 v0.1.0 Release Tag     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0% — not started
 ```
 
@@ -23,7 +23,7 @@ v0.1.0 Release Tag     ░░░░░░░░░░░░░░░░░░░
 | Alembic Migrations | specs/database-migrations.md | SPECCED | Initial baseline + auto-run on container start |
 | Idempotent Seed | specs/database-migrations.md | SPECCED | Upsert logic, no duplicates |
 | CI Coverage Fix | — | NOT_STARTED | Fix session isolation in CI tests |
-| Frontend Test Coverage | — | NOT_STARTED | Tests for ProfilePicker, PinGate, ColorCircle, WordList |
+| Frontend Test Coverage | — | COMPLETE | 75 tests, 86.2% line coverage (cycle-8) |
 | v0.1.0 Release Tag | — | NOT_STARTED | First semver tag, triggers versioned image push |
 
 ## Success Criteria
@@ -32,7 +32,7 @@ v0.1.0 Release Tag     ░░░░░░░░░░░░░░░░░░░
 - [ ] Seed script is idempotent (run multiple times, same result)
 - [ ] Docker entrypoint auto-runs migrations on start
 - [ ] CI backend coverage >= 80% (fix session isolation)
-- [ ] Frontend coverage >= 80% (new component tests)
+- [x] Frontend coverage >= 80% (86.2% — 75 tests)
 - [ ] v0.1.0 tag pushed, versioned images in registry
 - [ ] Staging deploy works without manual DB reset
 
@@ -40,3 +40,4 @@ v0.1.0 Release Tag     ░░░░░░░░░░░░░░░░░░░
 
 | Cycle | Features | Status | Notes |
 |-------|----------|--------|-------|
+| cycle-8 | Frontend Test Coverage (6 components + api client) | COMPLETE | 75 tests passing, 86.2% line coverage |
