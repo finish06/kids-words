@@ -27,7 +27,7 @@ SHAPES: list[tuple[str, str]] = [
     ("CONE", "shape://CONE"),
     ("CYLINDER", "shape://CYLINDER"),
     ("SPIRAL", "shape://SPIRAL"),
-    ("INFINITY", "shape://INFINITY"),
+    ("SEMICIRCLE", "shape://SEMICIRCLE"),
     ("OCTAGON", "shape://OCTAGON"),
     ("DECAGON", "shape://DECAGON"),
 ]

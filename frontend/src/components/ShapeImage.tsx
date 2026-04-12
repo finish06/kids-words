@@ -216,14 +216,15 @@ const SHAPE_DEFS: Record<string, { svg: ReactNode; bg: string }> = {
       </svg>
     ),
   },
-  INFINITY: {
+  SEMICIRCLE: {
     bg: "linear-gradient(135deg, #6366f1, #a5b4fc)",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
         <path
-          d="M50,50 C50,36 62,24 74,32 C86,40 80,58 68,58 C56,58 50,50 50,50 C50,50 44,42 32,42 C20,42 14,60 26,68 C38,76 50,64 50,50Z"
-          fill="none" stroke="#818cf8" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"
+          d="M12,62 A38,38 0 0,1 88,62 L12,62Z"
+          fill="#a5b4fc" stroke="#4f46e5" strokeWidth="4" strokeLinejoin="round"
         />
+        <ellipse cx="40" cy="54" rx="6" ry="4" fill="rgba(255,255,255,0.3)" transform="rotate(-10,40,54)" />
       </svg>
     ),
   },
