@@ -115,26 +115,16 @@ const SHAPE_DEFS: Record<string, { svg: ReactNode; bg: string }> = {
     ),
   },
   CRESCENT: {
-    bg: "linear-gradient(135deg, #1e1b4b, #312e81)",
+    bg: "linear-gradient(135deg, #f5f5f4, #e7e5e4)",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Night sky crescent moon — big, golden, unmistakable */}
-        <path
-          d="M62,8 A40,40 0 1,1 62,92 A30,30 0 1,0 62,8Z"
-          fill="#fbbf24" stroke="#f59e0b" strokeWidth="2.5"
-        />
-        {/* Moon glow */}
-        <path
-          d="M62,8 A40,40 0 1,1 62,92 A30,30 0 1,0 62,8Z"
-          fill="none" stroke="#fde68a" strokeWidth="1" opacity="0.4"
-          transform="scale(1.06) translate(-3,-3)"
-        />
-        {/* Shine */}
-        <ellipse cx="36" cy="34" rx="6" ry="4" fill="white" opacity="0.3" transform="rotate(-20,36,34)" />
-        {/* Small stars */}
-        <circle cx="78" cy="24" r="2" fill="#fde68a" opacity="0.7" />
-        <circle cx="82" cy="50" r="1.5" fill="#fde68a" opacity="0.5" />
-        <circle cx="74" cy="74" r="1.5" fill="#fde68a" opacity="0.6" />
+        <defs>
+          <mask id="crescentMask">
+            <rect width="100" height="100" fill="white" />
+            <circle cx="62" cy="50" r="34" fill="black" />
+          </mask>
+        </defs>
+        <circle cx="46" cy="50" r="40" fill="#f0c040" mask="url(#crescentMask)" />
       </svg>
     ),
   },

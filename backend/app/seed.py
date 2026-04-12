@@ -137,9 +137,27 @@ async def seed(db_url: str | None = None) -> None:
                     existing.image_url = word_data["image_url"]
                     updated_words += 1
 
+        # Remove words that are no longer in seed data
+        removed_words = 0
+        for cat_data in SEED_DATA:
+            result = await session.execute(
+                select(Category).where(Category.slug == cat_data["slug"])
+            )
+            category = result.scalar_one_or_none()
+            if category is None:
+                continue
+            seed_texts = {w["text"] for w in cat_data["words"]}
+            db_words_result = await session.execute(
+                select(Word).where(Word.category_id == category.id)
+            )
+            for word in db_words_result.scalars().all():
+                if word.text not in seed_texts:
+                    await session.delete(word)
+                    removed_words += 1
+
         await session.commit()
 
-        if added_cats == 0 and added_words == 0 and updated_words == 0:
+        if added_cats == 0 and added_words == 0 and updated_words == 0 and removed_words == 0:
             print("Database already up to date.")
         else:
             parts = []
@@ -149,6 +167,8 @@ async def seed(db_url: str | None = None) -> None:
                 parts.append(f"{added_words} words")
             if updated_words:
                 parts.append(f"{updated_words} words updated")
+            if removed_words:
+                parts.append(f"{removed_words} words removed")
             print(f"Seed complete: {', '.join(parts)}.")
 
     await engine.dispose()

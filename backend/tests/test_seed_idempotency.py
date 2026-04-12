@@ -174,12 +174,11 @@ async def test_ac005_changed_image_url_is_updated(
 
 
 @pytest.mark.asyncio
-async def test_seed_does_not_delete_words_removed_from_source(
+async def test_seed_removes_words_no_longer_in_source(
     seeded_db_url: str, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """Edge-case guard: seed is additive, never destructive. If a word is
-    removed from the source data, the existing row is preserved (deletions are
-    a human decision, not an automated one).
+    """When a word is removed from the seed data, the seed script deletes it
+    from the database. This keeps staging/prod in sync with the source list.
     """
     await seed(db_url=seeded_db_url)
     baseline_words = await _count(seeded_db_url, Word)
@@ -196,6 +195,6 @@ async def test_seed_does_not_delete_words_removed_from_source(
 
     await seed(db_url=seeded_db_url)
 
-    # RED should still be in the DB — additive semantics
-    assert await _count(seeded_db_url, Word) == baseline_words
-    assert await _fetch_word_image(seeded_db_url, "RED") is not None
+    # RED should be gone — seed cleans up removed words
+    assert await _count(seeded_db_url, Word) == baseline_words - 1
+    assert await _fetch_word_image(seeded_db_url, "RED") is None
