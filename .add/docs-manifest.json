@@ -1,0 +1,81 @@
+{
+  "$schema": "https://github.com/MountainUnicorn/add/docs-manifest.schema.json",
+  "version": "1.0.0",
+  "generated": "2026-04-12T00:15:00Z",
+  "stack": {
+    "language": "python",
+    "framework": "fastapi",
+    "frontend": "react",
+    "database": "postgresql",
+    "doc_tools": ["openapi-auto"]
+  },
+  "directories": {
+    "handlers": ["backend/app/routes/"],
+    "models": ["backend/app/"],
+    "schemas": ["backend/app/"],
+    "services": ["backend/app/"],
+    "templates": [],
+    "static": [],
+    "tests": ["backend/tests/", "frontend/src/components/__tests__/", "frontend/src/hooks/__tests__/", "frontend/src/api/__tests__/"],
+    "docs": ["docs/"]
+  },
+  "routes": [
+    {"method": "GET", "path": "/api/health", "handler_file": "backend/app/main.py", "handler_function": "health", "middleware": ["CORSMiddleware"], "tags": ["infra"], "response_model": "dict"},
+    {"method": "GET", "path": "/api/version", "handler_file": "backend/app/main.py", "handler_function": "version", "middleware": ["CORSMiddleware"], "tags": ["infra"], "response_model": "dict"},
+    {"method": "GET", "path": "/api/categories", "handler_file": "backend/app/routes/categories.py", "handler_function": "list_categories", "middleware": ["CORSMiddleware"], "tags": ["categories"], "response_model": "CategoryListResponse"},
+    {"method": "GET", "path": "/api/categories/{slug}/words", "handler_file": "backend/app/routes/categories.py", "handler_function": "get_category_words", "middleware": ["CORSMiddleware"], "tags": ["categories"], "response_model": "CategoryWordsResponse"},
+    {"method": "GET", "path": "/api/profiles", "handler_file": "backend/app/routes/profiles.py", "handler_function": "list_profiles", "middleware": ["CORSMiddleware"], "tags": ["profiles"], "response_model": "ProfileListResponse"},
+    {"method": "POST", "path": "/api/profiles/setup", "handler_file": "backend/app/routes/profiles.py", "handler_function": "setup_pin", "middleware": ["CORSMiddleware"], "tags": ["profiles"], "response_model": null},
+    {"method": "POST", "path": "/api/profiles/verify-pin", "handler_file": "backend/app/routes/profiles.py", "handler_function": "verify_pin", "middleware": ["CORSMiddleware"], "tags": ["profiles"], "response_model": "PinVerifyResponse"},
+    {"method": "POST", "path": "/api/profiles", "handler_file": "backend/app/routes/profiles.py", "handler_function": "create_profile", "middleware": ["CORSMiddleware"], "tags": ["profiles"], "response_model": "ProfileResponse"},
+    {"method": "PUT", "path": "/api/profiles/{profile_id}", "handler_file": "backend/app/routes/profiles.py", "handler_function": "update_profile", "middleware": ["CORSMiddleware"], "tags": ["profiles"], "response_model": "ProfileResponse"},
+    {"method": "DELETE", "path": "/api/profiles/{profile_id}", "handler_file": "backend/app/routes/profiles.py", "handler_function": "delete_profile", "middleware": ["CORSMiddleware"], "tags": ["profiles"], "response_model": null},
+    {"method": "GET", "path": "/api/progress", "handler_file": "backend/app/routes/progress.py", "handler_function": "get_all_progress", "middleware": ["CORSMiddleware"], "tags": ["progress"], "response_model": "AllProgressResponse"},
+    {"method": "GET", "path": "/api/progress/{category_slug}", "handler_file": "backend/app/routes/progress.py", "handler_function": "get_category_progress", "middleware": ["CORSMiddleware"], "tags": ["progress"], "response_model": "CategoryProgressResponse"},
+    {"method": "POST", "path": "/api/results", "handler_file": "backend/app/routes/results.py", "handler_function": "create_result", "middleware": ["CORSMiddleware"], "tags": ["results"], "response_model": "MatchResultResponse"}
+  ],
+  "middleware_chain": [
+    {"name": "CORSMiddleware", "file": "backend/app/main.py", "order": 1, "purpose": "Cross-origin resource sharing for frontend dev servers"}
+  ],
+  "models": [
+    {"name": "Profile", "file": "backend/app/models.py", "field_count": 5, "relationships": []},
+    {"name": "ParentSettings", "file": "backend/app/models.py", "field_count": 3, "relationships": []},
+    {"name": "Category", "file": "backend/app/models.py", "field_count": 5, "relationships": ["Word"]},
+    {"name": "Word", "file": "backend/app/models.py", "field_count": 4, "relationships": ["Category"]},
+    {"name": "MatchResult", "file": "backend/app/models.py", "field_count": 6, "relationships": ["Word", "Profile"]},
+    {"name": "WordProgress", "file": "backend/app/models.py", "field_count": 6, "relationships": ["Word", "Profile"]}
+  ],
+  "services": [
+    {"name": "seed", "file": "backend/app/seed.py", "public_functions": ["seed"]},
+    {"name": "database", "file": "backend/app/database.py", "public_functions": ["get_db"]}
+  ],
+  "existing_docs": [
+    {"path": "CLAUDE.md", "type": "readme"},
+    {"path": "README.md", "type": "readme"},
+    {"path": "docs/prd.md", "type": "other"},
+    {"path": "docs/staging-deploy.md", "type": "other"}
+  ],
+  "flows": {
+    "documented": [],
+    "undocumented": [
+      "GET /api/health", "GET /api/version",
+      "GET /api/categories", "GET /api/categories/{slug}/words",
+      "GET /api/profiles", "POST /api/profiles/setup", "POST /api/profiles/verify-pin",
+      "POST /api/profiles", "PUT /api/profiles/{profile_id}", "DELETE /api/profiles/{profile_id}",
+      "GET /api/progress", "GET /api/progress/{category_slug}",
+      "POST /api/results"
+    ],
+    "stale": []
+  },
+  "fingerprints": {
+    "backend/app/main.py": "361a0877",
+    "backend/app/routes/categories.py": "84560712",
+    "backend/app/routes/profiles.py": "decc8363",
+    "backend/app/routes/progress.py": "bfb0b7d5",
+    "backend/app/routes/results.py": "4264f6b3",
+    "backend/app/models.py": "ed64e48d",
+    "backend/app/schemas.py": "9b8bdca7",
+    "backend/app/database.py": "2920fc1e",
+    "backend/app/seed.py": "3ec01f1d"
+  }
+}
