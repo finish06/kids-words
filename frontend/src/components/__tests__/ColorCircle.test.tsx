@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { ColorCircle, isColorUrl, parseColorHex } from "../ColorCircle";
+import { ColorCircle } from "../ColorCircle";
+import { isColorUrl, parseColorHex } from "../colorUtils";
 
 describe("isColorUrl", () => {
   it("returns true for color:// URLs", () => {

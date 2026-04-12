@@ -3,7 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCategoryWords } from "../api/client";
 import { useRound } from "../hooks/useRound";
 import type { CategoryDetail, Word } from "../types";
-import { ColorCircle, isColorUrl, parseColorHex } from "./ColorCircle";
+import { ColorCircle } from "./ColorCircle";
+import { isColorUrl, parseColorHex } from "./colorUtils";
 import { Icon } from "./Icon";
 import { RoundComplete } from "./RoundComplete";
 

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCategoryProgress } from "../api/client";
 import type { CategoryDetail, WordProgressItem } from "../types";
-import { ColorCircle, isColorUrl, parseColorHex } from "./ColorCircle";
+import { ColorCircle } from "./ColorCircle";
+import { isColorUrl, parseColorHex } from "./colorUtils";
 import { Icon } from "./Icon";
 import { Stars } from "./Stars";
 

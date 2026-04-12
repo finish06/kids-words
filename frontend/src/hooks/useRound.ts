@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { postResult } from "../api/client";
 import type { StarUpdate, Word } from "../types";
 
@@ -11,10 +11,20 @@ interface RoundState {
   attemptNumber: number;
   isComplete: boolean;
   lastTapTime: number;
+  wordResults: WordResult[];
 }
 
 const DEBOUNCE_MS = 300;
 const OPTIONS_COUNT = 3;
+
+function shuffle<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
 
 function pickOptions(
   words: Word[],
@@ -22,10 +32,8 @@ function pickOptions(
   count: number,
 ): Word[] {
   const others = words.filter((w) => w.id !== currentWord.id);
-  const shuffled = [...others].sort(() => Math.random() - 0.5);
-  const distractors = shuffled.slice(0, count - 1);
-  const options = [currentWord, ...distractors];
-  return options.sort(() => Math.random() - 0.5);
+  const distractors = shuffle(others).slice(0, count - 1);
+  return shuffle([currentWord, ...distractors]);
 }
 
 export interface WordResult {
@@ -34,25 +42,22 @@ export interface WordResult {
 }
 
 export function useRound(words: Word[]) {
-  const shuffledWords = useMemo(
-    () => [...words].sort(() => Math.random() - 0.5),
-    [words],
-  );
-
-  const [state, setState] = useState<RoundState>({
-    currentIndex: 0,
-    words: shuffledWords,
-    options: shuffledWords.length > 0
-      ? pickOptions(shuffledWords, shuffledWords[0], OPTIONS_COUNT)
-      : [],
-    isCorrect: null,
-    selectedId: null,
-    attemptNumber: 1,
-    isComplete: false,
-    lastTapTime: 0,
+  const [state, setState] = useState<RoundState>(() => {
+    const shuffled = shuffle(words);
+    return {
+      currentIndex: 0,
+      words: shuffled,
+      options: shuffled.length > 0
+        ? pickOptions(shuffled, shuffled[0], OPTIONS_COUNT)
+        : [],
+      isCorrect: null,
+      selectedId: null,
+      attemptNumber: 1,
+      isComplete: false,
+      lastTapTime: 0,
+      wordResults: [],
+    };
   });
-
-  const wordResultsRef = useRef<WordResult[]>([]);
 
   const currentWord = state.words[state.currentIndex] ?? null;
 
@@ -72,6 +77,7 @@ export function useRound(words: Word[]) {
         attemptNumber: correct ? prev.attemptNumber : prev.attemptNumber + 1,
       }));
 
+      let starUpdate: StarUpdate | null = null;
       if (currentWord) {
         try {
           const result = await postResult({
@@ -80,34 +86,26 @@ export function useRound(words: Word[]) {
             is_correct: correct,
             attempt_number: state.attemptNumber,
           });
-
           if (correct && result.star_update) {
-            wordResultsRef.current.push({
-              text: currentWord.text,
-              starUpdate: result.star_update,
-            });
-          } else if (correct) {
-            wordResultsRef.current.push({
-              text: currentWord.text,
-              starUpdate: null,
-            });
+            starUpdate = result.star_update;
           }
         } catch {
-          if (correct) {
-            wordResultsRef.current.push({
-              text: currentWord.text,
-              starUpdate: null,
-            });
-          }
+          // API failure doesn't block the round
         }
       }
 
       if (correct) {
+        const wordResult: WordResult = {
+          text: currentWord?.text ?? "",
+          starUpdate,
+        };
+
         setTimeout(() => {
           setState((prev) => {
             const nextIndex = prev.currentIndex + 1;
+            const updatedResults = [...prev.wordResults, wordResult];
             if (nextIndex >= prev.words.length) {
-              return { ...prev, isComplete: true };
+              return { ...prev, isComplete: true, wordResults: updatedResults };
             }
             const nextWord = prev.words[nextIndex];
             return {
@@ -117,6 +115,7 @@ export function useRound(words: Word[]) {
               isCorrect: null,
               selectedId: null,
               attemptNumber: 1,
+              wordResults: updatedResults,
             };
           });
         }, 1200);
@@ -143,7 +142,7 @@ export function useRound(words: Word[]) {
       current: state.currentIndex + 1,
       total: state.words.length,
     },
-    wordResults: wordResultsRef.current,
+    wordResults: state.wordResults,
     handleSelect,
   };
 }
