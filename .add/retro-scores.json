@@ -1,0 +1,15 @@
+{
+  "$schema": "https://github.com/MountainUnicorn/add/retro-scores.schema.json",
+  "version": "1.0.0",
+  "project": "kids-words",
+  "entries": [
+    {
+      "date": "2026-04-12",
+      "collab_score": 7.0,
+      "add_effectiveness": 6.0,
+      "swarm_effectiveness": 7.0,
+      "retro_file": ".add/retros/retro-2026-04-12.md",
+      "context": "mixed"
+    }
+  ]
+}

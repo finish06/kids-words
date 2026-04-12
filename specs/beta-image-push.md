@@ -3,8 +3,8 @@
 **Version:** 0.1.0
 **Created:** 2026-04-04
 **PRD Reference:** docs/prd.md — Infrastructure
-**Milestone:** M1 (CI/CD)
-**Status:** Draft
+**Milestone:** M1 — Word Recognition (CI/CD)
+**Status:** Implemented
 
 ## 1. Overview
 

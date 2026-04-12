@@ -2,8 +2,9 @@
 
 **Goal:** Add dark mode support with device auto-detection and manual toggle.
 **Appetite:** 1 day
-**Status:** IN_PROGRESS
+**Status:** COMPLETE
 **Started:** 2026-04-05
+**Closed:** 2026-04-12 (retro — dark mode shipped via PR #12 + contrast audit follow-ups)
 **Target Maturity:** Beta
 
 ## Features

@@ -3,8 +3,8 @@
 **Version:** 0.1.0
 **Created:** 2026-04-05
 **PRD Reference:** docs/prd.md — User Accounts
-**Milestone:** M3 (bug fix)
-**Status:** Draft
+**Milestone:** M4 — Profile Enhancements
+**Status:** Implemented
 
 ## 1. Overview
 

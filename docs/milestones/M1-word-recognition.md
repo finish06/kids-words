@@ -2,7 +2,8 @@
 
 **Goal:** Build the core word-image matching activity that kids can use on a tablet.
 **Appetite:** 2-3 weeks
-**Status:** IN_PROGRESS
+**Status:** COMPLETE
+**Closed:** 2026-04-12 (retro)
 **Started:** 2026-04-04
 **Target Maturity:** Alpha
 

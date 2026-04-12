@@ -3,8 +3,8 @@
 **Version:** 0.1.0
 **Created:** 2026-04-05
 **PRD Reference:** docs/prd.md — Infrastructure
-**Milestone:** M3
-**Status:** Draft
+**Milestone:** M3 — Infrastructure Hardening
+**Status:** Implemented
 
 ## 1. Overview
 

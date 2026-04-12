@@ -2,8 +2,9 @@
 
 **Goal:** Complete the profile management experience — edit, delete, and polish.
 **Appetite:** 1-2 days
-**Status:** IN_PROGRESS
+**Status:** COMPLETE
 **Started:** 2026-04-05
+**Closed:** 2026-04-12 (retro — profile edit/delete shipped via PR #11)
 **Target Maturity:** Beta
 
 ## Features

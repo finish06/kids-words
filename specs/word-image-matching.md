@@ -4,7 +4,7 @@
 **Created:** 2026-04-04
 **PRD Reference:** docs/prd.md — Feature 1: Word-Image Matching
 **Milestone:** M1: Word Recognition
-**Status:** Draft
+**Status:** Implemented
 
 ## 1. Overview
 
