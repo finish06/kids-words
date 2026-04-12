@@ -67,20 +67,14 @@ SEED_DATA: list[dict[str, Any]] = [
         "slug": "shapes",
         "icon_url": get_image_url("2B50"),
         "display_order": 4,
-        "words": [
-            {"text": word, "image_url": url}
-            for word, url in SHAPES_UNIQUE
-        ],
+        "words": [{"text": word, "image_url": url} for word, url in SHAPES_UNIQUE],
     },
     {
         "name": "Body Parts",
         "slug": "body-parts",
         "icon_url": get_image_url("1F9B4"),
         "display_order": 5,
-        "words": [
-            {"text": word, "image_url": url}
-            for word, url in BODY_PARTS_UNIQUE
-        ],
+        "words": [{"text": word, "image_url": url} for word, url in BODY_PARTS_UNIQUE],
     },
 ]
 
