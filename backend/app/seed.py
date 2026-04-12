@@ -157,7 +157,13 @@ async def seed(db_url: str | None = None) -> None:
 
         await session.commit()
 
-        if added_cats == 0 and added_words == 0 and updated_words == 0 and removed_words == 0:
+        no_changes = (
+            added_cats == 0
+            and added_words == 0
+            and updated_words == 0
+            and removed_words == 0
+        )
+        if no_changes:
             print("Database already up to date.")
         else:
             parts = []
