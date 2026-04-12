@@ -1,4 +1,6 @@
-const SHAPE_DEFS: Record<string, { svg: JSX.Element; bg: string }> = {
+import type { ReactNode } from "react";
+
+const SHAPE_DEFS: Record<string, { svg: ReactNode; bg: string }> = {
   CIRCLE: {
     bg: "linear-gradient(135deg, #3b82f6, #60a5fa)",
     svg: (

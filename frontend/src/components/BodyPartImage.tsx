@@ -1,4 +1,6 @@
-const BODY_PART_DEFS: Record<string, { svg: JSX.Element; bg: string }> = {
+import type { ReactNode } from "react";
+
+const BODY_PART_DEFS: Record<string, { svg: ReactNode; bg: string }> = {
   HEAD: {
     bg: "linear-gradient(135deg, #fbbf24, #fde68a)",
     svg: (
