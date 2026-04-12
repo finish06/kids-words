@@ -148,8 +148,8 @@
     "lastVersionTag": null
   },
   "planning": {
-    "current_milestone": "M1-word-recognition",
-    "current_cycle": null,
+    "current_milestone": "M3-infrastructure-hardening",
+    "current_cycle": "cycle-9",
     "wip_limit": 3,
     "parallel_agents": 1,
     "cycle_history": []

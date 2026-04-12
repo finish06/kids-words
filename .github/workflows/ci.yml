@@ -41,10 +41,16 @@ jobs:
       - name: Tests with coverage
         env:
           PYTHONPATH: .
-        # CI coverage reads lower than local (68% vs 88%) due to FastAPI
-        # dependency_overrides not fully taking effect across module boundaries
-        # in CI. All 35 tests pass. Local coverage is authoritative at 88%.
-        run: . .venv/bin/activate && pytest tests/ --import-mode=importlib --cov=app --cov-report=term-missing --cov-fail-under=65
+        # CI coverage threshold is 75% (CLI override below). Local threshold
+        # is 80% (in pyproject.toml [tool.coverage.report]). The gap exists
+        # because FastAPI dependency_overrides do not fully take effect in
+        # CI for the routes that use them — local hits ~93%, CI hits ~76%.
+        # The route files affected are profiles.py, progress.py, results.py,
+        # categories.py. Fixing the underlying dep_override + import-mode
+        # interaction is tracked as a separate cycle item (cycle-10 candidate).
+        # Migration + seed tests use their own engines and don't suffer this
+        # gap, which is what raised CI coverage from ~68% to ~76%.
+        run: . .venv/bin/activate && pytest tests/ --cov=app --cov-report=term-missing --cov-fail-under=75
 
   frontend:
     name: Frontend (TypeScript)
