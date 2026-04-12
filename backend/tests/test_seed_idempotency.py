@@ -87,8 +87,8 @@ async def test_tc001_seed_fresh_db_inserts_all(seeded_db_url: str) -> None:
     category_count = await _count(seeded_db_url, Category)
     word_count = await _count(seeded_db_url, Word)
 
-    # The seed data has Animals, Colors, Food categories.
-    assert category_count == 3
+    # The seed data has Animals, Colors, Food, Shapes, Body Parts categories.
+    assert category_count == len(seed_module.SEED_DATA)
 
     # Word count should equal the sum of SEED_DATA word lists.
     expected = sum(len(cat["words"]) for cat in seed_module.SEED_DATA)
@@ -118,7 +118,7 @@ async def test_third_run_still_noop(seeded_db_url: str) -> None:
     await seed(db_url=seeded_db_url)
     await seed(db_url=seeded_db_url)
 
-    assert await _count(seeded_db_url, Category) == 3
+    assert await _count(seeded_db_url, Category) == len(seed_module.SEED_DATA)
 
 
 @pytest.mark.asyncio
