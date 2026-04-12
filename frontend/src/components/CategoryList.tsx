@@ -69,7 +69,7 @@ export function CategoryList() {
       <h1 className="title">Kids Words</h1>
       <p className="subtitle">Pick a category!</p>
       <div className="categories-grid">
-        {categories.map((cat) => (
+        {categories.filter((cat) => cat.slug !== "body-parts").map((cat) => (
           <div key={cat.id} className="category-card">
             {CATEGORY_ILLUSTRATIONS[cat.slug] && (
               <img
