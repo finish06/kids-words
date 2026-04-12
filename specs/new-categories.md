@@ -3,8 +3,8 @@
 **Version:** 0.1.0
 **Created:** 2026-04-07
 **PRD Reference:** docs/prd.md — Word Sets
-**Milestone:** M6
-**Status:** Draft
+**Milestone:** M6 — New Categories
+**Status:** Implemented
 
 ## 1. Overview
 

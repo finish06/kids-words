@@ -2,7 +2,8 @@
 
 **Goal:** Expand word library with Shapes and Body Parts categories.
 **Appetite:** 1 day
-**Status:** IN_PROGRESS
+**Status:** COMPLETE
+**Closed:** 2026-04-12 (cycle-10)
 **Started:** 2026-04-07
 **Target Maturity:** Beta
 
@@ -15,9 +16,9 @@
 
 ## Success Criteria
 
-- [ ] Shapes category with ~20 words appears on home screen
-- [ ] Body Parts category with ~25 words appears on home screen
-- [ ] All OpenMoji images load correctly
-- [ ] Existing progress preserved (idempotent seed)
-- [ ] Quiz picker works (5/10/20)
-- [ ] Deployed to staging
+- [x] Shapes category with ~20 words appears on home screen
+- [x] Body Parts category with ~25 words appears on home screen
+- [x] All OpenMoji images load correctly (verified via staging quiz round)
+- [x] Existing progress preserved (idempotent seed — 48/48 tests pass)
+- [x] Quiz picker works (5/10/20) — played 5-word Shapes round on staging
+- [x] Deployed to staging (auto-seed added to Docker entrypoint)
