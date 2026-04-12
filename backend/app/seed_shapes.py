@@ -28,6 +28,8 @@ SHAPES: list[tuple[str, str]] = [
     ("CYLINDER", "shape://CYLINDER"),
     ("SPIRAL", "shape://SPIRAL"),
     ("INFINITY", "shape://INFINITY"),
+    ("OCTAGON", "shape://OCTAGON"),
+    ("DECAGON", "shape://DECAGON"),
 ]
 
 # Deduplicate by word text

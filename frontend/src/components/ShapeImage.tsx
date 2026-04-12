@@ -215,6 +215,30 @@ const SHAPE_DEFS: Record<string, { svg: ReactNode; bg: string }> = {
       </svg>
     ),
   },
+  OCTAGON: {
+    bg: "linear-gradient(135deg, #dc2626, #fca5a5)",
+    svg: (
+      <svg viewBox="0 0 100 100" className="shape-svg">
+        <polygon
+          points="34,10 66,10 90,34 90,66 66,90 34,90 10,66 10,34"
+          fill="#fca5a5" stroke="#dc2626" strokeWidth="4" strokeLinejoin="round"
+        />
+        <circle cx="42" cy="42" r="5" fill="rgba(255,255,255,0.3)" />
+      </svg>
+    ),
+  },
+  DECAGON: {
+    bg: "linear-gradient(135deg, #0d9488, #5eead4)",
+    svg: (
+      <svg viewBox="0 0 100 100" className="shape-svg">
+        <polygon
+          points="50,8 69,14 82,30 86,50 82,70 69,86 50,92 31,86 18,70 14,50 18,30 31,14"
+          fill="#5eead4" stroke="#0d9488" strokeWidth="4" strokeLinejoin="round"
+        />
+        <circle cx="40" cy="40" r="5" fill="rgba(255,255,255,0.3)" />
+      </svg>
+    ),
+  },
 };
 
 export function ShapeImage({ name }: { name: string }) {
