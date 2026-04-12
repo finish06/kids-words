@@ -14,6 +14,8 @@ const CATEGORY_ILLUSTRATIONS: Record<string, string> = {
   animals: "/illustrations/cat-animals.svg",
   food: "/illustrations/cat-foods.svg",
   colors: "/illustrations/cat-colors.svg",
+  shapes: "/illustrations/cat-shapes.svg",
+  "body-parts": "/illustrations/cat-bodyparts.svg",
 };
 
 export function CategoryList() {
