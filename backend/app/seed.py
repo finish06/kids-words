@@ -68,8 +68,8 @@ SEED_DATA: list[dict[str, Any]] = [
         "icon_url": get_image_url("2B50"),
         "display_order": 4,
         "words": [
-            {"text": word, "image_url": get_image_url(code)}
-            for word, code in SHAPES_UNIQUE
+            {"text": word, "image_url": url}
+            for word, url in SHAPES_UNIQUE
         ],
     },
     {
@@ -78,8 +78,8 @@ SEED_DATA: list[dict[str, Any]] = [
         "icon_url": get_image_url("1F9B4"),
         "display_order": 5,
         "words": [
-            {"text": word, "image_url": get_image_url(code)}
-            for word, code in BODY_PARTS_UNIQUE
+            {"text": word, "image_url": url}
+            for word, url in BODY_PARTS_UNIQUE
         ],
     },
 ]

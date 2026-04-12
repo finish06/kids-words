@@ -1,39 +1,39 @@
-"""Shape word list with OpenMoji emoji codes.
+"""Shape word list using custom shape:// URL scheme.
 
-OpenMoji CDN:
-  https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji/color/618x618/{code}.png
+Images are rendered as inline SVG by the frontend ShapeImage component,
+not fetched from a CDN. The URL format is: shape://{WORD_TEXT}
 
-License: CC BY-SA 4.0 (https://openmoji.org/)
+Each shape maps to a colorful geometric SVG in the frontend.
 """
 
-# (word_text, emoji_unicode_hex)
+# (word_text, image_url)
 SHAPES: list[tuple[str, str]] = [
-    ("CIRCLE", "1F534"),  # red circle
-    ("SQUARE", "1F7E8"),  # yellow square
-    ("TRIANGLE", "1F53A"),  # red triangle pointed up
-    ("STAR", "2B50"),  # star
-    ("HEART", "2764"),  # red heart (shape)
-    ("DIAMOND", "1F537"),  # large blue diamond
-    ("RECTANGLE", "1F7E9"),  # green square (proxy)
-    ("OVAL", "1F7E0"),  # orange circle (proxy)
-    ("PENTAGON", "2B1F"),  # black pentagon
-    ("HEXAGON", "2B22"),  # black hexagon
-    ("ARROW", "27A1"),  # right arrow
-    ("CRESCENT", "1F319"),  # crescent moon
-    ("CROSS", "271D"),  # latin cross
-    ("RING", "1F48D"),  # ring
-    ("CUBE", "1F532"),  # black square button
-    ("SPHERE", "1F30D"),  # globe (proxy for sphere)
-    ("CONE", "1F4D0"),  # triangular ruler (proxy)
-    ("CYLINDER", "1F9F4"),  # lotion bottle (cylinder shape)
-    ("SPIRAL", "1F300"),  # cyclone / spiral
-    ("INFINITY", "267E"),  # infinity
+    ("CIRCLE", "shape://CIRCLE"),
+    ("SQUARE", "shape://SQUARE"),
+    ("TRIANGLE", "shape://TRIANGLE"),
+    ("STAR", "shape://STAR"),
+    ("HEART", "shape://HEART"),
+    ("DIAMOND", "shape://DIAMOND"),
+    ("RECTANGLE", "shape://RECTANGLE"),
+    ("OVAL", "shape://OVAL"),
+    ("PENTAGON", "shape://PENTAGON"),
+    ("HEXAGON", "shape://HEXAGON"),
+    ("ARROW", "shape://ARROW"),
+    ("CRESCENT", "shape://CRESCENT"),
+    ("CROSS", "shape://CROSS"),
+    ("RING", "shape://RING"),
+    ("CUBE", "shape://CUBE"),
+    ("SPHERE", "shape://SPHERE"),
+    ("CONE", "shape://CONE"),
+    ("CYLINDER", "shape://CYLINDER"),
+    ("SPIRAL", "shape://SPIRAL"),
+    ("INFINITY", "shape://INFINITY"),
 ]
 
 # Deduplicate by word text
 _seen: set[str] = set()
 SHAPES_UNIQUE: list[tuple[str, str]] = []
-for word, code in SHAPES:
+for word, url in SHAPES:
     if word not in _seen:
         _seen.add(word)
-        SHAPES_UNIQUE.append((word, code))
+        SHAPES_UNIQUE.append((word, url))

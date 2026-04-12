@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCategoryProgress } from "../api/client";
 import type { CategoryDetail, WordProgressItem } from "../types";
+import { BodyPartImage } from "./BodyPartImage";
 import { ColorCircle } from "./ColorCircle";
-import { isColorUrl, parseColorHex } from "./colorUtils";
+import { isBodyPartUrl, isColorUrl, isShapeUrl, parseBodyPartName, parseColorHex, parseShapeName } from "./colorUtils";
 import { Icon } from "./Icon";
+import { ShapeImage } from "./ShapeImage";
 import { Stars } from "./Stars";
 
 export function WordList() {
@@ -50,6 +52,10 @@ export function WordList() {
           <div key={word.word_id} className="word-card">
             {isColorUrl(word.image_url) ? (
               <ColorCircle color={parseColorHex(word.image_url)} />
+            ) : isShapeUrl(word.image_url) ? (
+              <ShapeImage name={parseShapeName(word.image_url)} />
+            ) : isBodyPartUrl(word.image_url) ? (
+              <BodyPartImage name={parseBodyPartName(word.image_url)} />
             ) : (
               <img
                 src={word.image_url}

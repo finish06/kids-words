@@ -3,8 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCategoryWords } from "../api/client";
 import { useRound } from "../hooks/useRound";
 import type { CategoryDetail, Word } from "../types";
+import { BodyPartImage } from "./BodyPartImage";
 import { ColorCircle } from "./ColorCircle";
-import { isColorUrl, parseColorHex } from "./colorUtils";
+import { isBodyPartUrl, isColorUrl, isShapeUrl, parseBodyPartName, parseColorHex, parseShapeName } from "./colorUtils";
+import { ShapeImage } from "./ShapeImage";
 import { Icon } from "./Icon";
 import { RoundComplete } from "./RoundComplete";
 
@@ -114,6 +116,10 @@ function MatchGame({
             >
               {isColorUrl(option.image_url) ? (
                 <ColorCircle color={parseColorHex(option.image_url)} />
+              ) : isShapeUrl(option.image_url) ? (
+                <ShapeImage name={parseShapeName(option.image_url)} />
+              ) : isBodyPartUrl(option.image_url) ? (
+                <BodyPartImage name={parseBodyPartName(option.image_url)} />
               ) : (
                 <img
                   src={option.image_url}
