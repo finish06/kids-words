@@ -1,520 +1,394 @@
 import type { ReactNode } from "react";
 
 /*
- * Body Part illustrations for kids aged 4-6.
+ * Body Part illustrations — educational anatomy-poster style.
  *
- * Design rule: every image must pass the "would a 4-year-old recognise this?" test.
- * That means showing body parts IN CONTEXT (on a face, on a body, with neighbours)
- * rather than as abstract symbols. A nose needs a face around it. A leg needs a foot
- * at the bottom and a hip at the top. A tooth needs a mouth.
+ * Reference: cartoon body-part posters for kids. Each icon shows the actual
+ * body part as it looks on a child — skin-toned, cropped close-up, soft
+ * light background. NOT abstract symbols or colored shapes.
+ *
+ * Palette:
+ *   Skin:   #fcd5b8 (fill), #e8b998 (shadow), #c4956a (outline)
+ *   Hair:   #5c3a1e (dark brown)
+ *   Lips:   #e88da0
+ *   Bg:     #e8f4fd (light blue circle)
  */
 
-const S = "#fde68a"; // skin fill
-const SO = "#d97706"; // skin outline
-const D = "#1e293b"; // dark (eyes/pupils)
+const SK = "#fcd5b8";
+const SKS = "#e8b998";
+const SKO = "#c4956a";
+const HR = "#5c3a1e";
+const D = "#3b3b3b";
 
 const BODY_PART_DEFS: Record<string, { svg: ReactNode; bg: string }> = {
   HEAD: {
-    bg: "linear-gradient(135deg, #a78bfa, #ede9fe)",
+    bg: "#e8f4fd",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Head silhouette with hair — clearly "head", not just "face" */}
-        <circle cx="50" cy="48" r="32" fill={S} stroke={SO} strokeWidth="3" />
-        {/* Hair on top */}
-        <path d="M22,38 Q24,12 50,8 Q76,12 78,38" fill="#92400e" stroke="#78350f" strokeWidth="2" />
-        <path d="M28,30 Q34,14 50,10 Q66,14 72,30" fill="#a16207" />
-        {/* Eyes */}
-        <circle cx="38" cy="46" r="3.5" fill={D} />
-        <circle cx="62" cy="46" r="3.5" fill={D} />
-        <circle cx="39" cy="45" r="1.2" fill="white" />
-        <circle cx="63" cy="45" r="1.2" fill="white" />
-        {/* Smile */}
-        <path d="M40,58 Q50,66 60,58" fill="none" stroke="#92400e" strokeWidth="2" strokeLinecap="round" />
-        {/* Neck stub to show "this is HEAD, not face" */}
-        <rect x="42" y="78" width="16" height="14" rx="4" fill={S} stroke={SO} strokeWidth="2" />
+        <circle cx="50" cy="52" r="30" fill={SK} stroke={SKO} strokeWidth="2" />
+        <path d="M24,42 Q26,14 50,10 Q74,14 76,42" fill={HR} />
+        <path d="M30,36 Q34,18 50,14 Q66,18 70,36" fill="#7a5230" />
+        <circle cx="38" cy="48" r="3.5" fill="white" />
+        <circle cx="62" cy="48" r="3.5" fill="white" />
+        <circle cx="39.5" cy="48.5" r="2" fill={D} />
+        <circle cx="63.5" cy="48.5" r="2" fill={D} />
+        <circle cx="40" cy="48" r="0.8" fill="white" />
+        <circle cx="64" cy="48" r="0.8" fill="white" />
+        <ellipse cx="50" cy="56" rx="2.5" ry="1.5" fill={SKS} />
+        <path d="M43,62 Q50,68 57,62" fill="none" stroke="#e88da0" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="34" cy="56" r="4" fill="#f5b5a8" opacity="0.4" />
+        <circle cx="66" cy="56" r="4" fill="#f5b5a8" opacity="0.4" />
       </svg>
     ),
   },
   FACE: {
-    bg: "linear-gradient(135deg, #f9a8d4, #fbcfe8)",
+    bg: "#fce4ec",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        <circle cx="50" cy="50" r="36" fill="#fbcfe8" stroke="#ec4899" strokeWidth="3" />
-        {/* Big expressive eyes */}
-        <ellipse cx="36" cy="42" rx="7" ry="8" fill="white" />
-        <ellipse cx="64" cy="42" rx="7" ry="8" fill="white" />
-        <circle cx="38" cy="43" r="4.5" fill={D} />
-        <circle cx="66" cy="43" r="4.5" fill={D} />
-        <circle cx="39" cy="42" r="1.5" fill="white" />
-        <circle cx="67" cy="42" r="1.5" fill="white" />
-        {/* Nose dot */}
-        <circle cx="50" cy="54" r="2" fill="#ec4899" />
-        {/* Wide smile */}
-        <path d="M36,62 Q50,74 64,62" fill="none" stroke="#be185d" strokeWidth="2.5" strokeLinecap="round" />
-        {/* Blush */}
-        <circle cx="28" cy="56" r="5" fill="#f9a8d4" opacity="0.5" />
-        <circle cx="72" cy="56" r="5" fill="#f9a8d4" opacity="0.5" />
+        <circle cx="50" cy="50" r="38" fill={SK} stroke={SKO} strokeWidth="2" />
+        <ellipse cx="36" cy="44" rx="5" ry="6" fill="white" />
+        <ellipse cx="64" cy="44" rx="5" ry="6" fill="white" />
+        <circle cx="37.5" cy="45" r="3" fill="#6b4423" />
+        <circle cx="65.5" cy="45" r="3" fill="#6b4423" />
+        <circle cx="38" cy="44" r="1" fill="white" />
+        <circle cx="66" cy="44" r="1" fill="white" />
+        <path d="M36,38 Q36,34 40,36" fill="none" stroke={HR} strokeWidth="1.5" />
+        <path d="M64,38 Q64,34 60,36" fill="none" stroke={HR} strokeWidth="1.5" />
+        <ellipse cx="50" cy="56" rx="3" ry="2" fill={SKS} />
+        <path d="M40,64 Q50,74 60,64" fill="#e88da0" stroke="#d47a8e" strokeWidth="1.5" />
+        <path d="M42,64 Q50,70 58,64" fill="white" />
+        <circle cx="30" cy="56" r="5" fill="#f5b5a8" opacity="0.35" />
+        <circle cx="70" cy="56" r="5" fill="#f5b5a8" opacity="0.35" />
       </svg>
     ),
   },
   EYE: {
-    bg: "linear-gradient(135deg, #60a5fa, #bfdbfe)",
+    bg: "#e8f4fd",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Large eye with detailed iris */}
-        <ellipse cx="50" cy="50" rx="38" ry="24" fill="white" stroke="#2563eb" strokeWidth="3" />
-        <circle cx="50" cy="50" r="16" fill="#3b82f6" />
+        <ellipse cx="50" cy="50" rx="40" ry="24" fill="white" stroke={SKO} strokeWidth="2.5" />
+        <circle cx="50" cy="50" r="16" fill="#8B6914" />
         <circle cx="50" cy="50" r="9" fill={D} />
-        <circle cx="44" cy="43" r="5" fill="white" />
-        <circle cx="54" cy="47" r="2.5" fill="white" />
-        {/* Eyelashes on top */}
-        <path d="M18,34 L22,28" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M30,28 L32,22" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M44,25 L44,19" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M56,25 L56,19" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M68,28 L70,22" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M80,34 L82,28" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" />
+        <circle cx="44" cy="44" r="4.5" fill="white" />
+        <circle cx="54" cy="48" r="2" fill="white" />
+        <path d="M12,50 Q12,30 26,24" fill="none" stroke={SKO} strokeWidth="2" strokeLinecap="round" />
+        <path d="M88,50 Q88,30 74,24" fill="none" stroke={SKO} strokeWidth="2" strokeLinecap="round" />
+        <path d="M18,28 L14,20" stroke={HR} strokeWidth="2" strokeLinecap="round" />
+        <path d="M28,22 L26,14" stroke={HR} strokeWidth="2" strokeLinecap="round" />
+        <path d="M40,20 L40,12" stroke={HR} strokeWidth="2" strokeLinecap="round" />
+        <path d="M60,20 L60,12" stroke={HR} strokeWidth="2" strokeLinecap="round" />
+        <path d="M72,22 L74,14" stroke={HR} strokeWidth="2" strokeLinecap="round" />
+        <path d="M82,28 L86,20" stroke={HR} strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
   },
   EAR: {
-    bg: "linear-gradient(135deg, #fbbf24, #fef3c7)",
+    bg: "#fef3c7",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Ear shown on side of face for context */}
-        {/* Partial face circle on left */}
-        <path d="M40,20 A30,30 0 0,0 40,80" fill={S} stroke={SO} strokeWidth="2" />
-        {/* Eye on face */}
-        <circle cx="30" cy="46" r="3" fill={D} />
-        <circle cx="31" cy="45" r="1" fill="white" />
-        {/* The ear — big and prominent on right side */}
-        <path d="M48,24 C72,22 80,38 80,52 C80,70 66,82 52,82 C48,82 44,78 44,74" fill={S} stroke={SO} strokeWidth="3" strokeLinecap="round" />
-        <path d="M52,34 C64,34 68,44 68,52 C68,62 60,68 52,68" fill="none" stroke={SO} strokeWidth="2.5" strokeLinecap="round" />
-        {/* Inner ear detail */}
-        <circle cx="58" cy="52" r="5" fill="#fbbf24" stroke={SO} strokeWidth="1.5" />
-        {/* Arrow pointing at ear */}
-        <path d="M82,40 L90,40" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M87,36 L91,40 L87,44" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M56,12 C78,12 88,30 88,50 C88,74 72,90 54,90 C46,90 40,84 40,78" fill={SK} stroke={SKO} strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M56,26 C68,26 76,38 76,50 C76,64 66,74 56,74" fill="none" stroke={SKS} strokeWidth="2.5" strokeLinecap="round" />
+        <ellipse cx="60" cy="54" rx="6" ry="5" fill={SKS} stroke={SKO} strokeWidth="1.5" />
+        <path d="M38,40 L28,40" stroke={SKO} strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
+        <path d="M38,50 L22,50" stroke={SKO} strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
+        <path d="M38,60 L28,60" stroke={SKO} strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
       </svg>
     ),
   },
   NOSE: {
-    bg: "linear-gradient(135deg, #fb923c, #fed7aa)",
+    bg: "#fff1e6",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* A face with a BIG highlighted nose */}
-        <circle cx="50" cy="50" r="36" fill={S} stroke={SO} strokeWidth="2.5" />
-        {/* Eyes */}
-        <circle cx="36" cy="38" r="3" fill={D} />
-        <circle cx="64" cy="38" r="3" fill={D} />
-        <circle cx="37" cy="37" r="1" fill="white" />
-        <circle cx="65" cy="37" r="1" fill="white" />
-        {/* THE NOSE — big, round, highlighted */}
-        <ellipse cx="50" cy="54" rx="10" ry="8" fill="#fb923c" stroke="#ea580c" strokeWidth="2.5" />
-        <circle cx="44" cy="56" r="2.5" fill="#ea580c" opacity="0.3" />
-        <circle cx="56" cy="56" r="2.5" fill="#ea580c" opacity="0.3" />
-        {/* Highlight on nose */}
-        <ellipse cx="48" cy="50" rx="3" ry="2" fill="white" opacity="0.35" />
-        {/* Little smile */}
-        <path d="M42,68 Q50,74 58,68" fill="none" stroke="#92400e" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M50,10 C50,10 50,40 50,50 C50,60 38,72 30,72 C24,72 22,66 26,62" fill="none" stroke={SKO} strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M50,50 C50,60 62,72 70,72 C76,72 78,66 74,62" fill="none" stroke={SKO} strokeWidth="2.5" strokeLinecap="round" />
+        <ellipse cx="50" cy="64" rx="20" ry="14" fill={SK} stroke={SKO} strokeWidth="2" />
+        <ellipse cx="40" cy="68" rx="5" ry="4" fill={SKS} />
+        <ellipse cx="60" cy="68" rx="5" ry="4" fill={SKS} />
+        <ellipse cx="46" cy="56" rx="6" ry="4" fill="white" opacity="0.3" transform="rotate(-10,46,56)" />
       </svg>
     ),
   },
   MOUTH: {
-    bg: "linear-gradient(135deg, #ef4444, #fca5a5)",
+    bg: "#fce4ec",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Big open smiling mouth */}
-        <path d="M12,36 Q50,30 88,36 Q82,80 50,84 Q18,80 12,36Z" fill="#f87171" stroke="#dc2626" strokeWidth="3" />
-        {/* Upper lip line */}
-        <path d="M12,36 Q50,48 88,36" fill="none" stroke="#dc2626" strokeWidth="2" />
-        {/* Teeth row */}
-        <rect x="22" y="36" width="12" height="12" rx="2" fill="white" stroke="#e5e7eb" strokeWidth="0.5" />
-        <rect x="36" y="36" width="12" height="12" rx="2" fill="white" stroke="#e5e7eb" strokeWidth="0.5" />
-        <rect x="50" y="36" width="12" height="12" rx="2" fill="white" stroke="#e5e7eb" strokeWidth="0.5" />
-        <rect x="64" y="36" width="12" height="12" rx="2" fill="white" stroke="#e5e7eb" strokeWidth="0.5" />
-        {/* Tongue at bottom */}
-        <ellipse cx="50" cy="70" rx="14" ry="10" fill="#f9a8d4" />
+        <path d="M14,44 Q50,36 86,44 Q80,76 50,80 Q20,76 14,44Z" fill="#e88da0" stroke="#d47a8e" strokeWidth="2.5" />
+        <path d="M14,44 Q50,54 86,44" fill="#d47a8e" />
+        <rect x="22" y="44" width="12" height="12" rx="1.5" fill="white" />
+        <rect x="36" y="44" width="12" height="12" rx="1.5" fill="white" />
+        <rect x="50" y="44" width="12" height="12" rx="1.5" fill="white" />
+        <rect x="64" y="44" width="12" height="12" rx="1.5" fill="white" />
+        <ellipse cx="50" cy="68" rx="16" ry="8" fill="#e57385" />
       </svg>
     ),
   },
   TOOTH: {
-    bg: "linear-gradient(135deg, #e0e7ff, #f0f9ff)",
+    bg: "#f0f9ff",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Happy tooth character with face */}
-        <path d="M50,8 C66,8 78,22 78,38 L74,72 C72,80 66,86 60,86 L56,70 L50,86 L44,70 L40,86 C34,86 28,80 26,72 L22,38 C22,22 34,8 50,8Z" fill="white" stroke="#94a3b8" strokeWidth="3" />
-        {/* Sparkle/shine */}
-        <path d="M32,26 Q40,18 50,22" fill="none" stroke="rgba(148,163,184,0.25)" strokeWidth="4" strokeLinecap="round" />
-        {/* Happy face on the tooth */}
-        <circle cx="38" cy="38" r="3" fill="#64748b" />
-        <circle cx="58" cy="38" r="3" fill="#64748b" />
-        <circle cx="39" cy="37" r="1" fill="white" />
-        <circle cx="59" cy="37" r="1" fill="white" />
-        <path d="M40,50 Q50,58 60,50" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
-        {/* Blush */}
-        <circle cx="30" cy="46" r="4" fill="#bfdbfe" opacity="0.5" />
-        <circle cx="66" cy="46" r="4" fill="#bfdbfe" opacity="0.5" />
+        <path d="M50,6 C68,6 82,22 82,42 L76,76 C74,86 66,92 60,92 L56,74 L50,92 L44,74 L40,92 C34,92 26,86 24,76 L18,42 C18,22 32,6 50,6Z" fill="white" stroke="#b0bec5" strokeWidth="3" />
+        <ellipse cx="40" cy="28" rx="10" ry="6" fill="white" opacity="0" />
+        <path d="M30,24 Q40,16 52,22" fill="none" stroke="#e0e7ee" strokeWidth="4" strokeLinecap="round" />
+        <circle cx="38" cy="42" r="3.5" fill="#b0bec5" opacity="0.5" />
+        <circle cx="58" cy="42" r="3.5" fill="#b0bec5" opacity="0.5" />
+        <path d="M42,54 Q50,60 58,54" fill="none" stroke="#b0bec5" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
       </svg>
     ),
   },
   TONGUE: {
-    bg: "linear-gradient(135deg, #ec4899, #fda4af)",
+    bg: "#fce4ec",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Face sticking tongue out */}
-        <circle cx="50" cy="40" r="30" fill={S} stroke={SO} strokeWidth="2.5" />
-        {/* Cheeky eyes */}
-        <path d="M34,34 Q38,28 42,34" fill="none" stroke={D} strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M58,34 Q62,28 66,34" fill="none" stroke={D} strokeWidth="2.5" strokeLinecap="round" />
-        {/* Open mouth */}
-        <ellipse cx="50" cy="52" rx="12" ry="8" fill="#1e293b" />
-        {/* THE TONGUE — sticking out */}
-        <path d="M40,54 L40,76 Q40,88 50,88 Q60,88 60,76 L60,54" fill="#fda4af" stroke="#e11d48" strokeWidth="2.5" />
-        <line x1="50" y1="58" x2="50" y2="80" stroke="#e11d48" strokeWidth="1.5" opacity="0.4" />
-        {/* Blush */}
-        <circle cx="28" cy="48" r="4" fill="#fda4af" opacity="0.4" />
-        <circle cx="72" cy="48" r="4" fill="#fda4af" opacity="0.4" />
+        <path d="M18,30 Q50,22 82,30 Q82,46 50,48 Q18,46 18,30Z" fill="#e88da0" stroke="#d47a8e" strokeWidth="2" />
+        <rect x="28" y="30" width="10" height="8" rx="1" fill="white" />
+        <rect x="40" y="30" width="10" height="8" rx="1" fill="white" />
+        <rect x="52" y="30" width="10" height="8" rx="1" fill="white" />
+        <rect x="64" y="30" width="10" height="8" rx="1" fill="white" />
+        <path d="M30,48 L30,82 Q30,94 50,94 Q70,94 70,82 L70,48" fill="#f47b8e" stroke="#e05a70" strokeWidth="2.5" />
+        <line x1="50" y1="52" x2="50" y2="86" stroke="#e05a70" strokeWidth="2" opacity="0.35" />
       </svg>
     ),
   },
   HAND: {
-    bg: "linear-gradient(135deg, #fbbf24, #fef3c7)",
+    bg: "#e8f4fd",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Open hand, fingers spread, palm facing viewer */}
-        <rect x="30" y="50" width="40" height="34" rx="10" fill={S} stroke={SO} strokeWidth="2.5" />
-        {/* Fingers */}
-        <rect x="18" y="14" width="11" height="42" rx="5.5" fill={S} stroke={SO} strokeWidth="2" />
-        <rect x="31" y="6" width="11" height="50" rx="5.5" fill={S} stroke={SO} strokeWidth="2" />
-        <rect x="44" y="10" width="11" height="46" rx="5.5" fill={S} stroke={SO} strokeWidth="2" />
-        <rect x="57" y="16" width="11" height="40" rx="5.5" fill={S} stroke={SO} strokeWidth="2" />
-        {/* Thumb */}
-        <rect x="70" y="46" width="10" height="22" rx="5" fill={S} stroke={SO} strokeWidth="2" transform="rotate(20, 75, 57)" />
-        {/* Palm lines */}
-        <path d="M36,60 Q50,54 62,60" fill="none" stroke={SO} strokeWidth="1" opacity="0.3" />
-        <path d="M36,68 Q44,64 54,68" fill="none" stroke={SO} strokeWidth="1" opacity="0.3" />
+        <rect x="22" y="52" width="56" height="36" rx="10" fill={SK} stroke={SKO} strokeWidth="2" />
+        <rect x="12" y="14" width="13" height="44" rx="6.5" fill={SK} stroke={SKO} strokeWidth="2" />
+        <rect x="27" y="6" width="13" height="52" rx="6.5" fill={SK} stroke={SKO} strokeWidth="2" />
+        <rect x="42" y="4" width="13" height="54" rx="6.5" fill={SK} stroke={SKO} strokeWidth="2" />
+        <rect x="57" y="8" width="13" height="50" rx="6.5" fill={SK} stroke={SKO} strokeWidth="2" />
+        <rect x="72" y="18" width="12" height="40" rx="6" fill={SK} stroke={SKO} strokeWidth="2" />
+        <path d="M28,62 Q48,56 70,62" fill="none" stroke={SKS} strokeWidth="1.5" />
+        <path d="M30,72 Q44,66 58,72" fill="none" stroke={SKS} strokeWidth="1.5" />
       </svg>
     ),
   },
   FOOT: {
-    bg: "linear-gradient(135deg, #f59e0b, #fef3c7)",
+    bg: "#e8f4fd",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Footprint / bottom of foot with toes — instantly recognizable */}
-        {/* Heel */}
-        <ellipse cx="50" cy="76" rx="18" ry="16" fill={S} stroke={SO} strokeWidth="2.5" />
-        {/* Ball of foot */}
-        <ellipse cx="50" cy="40" rx="24" ry="14" fill={S} stroke={SO} strokeWidth="2.5" />
-        {/* Arch (connects heel to ball) */}
-        <rect x="40" y="44" width="20" height="24" rx="4" fill={S} />
-        {/* Toes — five round bumps */}
-        <circle cx="28" cy="30" r="7" fill={S} stroke={SO} strokeWidth="2" />
-        <circle cx="40" cy="24" r="7.5" fill={S} stroke={SO} strokeWidth="2" />
-        <circle cx="52" cy="22" r="8" fill={S} stroke={SO} strokeWidth="2" />
-        <circle cx="64" cy="24" r="7" fill={S} stroke={SO} strokeWidth="2" />
-        <circle cx="74" cy="30" r="6" fill={S} stroke={SO} strokeWidth="2" />
+        <path d="M30,10 L30,60 Q30,78 48,80 L74,80 Q86,80 86,70 Q86,62 78,60 L42,60 L42,10" fill={SK} stroke={SKO} strokeWidth="2.5" strokeLinejoin="round" />
+        <ellipse cx="56" cy="74" rx="4" ry="3" fill={SKS} />
+        <ellipse cx="64" cy="72" rx="3.5" ry="3" fill={SKS} />
+        <ellipse cx="72" cy="72" rx="3" ry="2.5" fill={SKS} />
+        <ellipse cx="78" cy="68" rx="3" ry="2.5" fill={SKS} />
+        <ellipse cx="48" cy="76" rx="3.5" ry="3" fill={SKS} />
+        <path d="M36,32 L42,32" stroke={SKS} strokeWidth="1.5" opacity="0.4" />
       </svg>
     ),
   },
   ARM: {
-    bg: "linear-gradient(135deg, #f97316, #fed7aa)",
+    bg: "#fff8e1",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Flexed arm — bicep curl, classic "arm" pose */}
-        {/* Upper arm */}
-        <path d="M26,82 L26,50" stroke={S} strokeWidth="20" strokeLinecap="round" />
-        <path d="M26,82 L26,50" stroke={SO} strokeWidth="3" strokeLinecap="round" fill="none" />
-        {/* Forearm going up */}
-        <path d="M26,50 Q26,30 46,20" stroke={S} strokeWidth="18" strokeLinecap="round" />
-        <path d="M26,50 Q26,30 46,20" stroke={SO} strokeWidth="3" strokeLinecap="round" fill="none" />
-        {/* Fist */}
-        <circle cx="50" cy="18" r="12" fill={S} stroke={SO} strokeWidth="2.5" />
-        {/* Bicep bump */}
-        <ellipse cx="38" cy="42" rx="10" ry="6" fill="#fbbf24" opacity="0.3" />
-        {/* Muscle lines */}
-        <path d="M32,44 Q38,38 42,44" fill="none" stroke={SO} strokeWidth="1.5" opacity="0.4" strokeLinecap="round" />
+        <path d="M14,14 L14,58" stroke={SK} strokeWidth="24" strokeLinecap="round" />
+        <path d="M14,14 L14,58" stroke={SKO} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+        <path d="M14,58 Q14,80 36,88 L68,88" stroke={SK} strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M14,58 Q14,80 36,88 L68,88" stroke={SKO} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <rect x="66" y="78" width="22" height="20" rx="8" fill={SK} stroke={SKO} strokeWidth="2" />
+        <path d="M10,34 L18,34" stroke={SKS} strokeWidth="1.5" opacity="0.3" />
       </svg>
     ),
   },
   LEG: {
-    bg: "linear-gradient(135deg, #8b5cf6, #ede9fe)",
+    bg: "#e8f4fd",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Full leg from hip to shoe — clearly a leg */}
-        {/* Thigh */}
-        <rect x="34" y="6" width="24" height="38" rx="12" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2.5" />
-        {/* Knee circle */}
-        <circle cx="46" cy="44" r="8" fill="#ddd6fe" stroke="#7c3aed" strokeWidth="2" />
-        {/* Shin */}
-        <rect x="36" y="44" width="20" height="32" rx="10" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2.5" />
-        {/* Foot/shoe */}
-        <path d="M34,74 L34,82 Q34,90 44,90 L72,90 Q78,90 78,84 Q78,78 70,76 L56,74" fill="#c4b5fd" stroke="#7c3aed" strokeWidth="2.5" strokeLinejoin="round" />
+        <rect x="26" y="4" width="22" height="56" rx="11" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <rect x="52" y="4" width="22" height="56" rx="11" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <path d="M26,56 L26,70 Q26,84 36,86 L48,86 Q54,86 54,80" fill={SK} stroke={SKO} strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M52,56 L52,70 Q52,84 62,86 L74,86 Q80,86 80,80" fill={SK} stroke={SKO} strokeWidth="2.5" strokeLinejoin="round" />
+        <circle cx="37" cy="36" r="6" fill={SKS} stroke={SKO} strokeWidth="1.5" />
+        <circle cx="63" cy="36" r="6" fill={SKS} stroke={SKO} strokeWidth="1.5" />
       </svg>
     ),
   },
   FINGER: {
-    bg: "linear-gradient(135deg, #fbbf24, #fef3c7)",
+    bg: "#fff8e1",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Pointing hand — index finger extended, others curled */}
-        {/* Fist base */}
-        <rect x="20" y="50" width="44" height="34" rx="12" fill={S} stroke={SO} strokeWidth="2.5" />
-        {/* Curled fingers */}
-        <path d="M24,50 Q24,42 32,42 Q40,42 40,50" fill={S} stroke={SO} strokeWidth="2" />
-        <path d="M36,50 Q36,44 44,44 Q52,44 52,50" fill={S} stroke={SO} strokeWidth="2" />
-        <path d="M48,50 Q48,46 54,46 Q60,46 60,50" fill={S} stroke={SO} strokeWidth="2" />
-        {/* THE pointing finger — tall and prominent */}
-        <rect x="56" y="8" width="14" height="50" rx="7" fill={S} stroke={SO} strokeWidth="2.5" />
-        {/* Fingernail */}
-        <rect x="58" y="8" width="10" height="10" rx="5" fill="#fbbf24" stroke={SO} strokeWidth="1.5" />
-        {/* Knuckle lines */}
-        <path d="M56,36 L70,36" stroke={SO} strokeWidth="1" opacity="0.3" />
+        <rect x="28" y="54" width="44" height="34" rx="12" fill={SK} stroke={SKO} strokeWidth="2" />
+        <path d="M32,54 Q32,44 42,44 Q50,44 50,54" fill={SK} stroke={SKO} strokeWidth="2" />
+        <path d="M46,54 Q46,46 54,46 Q62,46 62,54" fill={SK} stroke={SKO} strokeWidth="2" />
+        <path d="M58,54 Q58,48 64,48 Q70,48 70,54" fill={SK} stroke={SKO} strokeWidth="2" />
+        <rect x="20" y="6" width="16" height="56" rx="8" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <ellipse cx="28" cy="10" rx="6" ry="4" fill={SKS} stroke={SKO} strokeWidth="1.5" />
+        <path d="M20,32 L36,32" stroke={SKS} strokeWidth="1.5" opacity="0.3" />
       </svg>
     ),
   },
   KNEE: {
-    bg: "linear-gradient(135deg, #06b6d4, #cffafe)",
+    bg: "#e8f4fd",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Simple: a person sitting, knees prominent and circled */}
-        {/* Torso */}
-        <rect x="36" y="6" width="28" height="30" rx="8" fill="#cffafe" stroke="#0891b2" strokeWidth="2.5" />
-        {/* Head */}
-        <circle cx="50" cy="6" r="10" fill="#cffafe" stroke="#0891b2" strokeWidth="2" />
-        {/* Upper legs going forward */}
-        <rect x="34" y="34" width="14" height="30" rx="7" fill="#cffafe" stroke="#0891b2" strokeWidth="2.5" />
-        <rect x="52" y="34" width="14" height="30" rx="7" fill="#cffafe" stroke="#0891b2" strokeWidth="2.5" />
-        {/* Lower legs going down */}
-        <rect x="34" y="64" width="14" height="28" rx="7" fill="#cffafe" stroke="#0891b2" strokeWidth="2.5" />
-        <rect x="52" y="64" width="14" height="28" rx="7" fill="#cffafe" stroke="#0891b2" strokeWidth="2.5" />
-        {/* KNEES highlighted with bright circles */}
-        <circle cx="41" cy="62" r="10" fill="#22d3ee" stroke="#0e7490" strokeWidth="3" />
-        <circle cx="59" cy="62" r="10" fill="#22d3ee" stroke="#0e7490" strokeWidth="3" />
-        <circle cx="39" cy="59" r="3" fill="white" opacity="0.4" />
-        <circle cx="57" cy="59" r="3" fill="white" opacity="0.4" />
+        <rect x="28" y="2" width="44" height="42" rx="10" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <rect x="28" y="56" width="44" height="42" rx="10" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <ellipse cx="50" cy="50" rx="20" ry="14" fill={SKS} stroke={SKO} strokeWidth="2.5" />
+        <ellipse cx="46" cy="46" rx="6" ry="4" fill="white" opacity="0.25" transform="rotate(-10,46,46)" />
       </svg>
     ),
   },
   BONE: {
-    bg: "linear-gradient(135deg, #e2e8f0, #f8fafc)",
+    bg: "#f0f9ff",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Classic dog-bone, DIAGONAL and BIG — fills the whole icon */}
-        <g transform="rotate(-30, 50, 50)">
-          {/* Shaft */}
-          <rect x="10" y="42" width="80" height="16" rx="8" fill="white" stroke="#94a3b8" strokeWidth="3.5" />
-          {/* Left knobs */}
-          <circle cx="14" cy="36" r="14" fill="white" stroke="#94a3b8" strokeWidth="3.5" />
-          <circle cx="14" cy="64" r="14" fill="white" stroke="#94a3b8" strokeWidth="3.5" />
-          {/* Right knobs */}
-          <circle cx="86" cy="36" r="14" fill="white" stroke="#94a3b8" strokeWidth="3.5" />
-          <circle cx="86" cy="64" r="14" fill="white" stroke="#94a3b8" strokeWidth="3.5" />
+        <g transform="rotate(-25, 50, 50)">
+          <rect x="8" y="42" width="84" height="16" rx="8" fill="white" stroke="#b0bec5" strokeWidth="3" />
+          <circle cx="12" cy="36" r="13" fill="white" stroke="#b0bec5" strokeWidth="3" />
+          <circle cx="12" cy="64" r="13" fill="white" stroke="#b0bec5" strokeWidth="3" />
+          <circle cx="88" cy="36" r="13" fill="white" stroke="#b0bec5" strokeWidth="3" />
+          <circle cx="88" cy="64" r="13" fill="white" stroke="#b0bec5" strokeWidth="3" />
         </g>
-        {/* Shine */}
-        <ellipse cx="40" cy="38" rx="8" ry="4" fill="white" opacity="0.5" transform="rotate(-30, 40, 38)" />
+        <ellipse cx="42" cy="40" rx="8" ry="4" fill="white" opacity="0.6" transform="rotate(-25,42,40)" />
       </svg>
     ),
   },
   BRAIN: {
-    bg: "linear-gradient(135deg, #ec4899, #fce7f3)",
+    bg: "#fce4ec",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Brain inside a head silhouette */}
-        <circle cx="50" cy="50" r="38" fill={S} stroke={SO} strokeWidth="2" opacity="0.3" />
-        {/* Brain shape */}
-        <path d="M50,82 C28,82 16,66 16,48 C16,36 22,26 32,22 C32,14 40,8 50,8 C60,8 68,14 68,22 C78,26 84,36 84,48 C84,66 72,82 50,82Z" fill="#fbcfe8" stroke="#db2777" strokeWidth="3" />
-        {/* Brain folds — left hemisphere */}
-        <path d="M50,14 L50,78" stroke="#db2777" strokeWidth="2" opacity="0.35" />
-        <path d="M28,36 Q38,30 50,38" fill="none" stroke="#db2777" strokeWidth="2.5" opacity="0.35" strokeLinecap="round" />
-        <path d="M50,38 Q62,30 72,36" fill="none" stroke="#db2777" strokeWidth="2.5" opacity="0.35" strokeLinecap="round" />
-        <path d="M30,54 Q40,46 50,54" fill="none" stroke="#db2777" strokeWidth="2.5" opacity="0.35" strokeLinecap="round" />
-        <path d="M50,54 Q60,46 70,54" fill="none" stroke="#db2777" strokeWidth="2.5" opacity="0.35" strokeLinecap="round" />
-        <path d="M32,68 Q42,62 50,68" fill="none" stroke="#db2777" strokeWidth="2" opacity="0.3" strokeLinecap="round" />
-        <path d="M50,68 Q58,62 68,68" fill="none" stroke="#db2777" strokeWidth="2" opacity="0.3" strokeLinecap="round" />
+        <path d="M50,88 C26,88 12,70 12,50 C12,36 18,26 30,22 C30,12 38,4 50,4 C62,4 70,12 70,22 C82,26 88,36 88,50 C88,70 74,88 50,88Z" fill="#f8bbd0" stroke="#e91e63" strokeWidth="2.5" />
+        <path d="M50,10 L50,84" stroke="#e91e63" strokeWidth="2" opacity="0.3" />
+        <path d="M24,36 Q36,28 50,36" fill="none" stroke="#e91e63" strokeWidth="2.5" opacity="0.3" strokeLinecap="round" />
+        <path d="M50,36 Q64,28 76,36" fill="none" stroke="#e91e63" strokeWidth="2.5" opacity="0.3" strokeLinecap="round" />
+        <path d="M26,52 Q38,44 50,52" fill="none" stroke="#e91e63" strokeWidth="2.5" opacity="0.3" strokeLinecap="round" />
+        <path d="M50,52 Q62,44 74,52" fill="none" stroke="#e91e63" strokeWidth="2.5" opacity="0.3" strokeLinecap="round" />
+        <path d="M28,68 Q40,60 50,68" fill="none" stroke="#e91e63" strokeWidth="2" opacity="0.25" strokeLinecap="round" />
+        <path d="M50,68 Q60,60 72,68" fill="none" stroke="#e91e63" strokeWidth="2" opacity="0.25" strokeLinecap="round" />
       </svg>
     ),
   },
   HEART: {
-    bg: "linear-gradient(135deg, #dc2626, #fca5a5)",
+    bg: "#ffebee",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Anatomical heart — with tubes and chambers */}
-        <path d="M50,88 C18,68 4,46 16,28 C26,12 42,16 50,30 C58,16 74,12 84,28 C96,46 82,68 50,88Z" fill="#fca5a5" stroke="#dc2626" strokeWidth="3" />
-        {/* Aorta tubes on top */}
-        <path d="M42,20 Q38,6 44,4" stroke="#dc2626" strokeWidth="4" fill="none" strokeLinecap="round" />
-        <path d="M50,16 Q50,2 56,2" stroke="#dc2626" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-        <path d="M58,20 Q62,8 58,4" stroke="#dc2626" strokeWidth="3" fill="none" strokeLinecap="round" />
-        {/* Heartbeat line across */}
-        <path d="M20,52 L38,52 L42,40 L48,62 L54,44 L58,52 L80,52" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
+        <path d="M50,90 C16,68 2,44 14,26 C24,10 40,14 50,30 C60,14 76,10 86,26 C98,44 84,68 50,90Z" fill="#ef5350" stroke="#c62828" strokeWidth="2.5" />
+        <path d="M40,18 Q34,4 40,2" stroke="#c62828" strokeWidth="4" fill="none" strokeLinecap="round" />
+        <path d="M50,14 Q50,0 56,0" stroke="#c62828" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+        <path d="M60,18 Q66,6 62,2" stroke="#c62828" strokeWidth="3" fill="none" strokeLinecap="round" />
+        <ellipse cx="34" cy="34" rx="8" ry="6" fill="white" opacity="0.2" transform="rotate(-20,34,34)" />
       </svg>
     ),
   },
   MUSCLE: {
-    bg: "linear-gradient(135deg, #ef4444, #fecaca)",
+    bg: "#fff8e1",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* BIG flexed arm filling the whole icon */}
-        {/* Upper arm — thick */}
-        <rect x="10" y="50" width="24" height="44" rx="12" fill="#fecaca" stroke="#dc2626" strokeWidth="3" />
-        {/* Forearm — angled up */}
-        <rect x="8" y="10" width="22" height="48" rx="11" fill="#fecaca" stroke="#dc2626" strokeWidth="3" transform="rotate(30, 20, 34)" />
-        {/* Fist */}
-        <circle cx="46" cy="14" r="16" fill="#fecaca" stroke="#dc2626" strokeWidth="3" />
-        <path d="M40,10 L40,18 M46,8 L46,18 M52,10 L52,18" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
-        {/* HUGE bicep bulge */}
-        <ellipse cx="34" cy="42" rx="18" ry="12" fill="#fca5a5" stroke="#dc2626" strokeWidth="2.5" />
-        {/* Action lines — big and bold */}
-        <path d="M60,8 L74,2" stroke="#fbbf24" strokeWidth="3.5" strokeLinecap="round" />
-        <path d="M64,20 L78,16" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
-        <path d="M62,32 L76,30" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M56,42 L68,42" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" />
+        <rect x="16" y="48" width="20" height="46" rx="10" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <rect x="10" y="8" width="18" height="48" rx="9" fill={SK} stroke={SKO} strokeWidth="2.5" transform="rotate(25, 20, 32)" />
+        <circle cx="48" cy="14" r="14" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <path d="M42,10 L42,18 M48,8 L48,18 M54,10 L54,18" stroke={SKS} strokeWidth="1.5" strokeLinecap="round" />
+        <ellipse cx="36" cy="40" rx="16" ry="10" fill={SKS} stroke={SKO} strokeWidth="2" />
+        <path d="M62,8 L72,4" stroke="#ffd54f" strokeWidth="3.5" strokeLinecap="round" />
+        <path d="M66,18 L76,14" stroke="#ffd54f" strokeWidth="3" strokeLinecap="round" />
+        <path d="M64,30 L74,28" stroke="#ffd54f" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
     ),
   },
   NECK: {
-    bg: "linear-gradient(135deg, #fbbf24, #fef3c7)",
+    bg: "#e8f4fd",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Head on top + shoulders on bottom + HIGHLIGHTED neck between */}
-        <circle cx="50" cy="22" r="18" fill={S} stroke={SO} strokeWidth="2.5" />
-        {/* Eyes */}
-        <circle cx="44" cy="20" r="2" fill={D} />
-        <circle cx="56" cy="20" r="2" fill={D} />
-        <path d="M46,26 Q50,30 54,26" fill="none" stroke="#92400e" strokeWidth="1.5" strokeLinecap="round" />
-        {/* THE NECK — highlighted in different color */}
-        <rect x="38" y="38" width="24" height="24" rx="6" fill="#fb923c" stroke="#ea580c" strokeWidth="3" />
-        {/* Shoulders */}
-        <path d="M22,72 Q22,60 38,58 L62,58 Q78,60 78,72 L78,90 L22,90Z" fill={S} stroke={SO} strokeWidth="2.5" strokeLinejoin="round" />
+        <circle cx="50" cy="22" r="18" fill={SK} stroke={SKO} strokeWidth="2" />
+        <path d="M34,14 Q36,4 50,2 Q64,4 66,14" fill={HR} />
+        <circle cx="44" cy="22" r="2" fill={D} />
+        <circle cx="56" cy="22" r="2" fill={D} />
+        <path d="M46,28 Q50,32 54,28" fill="none" stroke="#e88da0" strokeWidth="1.5" strokeLinecap="round" />
+        <rect x="38" y="38" width="24" height="26" rx="4" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <path d="M22,74 Q22,62 38,60 L62,60 Q78,62 78,74 L78,94 L22,94Z" fill="#81d4fa" stroke="#4fc3f7" strokeWidth="2" strokeLinejoin="round" />
+        <path d="M38,40 L38,60" stroke={SKS} strokeWidth="1" opacity="0.3" />
+        <path d="M62,40 L62,60" stroke={SKS} strokeWidth="1" opacity="0.3" />
       </svg>
     ),
   },
   SHOULDER: {
-    bg: "linear-gradient(135deg, #8b5cf6, #ede9fe)",
+    bg: "#e8f4fd",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Upper body with HIGHLIGHTED shoulder areas */}
-        {/* Head */}
-        <circle cx="50" cy="20" r="14" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2.5" />
-        <circle cx="45" cy="18" r="2" fill="#5b21b6" />
-        <circle cx="55" cy="18" r="2" fill="#5b21b6" />
-        <path d="M47,24 Q50,27 53,24" fill="none" stroke="#5b21b6" strokeWidth="1.5" strokeLinecap="round" />
-        {/* Neck */}
-        <rect x="44" y="32" width="12" height="10" rx="4" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2" />
-        {/* Body */}
-        <rect x="30" y="46" width="40" height="44" rx="6" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2" />
-        {/* THE SHOULDERS — highlighted circles */}
-        <circle cx="24" cy="48" r="12" fill="#c4b5fd" stroke="#6d28d9" strokeWidth="3" />
-        <circle cx="76" cy="48" r="12" fill="#c4b5fd" stroke="#6d28d9" strokeWidth="3" />
-        {/* Arms hanging from shoulders */}
-        <rect x="14" y="56" width="12" height="30" rx="6" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2" />
-        <rect x="74" y="56" width="12" height="30" rx="6" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2" />
+        <circle cx="50" cy="18" r="14" fill={SK} stroke={SKO} strokeWidth="2" />
+        <path d="M38,10 Q40,2 50,0 Q60,2 62,10" fill={HR} />
+        <circle cx="45" cy="18" r="1.5" fill={D} />
+        <circle cx="55" cy="18" r="1.5" fill={D} />
+        <path d="M47,24 Q50,27 53,24" fill="none" stroke="#e88da0" strokeWidth="1.5" strokeLinecap="round" />
+        <rect x="44" y="30" width="12" height="10" rx="4" fill={SK} />
+        <path d="M20,54 Q20,38 44,36 L56,36 Q80,38 80,54 L80,92 L20,92Z" fill="#81d4fa" stroke="#4fc3f7" strokeWidth="2" strokeLinejoin="round" />
+        <circle cx="20" cy="46" r="10" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <circle cx="80" cy="46" r="10" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <rect x="10" y="52" width="12" height="32" rx="6" fill={SK} stroke={SKO} strokeWidth="2" />
+        <rect x="78" y="52" width="12" height="32" rx="6" fill={SK} stroke={SKO} strokeWidth="2" />
       </svg>
     ),
   },
   BACK: {
-    bg: "linear-gradient(135deg, #14b8a6, #ccfbf1)",
+    bg: "#e8f4fd",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Person seen from BEHIND — head, shoulders, spine */}
-        {/* Head (back of) */}
-        <circle cx="50" cy="18" r="14" fill="#ccfbf1" stroke="#0d9488" strokeWidth="2.5" />
-        {/* Hair on back of head */}
-        <path d="M36,18 Q36,6 50,4 Q64,6 64,18" fill="#0d9488" opacity="0.3" />
-        {/* Back torso */}
-        <path d="M26,36 L74,36 L78,86 L22,86Z" fill="#ccfbf1" stroke="#0d9488" strokeWidth="2.5" strokeLinejoin="round" />
-        {/* Spine */}
-        <line x1="50" y1="36" x2="50" y2="82" stroke="#0d9488" strokeWidth="3" opacity="0.4" />
-        {/* Vertebrae bumps */}
-        <circle cx="50" cy="42" r="2.5" fill="#99f6e4" stroke="#0d9488" strokeWidth="1" />
-        <circle cx="50" cy="52" r="2.5" fill="#99f6e4" stroke="#0d9488" strokeWidth="1" />
-        <circle cx="50" cy="62" r="2.5" fill="#99f6e4" stroke="#0d9488" strokeWidth="1" />
-        <circle cx="50" cy="72" r="2.5" fill="#99f6e4" stroke="#0d9488" strokeWidth="1" />
-        {/* Shoulder blades */}
-        <ellipse cx="38" cy="48" rx="8" ry="10" fill="none" stroke="#0d9488" strokeWidth="1.5" opacity="0.3" />
-        <ellipse cx="62" cy="48" rx="8" ry="10" fill="none" stroke="#0d9488" strokeWidth="1.5" opacity="0.3" />
+        <circle cx="50" cy="16" r="14" fill={SK} stroke={SKO} strokeWidth="2" />
+        <path d="M36,16 Q36,4 50,2 Q64,4 64,16" fill={HR} />
+        <path d="M26,34 L74,34 L78,90 L22,90Z" fill={SK} stroke={SKO} strokeWidth="2.5" strokeLinejoin="round" />
+        <line x1="50" y1="34" x2="50" y2="86" stroke={SKS} strokeWidth="2.5" opacity="0.5" />
+        <circle cx="50" cy="42" r="2.5" fill={SKS} />
+        <circle cx="50" cy="52" r="2.5" fill={SKS} />
+        <circle cx="50" cy="62" r="2.5" fill={SKS} />
+        <circle cx="50" cy="72" r="2.5" fill={SKS} />
+        <ellipse cx="38" cy="48" rx="8" ry="10" fill="none" stroke={SKS} strokeWidth="1.5" opacity="0.3" />
+        <ellipse cx="62" cy="48" rx="8" ry="10" fill="none" stroke={SKS} strokeWidth="1.5" opacity="0.3" />
       </svg>
     ),
   },
   BELLY: {
-    bg: "linear-gradient(135deg, #f97316, #ffedd5)",
+    bg: "#fff8e1",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Simple: BIG round tummy with belly button, no torso frame */}
-        {/* Big round belly */}
-        <circle cx="50" cy="50" r="40" fill="#ffedd5" stroke="#ea580c" strokeWidth="3" />
-        {/* Belly button — big spiral */}
-        <circle cx="50" cy="50" r="8" fill="#fb923c" stroke="#ea580c" strokeWidth="3" />
-        <path d="M50,46 Q46,50 50,54" fill="none" stroke="#ea580c" strokeWidth="2" strokeLinecap="round" />
-        {/* Subtle roundness shading */}
-        <ellipse cx="38" cy="36" rx="12" ry="8" fill="white" opacity="0.15" transform="rotate(-20, 38, 36)" />
+        <ellipse cx="50" cy="50" rx="38" ry="40" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <circle cx="50" cy="50" r="6" fill={SKS} stroke={SKO} strokeWidth="2" />
+        <path d="M48,48 Q46,50 48,52" fill="none" stroke={SKO} strokeWidth="1.5" strokeLinecap="round" />
+        <ellipse cx="38" cy="34" rx="10" ry="6" fill="white" opacity="0.15" transform="rotate(-15,38,34)" />
       </svg>
     ),
   },
   THUMB: {
-    bg: "linear-gradient(135deg, #22c55e, #dcfce7)",
+    bg: "#e8f5e9",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* ONE big thumb pointing up — simple, fills the icon */}
-        {/* Thumb */}
-        <rect x="28" y="8" width="44" height="70" rx="22" fill="#dcfce7" stroke="#16a34a" strokeWidth="3.5" />
-        {/* Thumbnail */}
-        <rect x="32" y="8" width="36" height="24" rx="18" fill="#86efac" stroke="#16a34a" strokeWidth="2.5" />
-        {/* Shine on nail */}
-        <path d="M42,16 Q50,10 58,16" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.5" />
-        {/* Knuckle line */}
-        <path d="M28,50 L72,50" stroke="#16a34a" strokeWidth="1.5" opacity="0.3" />
-        {/* Base of hand */}
-        <rect x="22" y="72" width="56" height="22" rx="10" fill="#dcfce7" stroke="#16a34a" strokeWidth="3" />
-        {/* Sparkles */}
-        <path d="M80,14 l2 4 4 2-4 2-2 4-2-4-4-2 4-2z" fill="#fbbf24" />
-        <path d="M12,28 l1.5 3 3 1.5-3 1.5-1.5 3-1.5-3-3-1.5 3-1.5z" fill="#fbbf24" opacity="0.6" />
+        <rect x="30" y="48" width="40" height="40" rx="12" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <path d="M34,48 Q34,38 44,38 Q52,38 52,48" fill={SK} stroke={SKO} strokeWidth="2" />
+        <path d="M48,48 Q48,40 56,40 Q64,40 64,48" fill={SK} stroke={SKO} strokeWidth="2" />
+        <rect x="56" y="4" width="20" height="52" rx="10" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <ellipse cx="66" cy="8" rx="7" ry="4" fill={SKS} stroke={SKO} strokeWidth="1.5" />
+        <path d="M56,30 L76,30" stroke={SKS} strokeWidth="1.5" opacity="0.3" />
       </svg>
     ),
   },
   NAIL: {
-    bg: "linear-gradient(135deg, #ec4899, #fce7f3)",
+    bg: "#fce4ec",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Hand with fingers spread, all nails painted — clearly about nails */}
-        {/* Palm */}
-        <rect x="14" y="54" width="72" height="36" rx="12" fill={S} stroke={SO} strokeWidth="2" />
-        {/* Five fingers with painted nails */}
-        <rect x="6" y="18" width="14" height="44" rx="7" fill={S} stroke={SO} strokeWidth="2" />
-        <rect x="22" y="8" width="14" height="52" rx="7" fill={S} stroke={SO} strokeWidth="2" />
-        <rect x="38" y="4" width="14" height="56" rx="7" fill={S} stroke={SO} strokeWidth="2" />
-        <rect x="54" y="8" width="14" height="52" rx="7" fill={S} stroke={SO} strokeWidth="2" />
-        <rect x="70" y="18" width="14" height="44" rx="7" fill={S} stroke={SO} strokeWidth="2" />
-        {/* PAINTED NAILS — bright pink, the star */}
-        <rect x="6" y="16" width="14" height="14" rx="7" fill="#f472b6" stroke="#be185d" strokeWidth="2" />
-        <rect x="22" y="6" width="14" height="14" rx="7" fill="#f472b6" stroke="#be185d" strokeWidth="2" />
-        <rect x="38" y="2" width="14" height="14" rx="7" fill="#f472b6" stroke="#be185d" strokeWidth="2" />
-        <rect x="54" y="6" width="14" height="14" rx="7" fill="#f472b6" stroke="#be185d" strokeWidth="2" />
-        <rect x="70" y="16" width="14" height="14" rx="7" fill="#f472b6" stroke="#be185d" strokeWidth="2" />
-        {/* Sparkles */}
-        <path d="M88,6 l1.5 3 3 1.5-3 1.5-1.5 3-1.5-3-3-1.5 3-1.5z" fill="#fbbf24" />
+        <rect x="26" y="24" width="48" height="68" rx="24" fill={SK} stroke={SKO} strokeWidth="2.5" />
+        <path d="M26,62 L74,62" stroke={SKS} strokeWidth="1.5" opacity="0.3" />
+        <rect x="28" y="8" width="44" height="30" rx="22" fill="#f48fb1" stroke="#e91e63" strokeWidth="2.5" />
+        <path d="M40,18 Q50,10 60,18" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.4" />
+        <circle cx="56" cy="28" r="2" fill="white" opacity="0.5" />
       </svg>
     ),
   },
   HAIR: {
-    bg: "linear-gradient(135deg, #f97316, #fed7aa)",
+    bg: "#efebe9",
     svg: (
       <svg viewBox="0 0 100 100" className="shape-svg">
-        {/* Long flowing hair — wavy strands, clearly HAIR not a hat */}
-        {/* Small face at top */}
-        <circle cx="50" cy="28" r="16" fill={S} stroke={SO} strokeWidth="2" />
-        <circle cx="44" cy="26" r="2" fill={D} />
-        <circle cx="56" cy="26" r="2" fill={D} />
-        <path d="M46,32 Q50,35 54,32" fill="none" stroke="#92400e" strokeWidth="1.5" strokeLinecap="round" />
-        {/* LONG flowing hair — multiple wavy strands going down */}
-        <path d="M34,20 Q28,40 24,70 Q22,84 26,92" stroke="#92400e" strokeWidth="5" fill="none" strokeLinecap="round" />
-        <path d="M40,16 Q34,44 32,70 Q30,86 34,94" stroke="#a16207" strokeWidth="5" fill="none" strokeLinecap="round" />
-        <path d="M46,14 Q44,46 42,72 Q40,88 44,96" stroke="#b45309" strokeWidth="4.5" fill="none" strokeLinecap="round" />
-        <path d="M54,14 Q56,46 58,72 Q60,88 56,96" stroke="#b45309" strokeWidth="4.5" fill="none" strokeLinecap="round" />
-        <path d="M60,16 Q66,44 68,70 Q70,86 66,94" stroke="#a16207" strokeWidth="5" fill="none" strokeLinecap="round" />
-        <path d="M66,20 Q72,40 76,70 Q78,84 74,92" stroke="#92400e" strokeWidth="5" fill="none" strokeLinecap="round" />
-        {/* Hair on top of head */}
-        <path d="M34,22 Q34,10 50,8 Q66,10 66,22" fill="#92400e" stroke="#78350f" strokeWidth="2" />
+        <circle cx="50" cy="60" r="22" fill={SK} stroke={SKO} strokeWidth="2" />
+        <circle cx="42" cy="58" r="2" fill={D} />
+        <circle cx="58" cy="58" r="2" fill={D} />
+        <path d="M46,66 Q50,70 54,66" fill="none" stroke="#e88da0" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M16,54 Q18,6 50,2 Q82,6 84,54" fill={HR} stroke="#3e2723" strokeWidth="2" />
+        <path d="M24,46 Q28,12 50,6 Q72,12 76,46" fill="#7a5230" />
+        <path d="M18,54 Q14,68 16,82" stroke={HR} strokeWidth="4" fill="none" strokeLinecap="round" />
+        <path d="M82,54 Q86,68 84,82" stroke={HR} strokeWidth="4" fill="none" strokeLinecap="round" />
+        <path d="M24,52 Q20,66 22,78" stroke="#7a5230" strokeWidth="3" fill="none" strokeLinecap="round" />
+        <path d="M76,52 Q80,66 78,78" stroke="#7a5230" strokeWidth="3" fill="none" strokeLinecap="round" />
+        <path d="M28,50 Q32,24 46,10" fill="none" stroke="#3e2723" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
+        <path d="M72,50 Q68,24 54,10" fill="none" stroke="#3e2723" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
       </svg>
     ),
   },
@@ -526,7 +400,7 @@ export function BodyPartImage({ name }: { name: string }) {
     return <div className="shape-fallback">{name}</div>;
   }
   return (
-    <div className="shape-image" style={{ background: part.bg }}>
+    <div className="shape-image" style={{ background: part.bg, borderRadius: "50%" }}>
       {part.svg}
     </div>
   );
