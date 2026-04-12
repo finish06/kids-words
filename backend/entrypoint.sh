@@ -40,5 +40,9 @@ print(asyncio.run(check()))
 alembic upgrade head
 echo "Migrations complete."
 
+echo "Running seed (idempotent — adds missing categories/words only)..."
+python -m app.seed
+echo "Seed complete."
+
 echo "Starting server..."
 exec uvicorn app.main:app --host 0.0.0.0 --port 8000
