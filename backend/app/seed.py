@@ -19,7 +19,9 @@ from sqlalchemy.ext.asyncio import (
 from app.config import settings
 from app.models import Category, Word
 from app.seed_animals import ANIMALS_UNIQUE, get_image_url
+from app.seed_bodyparts import BODY_PARTS_UNIQUE
 from app.seed_foods import FOODS_UNIQUE
+from app.seed_shapes import SHAPES_UNIQUE
 
 SEED_DATA: list[dict[str, Any]] = [
     {
@@ -58,6 +60,26 @@ SEED_DATA: list[dict[str, Any]] = [
         "words": [
             {"text": word, "image_url": get_image_url(code)}
             for word, code in FOODS_UNIQUE
+        ],
+    },
+    {
+        "name": "Shapes",
+        "slug": "shapes",
+        "icon_url": get_image_url("2B50"),
+        "display_order": 4,
+        "words": [
+            {"text": word, "image_url": get_image_url(code)}
+            for word, code in SHAPES_UNIQUE
+        ],
+    },
+    {
+        "name": "Body Parts",
+        "slug": "body-parts",
+        "icon_url": get_image_url("1F9B4"),
+        "display_order": 5,
+        "words": [
+            {"text": word, "image_url": get_image_url(code)}
+            for word, code in BODY_PARTS_UNIQUE
         ],
     },
 ]
