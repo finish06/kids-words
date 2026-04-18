@@ -52,15 +52,18 @@ BASE_WORDS: list[dict[str, Any]] = [
 ]
 
 # (base_word, pattern, result_word, definition used as spoken clue)
-# Clue pattern discipline (cycle-15):
+# Clue pattern discipline (cycle-15, revised after initial PAT):
 #   UN-   → "not X"
 #   RE-   → "X it again"
-#   -ING  → "Xing right now"
-#   -ED   → "Xed yesterday"
+#   -ING  → "X right now"          (bare base; doesn't leak the -ING form)
+#   -ED   → "did X"                (past auxiliary + bare base; no -ED leak)
 #   -S    → "more than one X"
-#   -ER   → "a person who Xs"
+#   -ER   → "people who X"         (plural + bare base; no -S or -ER leak)
 # Each clue unambiguously points to its pattern so challenges have
 # no false-negative feedback (cycle-13 PAT finding, resolved cycle-15).
+# Initial cycle-15 clues used inflected base forms which accidentally
+# contained the answer (e.g., "jumping right now" revealed JUMPING);
+# revised to use bare base verb forms.
 COMBOS: list[dict[str, str]] = [
     # UN- (not)
     {"base": "HAPPY", "pattern": "UN-", "result": "UNHAPPY", "def": "not happy"},
@@ -81,73 +84,28 @@ COMBOS: list[dict[str, str]] = [
         "def": "paint it again",
     },
     # -ING (action right now)
-    {
-        "base": "PLAY",
-        "pattern": "-ING",
-        "result": "PLAYING",
-        "def": "playing right now",
-    },
-    {
-        "base": "RUN",
-        "pattern": "-ING",
-        "result": "RUNNING",
-        "def": "running right now",
-    },
-    {
-        "base": "JUMP",
-        "pattern": "-ING",
-        "result": "JUMPING",
-        "def": "jumping right now",
-    },
-    {
-        "base": "SING",
-        "pattern": "-ING",
-        "result": "SINGING",
-        "def": "singing right now",
-    },
+    {"base": "PLAY", "pattern": "-ING", "result": "PLAYING", "def": "play right now"},
+    {"base": "RUN", "pattern": "-ING", "result": "RUNNING", "def": "run right now"},
+    {"base": "JUMP", "pattern": "-ING", "result": "JUMPING", "def": "jump right now"},
+    {"base": "SING", "pattern": "-ING", "result": "SINGING", "def": "sing right now"},
     {
         "base": "DANCE",
         "pattern": "-ING",
         "result": "DANCING",
-        "def": "dancing right now",
+        "def": "dance right now",
     },
-    {
-        "base": "READ",
-        "pattern": "-ING",
-        "result": "READING",
-        "def": "reading right now",
-    },
+    {"base": "READ", "pattern": "-ING", "result": "READING", "def": "read right now"},
     {
         "base": "PAINT",
         "pattern": "-ING",
         "result": "PAINTING",
-        "def": "painting right now",
+        "def": "paint right now",
     },
     # -ED (past)
-    {
-        "base": "PLAY",
-        "pattern": "-ED",
-        "result": "PLAYED",
-        "def": "played yesterday",
-    },
-    {
-        "base": "JUMP",
-        "pattern": "-ED",
-        "result": "JUMPED",
-        "def": "jumped yesterday",
-    },
-    {
-        "base": "PAINT",
-        "pattern": "-ED",
-        "result": "PAINTED",
-        "def": "painted yesterday",
-    },
-    {
-        "base": "DANCE",
-        "pattern": "-ED",
-        "result": "DANCED",
-        "def": "danced yesterday",
-    },
+    {"base": "PLAY", "pattern": "-ED", "result": "PLAYED", "def": "did play"},
+    {"base": "JUMP", "pattern": "-ED", "result": "JUMPED", "def": "did jump"},
+    {"base": "PAINT", "pattern": "-ED", "result": "PAINTED", "def": "did paint"},
+    {"base": "DANCE", "pattern": "-ED", "result": "DANCED", "def": "did dance"},
     # -S (plural)
     {"base": "DOG", "pattern": "-S", "result": "DOGS", "def": "more than one dog"},
     {"base": "CAT", "pattern": "-S", "result": "CATS", "def": "more than one cat"},
@@ -160,60 +118,35 @@ COMBOS: list[dict[str, str]] = [
         "result": "BOOKS",
         "def": "more than one book",
     },
-    # -ER (a person who does the thing)
-    {
-        "base": "PLAY",
-        "pattern": "-ER",
-        "result": "PLAYER",
-        "def": "a person who plays",
-    },
-    {
-        "base": "RUN",
-        "pattern": "-ER",
-        "result": "RUNNER",
-        "def": "a person who runs",
-    },
-    {
-        "base": "JUMP",
-        "pattern": "-ER",
-        "result": "JUMPER",
-        "def": "a person who jumps",
-    },
-    {
-        "base": "READ",
-        "pattern": "-ER",
-        "result": "READER",
-        "def": "a person who reads",
-    },
+    # -ER (people who do the thing)
+    {"base": "PLAY", "pattern": "-ER", "result": "PLAYER", "def": "people who play"},
+    {"base": "RUN", "pattern": "-ER", "result": "RUNNER", "def": "people who run"},
+    {"base": "JUMP", "pattern": "-ER", "result": "JUMPER", "def": "people who jump"},
+    {"base": "READ", "pattern": "-ER", "result": "READER", "def": "people who read"},
     {
         "base": "WRITE",
         "pattern": "-ER",
         "result": "WRITER",
-        "def": "a person who writes",
+        "def": "people who write",
     },
     {
         "base": "TEACH",
         "pattern": "-ER",
         "result": "TEACHER",
-        "def": "a person who teaches",
+        "def": "people who teach",
     },
-    {
-        "base": "SING",
-        "pattern": "-ER",
-        "result": "SINGER",
-        "def": "a person who sings",
-    },
+    {"base": "SING", "pattern": "-ER", "result": "SINGER", "def": "people who sing"},
     {
         "base": "DANCE",
         "pattern": "-ER",
         "result": "DANCER",
-        "def": "a person who dances",
+        "def": "people who dance",
     },
     {
         "base": "PAINT",
         "pattern": "-ER",
         "result": "PAINTER",
-        "def": "a person who paints",
+        "def": "people who paint",
     },
 ]
 
