@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { mockCategories } from "../../test/mocks";
 import { HomeScreen } from "../HomeScreen";
 
 vi.mock("../../api/client", () => ({
@@ -13,10 +12,21 @@ import { getCategories, getWordBuilderProgress } from "../../api/client";
 const mockGetCategories = vi.mocked(getCategories);
 const mockGetProgress = vi.mocked(getWordBuilderProgress);
 
-describe("HomeScreen", () => {
+describe("HomeScreen (cycle-16 Games/Practice structure)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockGetCategories.mockResolvedValue({ categories: mockCategories });
+    mockGetCategories.mockResolvedValue({
+      categories: [
+        {
+          id: "cat-1",
+          name: "Animals",
+          slug: "animals",
+          icon_url: null,
+          display_order: 1,
+          word_count: 100,
+        },
+      ],
+    });
     mockGetProgress.mockResolvedValue({
       levels: [
         {
@@ -43,7 +53,7 @@ describe("HomeScreen", () => {
     });
   });
 
-  it("renders both Games and Word Matching sections", async () => {
+  it("renders Games and Practice section headings", async () => {
     render(
       <MemoryRouter>
         <HomeScreen />
@@ -51,11 +61,11 @@ describe("HomeScreen", () => {
     );
     await waitFor(() => {
       expect(screen.getByText("Games")).toBeInTheDocument();
-      expect(screen.getByText("Word Matching")).toBeInTheDocument();
+      expect(screen.getByText("Practice")).toBeInTheDocument();
     });
   });
 
-  it("shows Word Builder re-enabled (cycle-15) + Listening Practice placeholder", async () => {
+  it("renders Word Builder and Word Matching cards in Games", async () => {
     render(
       <MemoryRouter>
         <HomeScreen />
@@ -63,10 +73,46 @@ describe("HomeScreen", () => {
     );
     await waitFor(() => {
       expect(screen.getByText("Word Builder")).toBeInTheDocument();
-      expect(screen.getByText("Listening Practice")).toBeInTheDocument();
+      expect(screen.getByText("Word Matching")).toBeInTheDocument();
     });
-    // Listening Practice still reads "Coming soon"; Word Builder is now live
-    expect(screen.getByText("Coming soon")).toBeInTheDocument();
-    expect(screen.queryByText("Word Phonetics")).not.toBeInTheDocument();
+  });
+
+  it("renders Listening Practice placeholder in Practice section", async () => {
+    render(
+      <MemoryRouter>
+        <HomeScreen />
+      </MemoryRouter>,
+    );
+    await waitFor(() => {
+      expect(screen.getByText("Listening Practice")).toBeInTheDocument();
+      expect(screen.getByText("Coming soon")).toBeInTheDocument();
+    });
+  });
+
+  it("renders a ghost placeholder slot in Practice section", async () => {
+    render(
+      <MemoryRouter>
+        <HomeScreen />
+      </MemoryRouter>,
+    );
+    await waitFor(() => {
+      expect(screen.getByText("More coming soon")).toBeInTheDocument();
+    });
+  });
+
+  it("does NOT render category cards directly on Home (they moved to /matching)", async () => {
+    render(
+      <MemoryRouter>
+        <HomeScreen />
+      </MemoryRouter>,
+    );
+    // Wait a tick for any rendering to settle
+    await waitFor(() => {
+      expect(screen.getByText("Games")).toBeInTheDocument();
+    });
+    // Animals is a category; it should not appear on Home anymore
+    expect(screen.queryByText("Animals")).not.toBeInTheDocument();
+    // No "Word Matching" section heading either — it's now a card inside Games
+    expect(screen.queryByRole("heading", { level: 2, name: /^Word Matching$/i })).not.toBeInTheDocument();
   });
 });

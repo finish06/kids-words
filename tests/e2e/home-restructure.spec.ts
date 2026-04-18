@@ -1,19 +1,19 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * Regression smoke for the cycle-13 home-screen restructure.
+ * Regression smoke for the cycle-16 Home Games/Practice restructure.
  *
- * Confirms the existing Word Matching flow still works after CategoryList
- * was split into HomeScreen + GamesSection + WordMatchingSection.
- *
- * Full Word Builder E2E (happy path, wrong-tap, level-up) is deferred to
- * a post-PAT cycle per specs/ux/word-builder-ux.md + cycle-13 Q6.
+ * Confirms:
+ * - Home shows Games + Practice sections (no inline categories)
+ * - Word Builder card still works (cycle-15 state preserved)
+ * - Word Matching card → /matching → category → Length Picker (new 4-tap flow)
+ * - Back navigation is hierarchical
+ * - Listening Practice + ghost placeholder render in Practice section
  */
 
-test.describe("Home restructure regression", () => {
+test.describe("Home Games/Practice restructure regression (cycle-16)", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
-    // Handle profile picker if present (pick Guest)
     const guestButton = page.locator(".profile-card", { hasText: "Guest" });
     await Promise.race([
       guestButton.waitFor({ timeout: 3000 }).then(() => guestButton.click()),
@@ -23,59 +23,102 @@ test.describe("Home restructure regression", () => {
     await expect(page.getByText("Kids Words")).toBeVisible({ timeout: 5000 });
   });
 
-  test("HR-001: home shows both Games and Word Matching sections", async ({
+  test("HR-001: Home shows Games + Practice sections and game cards", async ({
     page,
   }) => {
-    await expect(page.getByText("Games")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Games" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Practice" })).toBeVisible();
+    await expect(page.getByText("Word Builder")).toBeVisible();
     await expect(page.getByText("Word Matching")).toBeVisible();
+    await expect(page.getByText("Listening Practice")).toBeVisible();
+    await expect(page.getByText("More coming soon")).toBeVisible();
     await page.screenshot({
-      path: "tests/screenshots/home-restructure/step-01-both-sections.png",
+      path: "tests/screenshots/home-games-practice/step-01-home-layout.png",
       fullPage: true,
     });
   });
 
-  test("HR-002: Word Builder card is live and clickable (cycle-15 un-gate)", async ({
-    page,
-  }) => {
-    await expect(page.getByText("Word Builder")).toBeVisible();
-    // No longer disabled — un-gated after cycle-15's clue redesign
-    await expect(
-      page.locator(".game-card--word-builder:not(.game-card--disabled)"),
-    ).toBeVisible();
+  test("HR-002: Home no longer shows category cards directly", async ({ page }) => {
+    await expect(page.getByText("Animals")).not.toBeVisible();
+    await expect(page.getByText("Colors")).not.toBeVisible();
   });
 
-  test("HR-003: Listening Practice card is present and disabled (placeholder)", async ({
+  test("HR-003: Word Builder card is live and clickable", async ({ page }) => {
+    const wbCard = page.locator(".game-card--word-builder");
+    await expect(wbCard).toBeVisible();
+    await expect(wbCard).not.toHaveClass(/game-card--disabled/);
+  });
+
+  test("HR-004: Listening Practice card is disabled placeholder", async ({
     page,
   }) => {
-    // Renamed from Word Phonetics in cycle-15; actual game deferred to cycle-16
     await expect(page.getByText("Listening Practice")).toBeVisible();
     await expect(page.getByText("Coming soon")).toBeVisible();
   });
 
-  test("HR-004: existing Animals category still navigates (regression)", async ({
+  test("HR-005: Word Matching card navigates to /matching category grid", async ({
     page,
   }) => {
-    await page.getByText("Animals").click();
-    // Length picker should appear (same behavior as before)
-    await expect(page.getByText("How many words?")).toBeVisible({
-      timeout: 5000,
-    });
+    await page.locator(".game-card--word-matching").click();
+    await expect(
+      page.getByRole("heading", { name: "Word Matching" }),
+    ).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText("Pick a category!")).toBeVisible();
+    await expect(page.getByText("Animals")).toBeVisible();
     await page.screenshot({
-      path: "tests/screenshots/home-restructure/step-04-animals-length-picker.png",
+      path: "tests/screenshots/home-games-practice/step-05-matching-screen.png",
       fullPage: true,
     });
   });
 
-  test("HR-005: Word Builder card navigates to length picker (cycle-15 re-enable)", async ({
+  test("HR-006: /matching → category → Length Picker (new 4-tap flow)", async ({
+    page,
+  }) => {
+    await page.locator(".game-card--word-matching").click();
+    await expect(page.getByText("Animals")).toBeVisible({ timeout: 5000 });
+    await page.getByText("Animals").click();
+    await expect(page.getByText("How many words?")).toBeVisible({
+      timeout: 5000,
+    });
+    await page.screenshot({
+      path: "tests/screenshots/home-games-practice/step-06-length-picker.png",
+      fullPage: true,
+    });
+  });
+
+  test("HR-007: Word Builder card navigates to Length Picker directly", async ({
     page,
   }) => {
     await page.locator(".game-card--word-builder").click();
     await expect(page.getByText("How many words?")).toBeVisible({
       timeout: 5000,
     });
-    await page.screenshot({
-      path: "tests/screenshots/home-restructure/step-05-word-builder-picker.png",
-      fullPage: true,
+  });
+
+  test("HR-008: back from Length Picker returns up one level", async ({
+    page,
+  }) => {
+    await page.locator(".game-card--word-matching").click();
+    await page.getByText("Animals").click();
+    await expect(page.getByText("How many words?")).toBeVisible({
+      timeout: 5000,
+    });
+
+    await page.getByRole("button", { name: /back/i }).click();
+    await expect(page.getByText("Pick a category!")).toBeVisible({
+      timeout: 5000,
+    });
+  });
+
+  test("HR-009: back from /matching returns to Home", async ({ page }) => {
+    await page.locator(".game-card--word-matching").click();
+    await expect(page.getByText("Pick a category!")).toBeVisible({
+      timeout: 5000,
+    });
+
+    await page.getByRole("button", { name: /back/i }).click();
+    await expect(page.getByRole("heading", { name: "Games" })).toBeVisible({
+      timeout: 5000,
     });
   });
 });

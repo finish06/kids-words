@@ -4,6 +4,7 @@ import { getProfiles, setActiveProfile } from "./api/client";
 import { BuildPicker, BuildScreen } from "./components/BuildScreen";
 import { HomeScreen } from "./components/HomeScreen";
 import { Icon } from "./components/Icon";
+import { MatchingScreen } from "./components/MatchingScreen";
 import { MatchRound } from "./components/MatchRound";
 import { ProfileManager } from "./components/ProfileManager";
 import { ProfilePicker } from "./components/ProfilePicker";
@@ -100,6 +101,7 @@ function App() {
       </div>
       <Routes>
         <Route path="/" element={<HomeScreen />} />
+        <Route path="/matching" element={<MatchingScreen />} />
         <Route path="/play/:slug" element={<MatchRound />} />
         <Route path="/words/:slug" element={<WordList />} />
         <Route path="/build" element={<BuildPicker />} />

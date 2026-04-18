@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockCategories } from "../../test/mocks";
-import { WordMatchingSection } from "../WordMatchingSection";
+import { MatchingScreen } from "../MatchingScreen";
 
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
@@ -18,52 +18,41 @@ vi.mock("../../api/client", () => ({
 import { getCategories } from "../../api/client";
 const mockGetCategories = vi.mocked(getCategories);
 
-function renderWithRouter() {
+function renderScreen() {
   return render(
     <MemoryRouter>
-      <WordMatchingSection />
+      <MatchingScreen />
     </MemoryRouter>,
   );
 }
 
-describe("WordMatchingSection", () => {
+describe("MatchingScreen", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("shows a Word Matching section heading", async () => {
-    mockGetCategories.mockResolvedValue({ categories: mockCategories });
-    renderWithRouter();
-    await waitFor(() => {
-      expect(screen.getByText("Word Matching")).toBeInTheDocument();
-    });
+  it("shows loading skeletons initially", () => {
+    mockGetCategories.mockReturnValue(new Promise(() => {})); // never resolves
+    renderScreen();
+    const skeletons = document.querySelectorAll(".skeleton-card");
+    expect(skeletons.length).toBeGreaterThan(0);
   });
 
-  it("renders categories after loading", async () => {
+  it("renders the Word Matching header and category grid", async () => {
     mockGetCategories.mockResolvedValue({ categories: mockCategories });
-    renderWithRouter();
+    renderScreen();
 
     await waitFor(() => {
-      expect(screen.getByText("Animals")).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: "Word Matching" })).toBeInTheDocument();
     });
+    expect(screen.getByText("Pick a category!")).toBeInTheDocument();
+    expect(screen.getByText("Animals")).toBeInTheDocument();
     expect(screen.getByText("Colors")).toBeInTheDocument();
-    expect(screen.getByText("6 words")).toBeInTheDocument();
-    expect(screen.getByText("3 words")).toBeInTheDocument();
   });
 
-  it("shows error state on API failure", async () => {
-    mockGetCategories.mockRejectedValue(new Error("Network error"));
-    renderWithRouter();
-
-    await waitFor(() => {
-      expect(screen.getByText("Oops! Let's try again.")).toBeInTheDocument();
-    });
-    expect(screen.getByText("Try Again")).toBeInTheDocument();
-  });
-
-  it("navigates to play route on category click", async () => {
+  it("navigates to /play/:slug on category tap", async () => {
     mockGetCategories.mockResolvedValue({ categories: mockCategories });
-    renderWithRouter();
+    renderScreen();
 
     await waitFor(() => {
       expect(screen.getByText("Animals")).toBeInTheDocument();
@@ -71,6 +60,37 @@ describe("WordMatchingSection", () => {
 
     await userEvent.click(screen.getByText("Animals"));
     expect(mockNavigate).toHaveBeenCalledWith("/play/animals");
+  });
+
+  it("navigates back to Home on back tap", async () => {
+    mockGetCategories.mockResolvedValue({ categories: mockCategories });
+    renderScreen();
+
+    await waitFor(() => {
+      expect(screen.getByText("Word Matching")).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByRole("button", { name: /back/i }));
+    expect(mockNavigate).toHaveBeenCalledWith("/");
+  });
+
+  it("shows error state on API failure", async () => {
+    mockGetCategories.mockRejectedValue(new Error("Network error"));
+    renderScreen();
+
+    await waitFor(() => {
+      expect(screen.getByText("Oops! Let's try again.")).toBeInTheDocument();
+    });
+    expect(screen.getByText("Try Again")).toBeInTheDocument();
+  });
+
+  it("shows empty state when no categories are returned", async () => {
+    mockGetCategories.mockResolvedValue({ categories: [] });
+    renderScreen();
+
+    await waitFor(() => {
+      expect(screen.getByText(/No categories yet/i)).toBeInTheDocument();
+    });
   });
 
   it("filters out the body-parts category (hidden per prior decision)", async () => {
@@ -87,7 +107,7 @@ describe("WordMatchingSection", () => {
         },
       ],
     });
-    renderWithRouter();
+    renderScreen();
 
     await waitFor(() => {
       expect(screen.getByText("Animals")).toBeInTheDocument();
