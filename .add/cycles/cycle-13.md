@@ -2,10 +2,10 @@
 
 **Milestone:** M7 — Word Builder
 **Maturity:** Beta
-**Status:** AWAITING_PAT (agent work complete; human sign-off pending)
+**Status:** COMPLETE (PAT returned: ship + gate)
 **Started:** 2026-04-18
 **Agent-Done:** 2026-04-18 (code merged + staging smoke green)
-**Completed:** TBD (gated on human PAT play-through)
+**Completed:** 2026-04-18 (PAT identified challenge-model ambiguity; gated via cycle-14; redesign planned for cycle-15)
 **Duration Budget:** ~12-20h single-cycle execution (away mode)
 **Branch Strategy:** Single feature branch `feat/word-builder-frontend`, single squash commit, revert-if-red rollback
 **Ordering:** TDD-strict for state logic; design-first for pure-visual components
@@ -306,6 +306,24 @@ Shipped in ~3-4h of focused session (well inside the 12-20h budget). TDD-strict 
 
 ### Validation criteria (human-gated)
 
-- [ ] PAT sign-off from human — play through Word Builder on staging per handoff checklist
-- [ ] Formal `/add:cycle --complete` (awaits PAT)
-- [ ] `.add/learnings.md` post-verify checkpoint (will write at `--complete`, not agent-done)
+- [x] PAT sign-off from human — played through on staging; identified challenge-model ambiguity (PAINT accepts -S, -ED, -ER all as valid English; game treats all but "correct" as wrong)
+- [x] Formal closure (this commit): PAT outcome = "ship + gate". Code remains shipped; UI gated via cycle-14; redesign planned for cycle-15
+- [x] `.add/learnings.md` post-verify checkpoint (captured with cycle-13 + cycle-14 bookkeeping)
+
+## PAT Outcome (2026-04-18)
+
+User played through Word Builder on staging and surfaced a generative-morphology problem: "Paint (un-, -ed, -s). Both -ed and -s work. Paints or painted. Both words." The challenge model marks only one pattern as correct per challenge; distractors that happen to form real English words produce false-negative feedback, violating AC-005's non-punitive promise.
+
+The problem lives in cycle-12's backend design, not in cycle-13's frontend. Cycle-13 correctly implemented the spec — the spec itself needed revision.
+
+**Product decision (user):** keep all code shipped (don't revert); gate the Home entry point via cycle-14; redesign the challenge model in cycle-15 using clue-based challenges (e.g., "a person who paints" → -ER) combined with M8 Phonetics (tap-to-hear) so pre-readers can play. Approved clue table + cycle-15 scope captured in `.add/cycle-15-direction.md`.
+
+**Cycle-13 value delivered:**
+- Home restructure shipped (HomeScreen + GamesSection + WordMatchingSection) — all still useful
+- LengthPicker extracted — already useful for Match Round, will be reused
+- useBuildRound hook, BuildScreen, PatternTile, LevelIndicator, LevelUpModal, BuildRoundComplete — all stay in codebase; cycle-15 reuses with clue-header addition
+- CSS animations, types, API client additions — all useful
+- 89/89 Vitest suite passing on main
+- Home-restructure E2E regression protects Word Matching going forward
+
+Closing cycle-13 as COMPLETE: the cycle delivered its stated goal (frontend per approved UX). PAT's finding is a design-model issue that justifies its own cycle (cycle-15), not a cycle-13 failure.
