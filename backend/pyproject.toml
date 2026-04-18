@@ -1,6 +1,6 @@
 [project]
 name = "kids-words-backend"
-version = "0.1.0"
+version = "0.2.0"
 description = "Kids Words API - word recognition learning app for ages 4-6"
 requires-python = ">=3.13"
 dependencies = [
