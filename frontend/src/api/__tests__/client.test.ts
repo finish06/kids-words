@@ -5,7 +5,10 @@ import {
   getCategoryProgress,
   getCategoryWords,
   getProfiles,
+  getWordBuilderProgress,
+  getWordBuilderRound,
   postResult,
+  postWordBuilderResult,
   setActiveProfile,
   setupPin,
   verifyPin,
@@ -161,5 +164,75 @@ describe("API client", () => {
 
     const result = await getCategoryProgress("animals");
     expect(result).toEqual(data);
+  });
+
+  // Word Builder (M7)
+
+  it("getWordBuilderRound fetches /api/word-builder/round with count", async () => {
+    const data = { level: 1, challenges: [] };
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(data),
+    });
+
+    const result = await getWordBuilderRound(5);
+    expect(result).toEqual(data);
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining("/api/word-builder/round?count=5"),
+      expect.anything(),
+    );
+  });
+
+  it("getWordBuilderRound includes level param when provided", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ level: 2, challenges: [] }),
+    });
+
+    await getWordBuilderRound(10, 2);
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringMatching(/count=10.*level=2|level=2.*count=10/),
+      expect.anything(),
+    );
+  });
+
+  it("postWordBuilderResult sends POST with attempt body", async () => {
+    const data = {
+      id: "r1",
+      recorded: true,
+      responded_at: "2026-04-18T00:00:00Z",
+      star_update: null,
+    };
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(data),
+    });
+
+    const result = await postWordBuilderResult({
+      pattern_id: "p-re",
+      is_correct: true,
+      attempt_number: 1,
+    });
+
+    expect(result).toEqual(data);
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining("/api/word-builder/results"),
+      expect.objectContaining({ method: "POST" }),
+    );
+  });
+
+  it("getWordBuilderProgress fetches /api/word-builder/progress", async () => {
+    const data = { levels: [] };
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(data),
+    });
+
+    const result = await getWordBuilderProgress();
+    expect(result).toEqual(data);
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining("/api/word-builder/progress"),
+      expect.anything(),
+    );
   });
 });

@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockCategories } from "../../test/mocks";
-import { CategoryList } from "../CategoryList";
+import { WordMatchingSection } from "../WordMatchingSection";
 
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
@@ -21,20 +21,22 @@ const mockGetCategories = vi.mocked(getCategories);
 function renderWithRouter() {
   return render(
     <MemoryRouter>
-      <CategoryList />
+      <WordMatchingSection />
     </MemoryRouter>,
   );
 }
 
-describe("CategoryList", () => {
+describe("WordMatchingSection", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("shows loading skeletons initially", () => {
-    mockGetCategories.mockReturnValue(new Promise(() => {})); // never resolves
+  it("shows a Word Matching section heading", async () => {
+    mockGetCategories.mockResolvedValue({ categories: mockCategories });
     renderWithRouter();
-    expect(screen.getAllByClassName?.("skeleton-card") ?? document.querySelectorAll(".skeleton-card")).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText("Word Matching")).toBeInTheDocument();
+    });
   });
 
   it("renders categories after loading", async () => {
@@ -71,21 +73,25 @@ describe("CategoryList", () => {
     expect(mockNavigate).toHaveBeenCalledWith("/play/animals");
   });
 
-  it("displays the app title", async () => {
-    mockGetCategories.mockResolvedValue({ categories: mockCategories });
+  it("filters out the body-parts category (hidden per prior decision)", async () => {
+    mockGetCategories.mockResolvedValue({
+      categories: [
+        ...mockCategories,
+        {
+          id: "cat-99",
+          name: "Body Parts",
+          slug: "body-parts",
+          icon_url: null,
+          display_order: 5,
+          word_count: 25,
+        },
+      ],
+    });
     renderWithRouter();
 
     await waitFor(() => {
-      expect(screen.getByText("Kids Words")).toBeInTheDocument();
+      expect(screen.getByText("Animals")).toBeInTheDocument();
     });
-  });
-
-  it("renders empty state when no categories", async () => {
-    mockGetCategories.mockResolvedValue({ categories: [] });
-    renderWithRouter();
-
-    await waitFor(() => {
-      expect(screen.getByText("Pick a category!")).toBeInTheDocument();
-    });
+    expect(screen.queryByText("Body Parts")).not.toBeInTheDocument();
   });
 });

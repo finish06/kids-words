@@ -8,10 +8,11 @@ import { ColorCircle } from "./ColorCircle";
 import { isBodyPartUrl, isColorUrl, isShapeUrl, parseBodyPartName, parseColorHex, parseShapeName } from "./colorUtils";
 import { ShapeImage } from "./ShapeImage";
 import { Icon } from "./Icon";
+import { LengthPicker } from "./LengthPicker";
 import { RoundComplete } from "./RoundComplete";
 
-const QUIZ_LENGTHS = [5, 10, 20] as const;
-
+// QuizLengthPicker shim: thin wrapper over shared LengthPicker that preserves
+// MatchRound's existing call sites (categoryName prop).
 function QuizLengthPicker({
   categoryName,
   maxWords,
@@ -24,25 +25,12 @@ function QuizLengthPicker({
   onBack: () => void;
 }) {
   return (
-    <div className="quiz-picker">
-      <button className="back-button" onClick={onBack}>
-        <Icon name="arrow-left" size={20} /> Back
-      </button>
-      <h1 className="picker-title">{categoryName}</h1>
-      <p className="picker-subtitle">How many words?</p>
-      <div className="picker-options">
-        {QUIZ_LENGTHS.map((count) => (
-          <button
-            key={count}
-            className="picker-button"
-            onClick={() => onPick(count)}
-            disabled={count > maxWords}
-          >
-            {count}
-          </button>
-        ))}
-      </div>
-    </div>
+    <LengthPicker
+      title={categoryName}
+      maxWords={maxWords}
+      onPick={onPick}
+      onBack={onBack}
+    />
   );
 }
 

@@ -88,3 +88,63 @@ export interface CategoryProgressResponse {
   words: WordProgressItem[];
   summary: ProgressSummary;
 }
+
+// Word Builder (M7)
+
+export type PatternType = "prefix" | "suffix";
+
+export interface PatternOption {
+  id: string;
+  text: string;
+  type: PatternType;
+}
+
+export interface Challenge {
+  base_word: string;
+  correct_pattern: PatternOption;
+  options: PatternOption[];
+  result_word: string;
+  definition: string;
+}
+
+export interface RoundResponse {
+  level: number;
+  challenges: Challenge[];
+}
+
+export interface WordBuilderAttempt {
+  pattern_id: string;
+  is_correct: boolean;
+  attempt_number: number;
+}
+
+export interface PatternStarUpdate {
+  pattern_id: string;
+  new_count: number;
+  new_star_level: number;
+  just_mastered: boolean;
+}
+
+export interface WordBuilderResultResponse {
+  id: string;
+  recorded: boolean;
+  responded_at: string;
+  star_update: PatternStarUpdate | null;
+}
+
+export interface LevelPatternProgress {
+  text: string;
+  star_level: number;
+  mastered: boolean;
+}
+
+export interface LevelProgress {
+  level: number;
+  unlocked: boolean;
+  patterns: LevelPatternProgress[];
+  mastery_percentage: number;
+}
+
+export interface WordBuilderProgressResponse {
+  levels: LevelProgress[];
+}

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { getProfiles, setActiveProfile } from "./api/client";
-import { CategoryList } from "./components/CategoryList";
+import { BuildPicker, BuildScreen } from "./components/BuildScreen";
+import { HomeScreen } from "./components/HomeScreen";
 import { Icon } from "./components/Icon";
 import { MatchRound } from "./components/MatchRound";
 import { ProfileManager } from "./components/ProfileManager";
@@ -98,9 +99,11 @@ function App() {
         </div>
       </div>
       <Routes>
-        <Route path="/" element={<CategoryList />} />
+        <Route path="/" element={<HomeScreen />} />
         <Route path="/play/:slug" element={<MatchRound />} />
         <Route path="/words/:slug" element={<WordList />} />
+        <Route path="/build" element={<BuildPicker />} />
+        <Route path="/build/play" element={<BuildScreen />} />
       </Routes>
     </div>
   );

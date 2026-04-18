@@ -6,6 +6,10 @@ import type {
   MatchResultResponse,
   ProfileListResponse,
   Profile,
+  RoundResponse,
+  WordBuilderAttempt,
+  WordBuilderProgressResponse,
+  WordBuilderResultResponse,
 } from "../types";
 
 const API_BASE = import.meta.env.VITE_API_URL ?? "";
@@ -125,4 +129,30 @@ export async function getCategoryProgress(
   slug: string,
 ): Promise<CategoryProgressResponse> {
   return fetchJson<CategoryProgressResponse>(`/api/progress/${slug}`);
+}
+
+// Word Builder (M7)
+
+export async function getWordBuilderRound(
+  count: number,
+  level?: number,
+): Promise<RoundResponse> {
+  const params = new URLSearchParams({ count: String(count) });
+  if (level !== undefined) params.set("level", String(level));
+  return fetchJson<RoundResponse>(
+    `/api/word-builder/round?${params.toString()}`,
+  );
+}
+
+export async function postWordBuilderResult(
+  attempt: WordBuilderAttempt,
+): Promise<WordBuilderResultResponse> {
+  return fetchJson<WordBuilderResultResponse>("/api/word-builder/results", {
+    method: "POST",
+    body: JSON.stringify(attempt),
+  });
+}
+
+export async function getWordBuilderProgress(): Promise<WordBuilderProgressResponse> {
+  return fetchJson<WordBuilderProgressResponse>("/api/word-builder/progress");
 }
