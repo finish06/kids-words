@@ -29,7 +29,9 @@ from sqlalchemy import create_engine, inspect
 from alembic import command
 from app.config import settings
 
-# All tables that the initial migration should create.
+# All tables that `alembic upgrade head` should produce, as of the current
+# revision. Initial schema (001) creates the first seven; word-builder (002)
+# adds the final four. This set evolves with each new migration.
 EXPECTED_TABLES = {
     "alembic_version",
     "profiles",
@@ -38,6 +40,11 @@ EXPECTED_TABLES = {
     "words",
     "match_results",
     "word_progress",
+    # M7 Word Builder (migration 002):
+    "patterns",
+    "base_words",
+    "word_combos",
+    "pattern_progress",
 }
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent

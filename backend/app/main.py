@@ -14,6 +14,7 @@ from app.routes.categories import router as categories_router
 from app.routes.profiles import router as profiles_router
 from app.routes.progress import router as progress_router
 from app.routes.results import router as results_router
+from app.routes.word_builder import router as word_builder_router
 
 APP_VERSION = "0.2.0"
 START_TIME = datetime.now(UTC)
@@ -41,6 +42,7 @@ app.include_router(categories_router)
 app.include_router(results_router)
 app.include_router(profiles_router)
 app.include_router(progress_router)
+app.include_router(word_builder_router)
 
 
 @app.get("/api/health")

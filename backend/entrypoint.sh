@@ -44,5 +44,9 @@ echo "Running seed (idempotent — adds missing categories/words only)..."
 python -m app.seed
 echo "Seed complete."
 
+echo "Running word-builder seed (idempotent — L1 patterns/combos)..."
+python -m app.seed_word_builder
+echo "Word-builder seed complete."
+
 echo "Starting server..."
 exec uvicorn app.main:app --host 0.0.0.0 --port 8000

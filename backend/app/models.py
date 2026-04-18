@@ -136,3 +136,88 @@ class WordProgress(Base):
         if correct_count >= 2:
             return 1
         return 0
+
+
+# ============================================================================
+# M7 Word Builder
+# ============================================================================
+
+
+class Pattern(Base):
+    __tablename__ = "patterns"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    text: Mapped[str] = mapped_column(String(20), nullable=False, unique=True)
+    type: Mapped[str] = mapped_column(String(10), nullable=False)  # "prefix" | "suffix"
+    level: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    meaning: Mapped[str] = mapped_column(String(100), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class BaseWord(Base):
+    __tablename__ = "base_words"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    text: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
+    level: Mapped[int] = mapped_column(Integer, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class WordCombo(Base):
+    __tablename__ = "word_combos"
+    __table_args__ = (
+        UniqueConstraint("base_word_id", "pattern_id", name="uq_combo_base_pattern"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    base_word_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("base_words.id"), nullable=False
+    )
+    pattern_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("patterns.id"), nullable=False
+    )
+    result_word: Mapped[str] = mapped_column(String(100), nullable=False)
+    definition: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class PatternProgress(Base):
+    __tablename__ = "pattern_progress"
+    __table_args__ = (
+        UniqueConstraint("pattern_id", "profile_id", name="uq_pattern_profile"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    pattern_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("patterns.id"), nullable=False
+    )
+    profile_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("profiles.id"), nullable=False
+    )
+    first_attempt_correct_count: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0
+    )
+    star_level: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    mastered_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    @staticmethod
+    def compute_star_level(correct_count: int) -> int:
+        """Same thresholds as WordProgress (AC-012): 2→1★, 4→2★, 7+→3★."""
+        if correct_count >= 7:
+            return 3
+        if correct_count >= 4:
+            return 2
+        if correct_count >= 2:
+            return 1
+        return 0
