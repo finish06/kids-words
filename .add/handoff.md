@@ -1,67 +1,62 @@
 # Session Handoff
-**Written:** 2026-04-18 (cycle-15 agent-done; PAT pending)
+**Written:** 2026-04-18 (cycle-16 agent-done; PAT pending)
 
-## Completed this session (away mode, ~1h used of 12h budget)
+## Completed this session (interactive, then half-day focused)
 
-### Primary: cycle-15 Word Builder clue redesign + M8 Phonetics — AGENT_DONE
-- PR #21 squash-merged as `bb6b9e0`
-- 14 files changed, +669 / −81 lines
-- 9 new Vitest tests (+useSpeech); total 98/98 pass; backend 81/81 pass
-- Lint + types clean; CI green across 3 consecutive runs (stability gate)
+### Late additions after cycle-15 closed
+- **Clue leak fix (c03a3e8):** PAT caught that "-ING/-ED/-ER" clues contained inflected forms revealing the answer. Switched to bare-base-verb wording ("jump right now", "did jump", "people who jump"). Seed-only patch; idempotent auto-update on staging.
+- **New spec: `specs/home-games-practice.md`** — restructure Home into Games + Practice sections, relocate 5 category cards to new `/matching` route.
+- **Cycle-16 planned + executed:** PR #22 → `783b08f` staging live.
 
-### Shipped
-- **`useSpeech` hook** — Web Speech API wrapper; iOS warm-up; kid-friendly rate/pitch/lang
-- **Word Builder clue redesign** — clue sentence above base word, auto-plays on challenge load, tap to re-hear
-- **Word Builder un-gated** — WordBuilderCard clickable again; cycle-14's "Coming soon" reverted
-- **Match Round tap-to-hear** — target word + image cards speak (M8 feature proper)
-- **Listening Practice card** — renamed from Word Phonetics; stays "Coming soon" placeholder
-- **Seed clue audit** — 28 L1 combos updated to approved pattern-disciplined wording (FISH+-S dropped; idempotent seed auto-removed on staging)
-- **Specs updated** — word-builder.md v0.3.0, word-builder-ux.md v1.1, word-pronunciation.md → Implementing
+### Cycle-16 shipped
+- **New components:** MatchingScreen, WordMatchingCard, PracticeSection
+- **Updated:** HomeScreen (Games + Practice layout), GamesSection (WB + WM), App.tsx routing (new `/matching`)
+- **Removed:** WordMatchingSection + its test (replaced by MatchingScreen)
+- **New tests:** MatchingScreen (7), WordMatchingCard (4), HomeScreen (6 rewrites)
+- **E2E regression rewritten** — 9 scenarios covering home layout + back nav + WB unchanged + category-to-length flow
+- **CSS:** Games grid, Practice grid, ghost card, MatchingScreen header
+- **107/107 Vitest pass; lint + tsc clean; CI green first run**
 
-### Staging verified at `bb6b9e0`
-- `/api/health` healthy, DB 54.8ms, fresh uptime
-- `/api/word-builder/round?count=3` returns new clue wording: "a person who plays", "playing right now", "more than one dog"
-- JS bundle: "Listening Practice" × 2, "Hear the clue" × 1, zero "Word Phonetics" references
+### Staging verified at `783b08f`
+- Backend healthy, DB 53.2ms
+- JS bundle contains: Games + Practice headings, Word Matching card, Listening Practice placeholder, "More coming soon" ghost, "Pick a category" subtitle, `/matching` route, `game-card--ghost` class
 
 ## ➡ PAT CHECKLIST (for you on iPad at https://kids-words.staging.calebdunn.tech/)
 
-1. [ ] Home shows Word Builder card **clickable** (not "Coming soon")
-2. [ ] Home shows "Listening Practice — Coming soon" (renamed from Word Phonetics)
-3. [ ] Tap Word Builder card → Length Picker with 5/10/20 options
-4. [ ] Pick 5 → Build Screen renders with **clue sentence above base word**
-5. [ ] Clue **auto-plays** on load (iOS Safari: may need one initial tap anywhere to warm up)
-6. [ ] Tap the clue button → hear it re-spoken
-7. [ ] Pattern tiles still work: correct = slide + glow; wrong = shake + bounce back
-8. [ ] Play a 5-word round — verify each clue unambiguously points to one pattern (the cycle-13 PAT regression test)
-9. [ ] Complete the round → Round Complete shows per-pattern stars
-10. [ ] Tap "Play Again" → returns to Length Picker (not direct replay)
-11. [ ] Return Home → tap Animals → in Match Round, tap the target word at top → hear it spoken
-12. [ ] Tap any image card in Match Round → hear the word; matching logic still fires correctly
-13. [ ] Toggle dark mode → clue button, speaker icon, Match Round word button render cleanly
+1. [ ] Home shows **Games** + **Practice** as section headings
+2. [ ] Games row: Word Builder card + Word Matching card (both clickable)
+3. [ ] Practice row: Listening Practice "Coming soon" + dashed "More coming soon" ghost
+4. [ ] **No** category cards (Animals/Colors/Food/Shapes) visible directly on Home
+5. [ ] Tap **Word Matching** card → `/matching` screen with "Pick a category!" heading + 5 category cards
+6. [ ] Tap **Animals** → Length Picker
+7. [ ] Tap **5** → Match Round plays as before (including cycle-15's tap-to-hear audio)
+8. [ ] Back from Length Picker → returns to `/matching` (not Home)
+9. [ ] Back from `/matching` → returns to Home
+10. [ ] Tap **Word Builder** card → clue-based round still works (cycle-15 state preserved)
+11. [ ] Toggle dark mode → both sections + MatchingScreen render cleanly
+12. [ ] iPad landscape layout looks good (Games grid side-by-side; Practice grid side-by-side)
 
-**If PAT passes:** run `/add:cycle --complete` to write the learnings checkpoint, update M7 + M8 hill charts, and append to `cycle_history`. Likely candidate to close M7 + M8 both if all criteria met.
+**If PAT passes:** `/add:cycle --complete` writes learnings, updates M7 closure bookkeeping, appends to `cycle_history`, and sets `current_cycle` to null.
 
-**If PAT reveals clue-wording issues:** clue text lives in `backend/app/seed_word_builder.py` — 5-minute edit + re-deploy via idempotent seed. Much smaller than a full cycle.
-
-**If PAT reveals deeper UX issues:** log for cycle-16 (which was already planned for Listening Practice anyway).
+**If PAT reveals issues:** file them for cycle-17. Spec is versioned so iteration is cheap.
 
 ## Config state
 - `planning.current_milestone`: `M7-word-builder`
-- `planning.current_cycle`: `cycle-15` (stays IN_PROGRESS until PAT; `/add:cycle --complete` will set to null)
-- `cycle_history`: 9, 11, 12, 13, 14 — cycle-15 appends on formal close
+- `planning.current_cycle`: `cycle-16` (stays IN_PROGRESS until PAT + `/add:cycle --complete`)
+- `cycle_history`: 9, 11, 12, 13, 14, 15 — cycle-16 appends on formal close
 
 ## Milestones
-- **M1-M6, M3:** COMPLETE
-- **M7 Word Builder:** IN_PROGRESS — backend VERIFIED cycle-12; frontend+clue redesign shipped cycle-15; awaits PAT
-- **M8 Audio & Pronunciation:** IN_PROGRESS — shipped alongside cycle-15 via useSpeech + Match Round audio + Word Builder clue; awaits PAT
+- **M1-M6 + M3:** COMPLETE
+- **M7 Word Builder:** IN_PROGRESS — all user-facing work shipped through cycle-16; awaits PAT + `/add:cycle --complete` to formally close. Successful PAT would close M7.
+- **M8 Audio & Pronunciation:** Implemented via cycle-15; awaits PAT confirmation through cycle-16's Match Round path.
 
-## Deferred (for cycle-16 and beyond)
+## Deferred (for later cycles)
 - Listening Practice game (needs `/add:spec` + `/add:ux` first)
 - L2 + L3 Word Builder seed expansion
 - Full Word Builder E2E Playwright (happy path, wrong-tap, level-up)
-- iPad Capacitor build verification
-- Configurable TTS rate / voice selection
-- `learnings.md` → JSON migration (3rd retro action-item deferral; due for promotion above a cycle)
+- Level-up modal detection (backend flag is ready to consume)
+- Configurable TTS rate / voice
+- `.add/learnings.md` → JSON migration (4th retro action deferral)
 
-## Known stubs still in code
-- Level-up modal detection (LevelUpModal renders when triggered but the pre/post-round progress diff is still a no-op; backend `unlocked` flag ready to consume when needed)
+## Branch state
+- `main` at `783b08f` (PR #22 merged, cycle-16 feature branch deleted)

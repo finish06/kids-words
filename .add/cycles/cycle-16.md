@@ -2,9 +2,10 @@
 
 **Milestone:** M7 (closure polish) — no new milestone; home restructure sits in M7's tail
 **Maturity:** Beta
-**Status:** PLANNED
-**Started:** TBD (planned 2026-04-18)
-**Completed:** TBD (PAT-gated)
+**Status:** AWAITING_PAT (agent-done, human sign-off pending)
+**Started:** 2026-04-18
+**Agent-Done:** 2026-04-18 (PR #22 merged; staging verified at 783b08f)
+**Completed:** TBD (gated on human PAT play-through)
 **Duration Budget:** 3-5h half-day focused session
 **Branch Strategy:** Single feature branch `feat/home-games-practice`, single squash commit, revert-if-red
 **Ordering:** Design-first (no new state logic; pure structural restructure with existing components reused)
