@@ -2,9 +2,9 @@
 
 **Milestone:** M7 — Word Builder
 **Maturity:** Beta
-**Status:** PLANNED
-**Started:** TBD (planned 2026-04-18)
-**Completed:** TBD
+**Status:** COMPLETE
+**Started:** 2026-04-18
+**Completed:** 2026-04-18
 **Duration Budget:** Half-day focused session (~4-8h effort)
 **Branch Strategy:** Single feature branch `feat/word-builder-backend`, single squash commit, revert-if-red rollback
 **Ordering:** TDD-strict (RED → GREEN → REFACTOR → VERIFY) per `.claude/rules/tdd-enforcement.md`
@@ -218,3 +218,55 @@ Log in `.add/handoff.md`, skip to the next substep, do not sit and wait. If the 
 - TDD-strict is the first time it's being applied at this project's Beta scale on new backend code. Treat the RED phase as a correctness gate: if it's tempting to skip writing a test for an AC, that's a signal the AC is unclear, not that the test is unnecessary.
 - Frontend cycle (M7 remaining: Build Screen, tiles, animations, round-complete integration, level indicator) is blocked on `/add:ux specs/word-builder.md`. Queue that as a precondition before cycle-13.
 - Level 2 and Level 3 seed expansions (~40 + ~30 combos with definitions) deferred to a post-frontend cycle — they benefit from UI feedback on content tuning.
+
+## Execution Outcome (2026-04-18 away session)
+
+Shipped in ~3h total (well inside the 4-8h budget + 12h away window). TDD-strict delivered as intended: all 33 tests written and failing before any implementation, then model + migration + schemas + routes + seed built to satisfy them with zero after-the-fact test rewrites.
+
+### Item 1 — Word Builder Backend: VERIFIED
+
+- **Branch:** `feat/word-builder-backend`
+- **PR:** [#17](https://github.com/finish06/kids-words/pull/17) — squash-merged as `b7c6d1e`
+- **Tests added:** 33 (16 endpoint, 7 migration, 7 seed, +3 EXPECTED_TABLES update in test_migrations.py)
+- **Total suite:** 48 → 81 tests, 0 regressions
+- **Coverage:** 94% project-wide at 80% blocking threshold; `word_builder.py` at 94%, `seed_word_builder.py` at 90%
+- **CI:** green first run (Backend 30s, Frontend 18s) on PR #17
+- **Staging verify (2026-04-18 ~16:32 UTC):**
+  - Auto-deploy webhook fired on merge
+  - Migration 002 auto-applied via Docker entrypoint — **no manual DB reset**
+  - `/api/health` green, version 0.2.0 on commit `b7c6d1e`, DB 52.7ms
+  - `/api/word-builder/progress` returns L1 with 6 patterns, `unlocked: true`, 0% mastery (correct for fresh state)
+  - `/api/word-builder/round?count=5` returns 5 valid challenges with base_word, correct_pattern in options, result_word, definition
+- **Rollback not needed** — no regressions, no staging 500s
+
+### M3 Milestone — Last Criterion CLOSED
+
+The "Staging deploy works without manual DB reset" criterion had been open since M3 started (2026-04-05). It was intentionally deferred to be validated on the next real schema change rather than simulated. Cycle-12's migration 002 was that first real change, and it applied cleanly on staging without any manual intervention. **M3 is now 7/7 success criteria met.**
+
+### What Worked
+
+- **TDD-strict at Beta scale:** first time the project has done full RED→GREEN→REFACTOR→VERIFY on new feature code (cycles 8/9 were audit-and-backfill). Zero test rewrites during GREEN — the spec §5 API contract was complete enough that the tests locked the shape in cleanly.
+- **Spec as source of truth:** every AC (002, 003, 004, 005, 006, 007, 008, 011, 012, 013, 016) has a dedicated `test_acNNN_*` test. Spec compliance is provable, not aspirational.
+- **Cycle-11's Python-3.14 CI fix paid off immediately.** Without it, cycle-12's 33 new async route tests would have shown <50% coverage in CI even though they passed, blocking the 80% gate. The two cycles composed cleanly.
+
+### What Was Bumpy
+
+- **Initial mypy errors in `seed_word_builder.py`** — reusing the `result` variable across three different `session.execute(select(X))` calls confused mypy's flow analysis. Fixed by using distinct variable names (`pat_result`, `bw_result`, `combo_result`) and explicit type annotations on `existing_*` locals. Worth a workstation-scope learning: "mypy's type narrowing across reused SQLAlchemy result variables is fragile — use distinct names per query."
+- **Ruff line-length in test docstrings** — a handful of one-liner docstrings exceeded 88 chars. Trivial to fix but surfaced a pattern: keep AC-tagged test docstrings to one short line rather than the full AC text.
+- **Accidentally `git add -A`'d pre-existing `tests/screenshots/` untracked files** in the feature commit. Caught and unstaged before commit. Reinforces project rule: prefer explicit file adds over `-A`.
+
+### Validation Criteria (cycle success)
+
+- [x] All RED-phase tests wrote and failed before implementation
+- [x] All GREEN-phase tests pass (81/81)
+- [x] Migration roundtrip test passes (upgrade→downgrade→upgrade)
+- [x] No regressions in 48 existing backend tests (total 81)
+- [x] `app/routes/word_builder.py` coverage ≥ 80% (94%)
+- [x] CI green on PR
+- [x] PR squash-merged to main (self-authorized per Q7)
+- [x] Staging auto-deploy ran migration + auto-seed cleanly
+- [x] Staging `/api/word-builder/round` + `/progress` verified
+- [x] **M3 success criterion "Staging deploy works without manual DB reset" — ticked**
+- [x] M7 hill chart updated (Backend 0% → 100%)
+- [x] `.add/learnings.md` post-verify checkpoint written
+- [x] `.add/handoff.md` updated with outcome

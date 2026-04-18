@@ -35,4 +35,6 @@
 | T+0 | RED phase: write 4 test files (updated migrations, added 3 new) | COMPLETE | pytest collection errors confirm RED — imports for BaseWord/Pattern/etc. fail as expected. 0 tests pass. |
 | T+1 | GREEN phase: models + migration + schemas + route + seed + wiring | COMPLETE | Pattern/BaseWord/WordCombo/PatternProgress models; migration 002 with upgrade+downgrade; 3 endpoints in word_builder.py; L1 seed (6 patterns, 15 base words, 29 combos); entrypoint.sh + main.py wired |
 | T+2 | REFACTOR + VERIFY: ruff + mypy + full suite + coverage | COMPLETE | 81/81 tests pass, 94% coverage, all gates clean. No regressions to existing 48 tests. word_builder.py at 94%, seed_word_builder.py at 90%. |
-| T+2 | Commit + push + PR | STARTED | Single commit to feat/word-builder-backend → PR |
+| T+2 | Commit + push + PR | COMPLETE | PR #17; squash-merged as b7c6d1e; CI green first run (Backend 30s, Frontend 18s); coverage 93.59% |
+| T+3 | Staging auto-deploy verified (M3 closure) | COMPLETE | Staging caught up to b7c6d1e; migration 002 auto-applied, no manual DB reset; /health healthy; /progress + /round return valid JSON |
+| T+3 | Cycle-12 --complete bookkeeping | COMPLETE | cycle-12.md outcome section; M7 hill chart + success criteria updated; M3 last criterion ticked; learnings.md retro entry; handoff rewritten; config current_cycle → null |

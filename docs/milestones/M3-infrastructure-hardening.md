@@ -34,7 +34,7 @@ Release Tag            ███████████████████
 - [x] CI backend coverage >= 80% (93.33% at 80% threshold since cycle-11 / PR #16)
 - [x] Frontend coverage >= 80% (86.2% — 75 tests)
 - [x] Release tag pushed (v0.1.0 + v0.2.0); versioned images in registry via staging auto-deploy
-- [ ] Staging deploy works without manual DB reset (untested, pending CI fix + v0.1.0)
+- [x] Staging deploy works without manual DB reset (validated 2026-04-18: migration 002 auto-applied via Docker entrypoint when cycle-12/PR #17 deployed; staging healthy at b7c6d1e with new endpoints returning valid JSON)
 
 ## Cycle Tracking
 
