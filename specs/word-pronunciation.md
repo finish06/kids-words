@@ -1,10 +1,12 @@
 # Spec: Word Pronunciation (Tap to Hear)
 
-**Version:** 0.1.0
+**Version:** 0.2.0
 **Created:** 2026-04-07
+**Updated:** 2026-04-18 (cycle-15: implemented via `useSpeech` hook)
 **PRD Reference:** docs/prd.md — Audio/pronunciation (v2)
 **Milestone:** M8 — Audio & Pronunciation
-**Status:** Specced
+**Status:** Implementing (PAT pending)
+**Implemented via:** `frontend/src/hooks/useSpeech.ts` (shared infrastructure) + Match Round word+image tap-to-hear + Word Builder clue tap-to-hear
 
 ## 1. Overview
 

@@ -6,15 +6,30 @@ import { HomeScreen } from "../HomeScreen";
 
 vi.mock("../../api/client", () => ({
   getCategories: vi.fn(),
+  getWordBuilderProgress: vi.fn(),
 }));
 
-import { getCategories } from "../../api/client";
+import { getCategories, getWordBuilderProgress } from "../../api/client";
 const mockGetCategories = vi.mocked(getCategories);
+const mockGetProgress = vi.mocked(getWordBuilderProgress);
 
 describe("HomeScreen", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockGetCategories.mockResolvedValue({ categories: mockCategories });
+    mockGetProgress.mockResolvedValue({
+      levels: [
+        {
+          level: 1,
+          unlocked: true,
+          patterns: [
+            { text: "RE-", star_level: 0, mastered: false },
+            { text: "UN-", star_level: 0, mastered: false },
+          ],
+          mastery_percentage: 0,
+        },
+      ],
+    });
   });
 
   it("renders the app title", async () => {
@@ -40,7 +55,7 @@ describe("HomeScreen", () => {
     });
   });
 
-  it("shows both game cards as Coming soon (cycle-14 gating)", async () => {
+  it("shows Word Builder re-enabled (cycle-15) + Listening Practice placeholder", async () => {
     render(
       <MemoryRouter>
         <HomeScreen />
@@ -48,10 +63,10 @@ describe("HomeScreen", () => {
     );
     await waitFor(() => {
       expect(screen.getByText("Word Builder")).toBeInTheDocument();
-      expect(screen.getByText("Word Phonetics")).toBeInTheDocument();
+      expect(screen.getByText("Listening Practice")).toBeInTheDocument();
     });
-    // Both cards should carry "Coming soon" until their design is finalized
-    const comingSoon = screen.getAllByText("Coming soon");
-    expect(comingSoon.length).toBeGreaterThanOrEqual(2);
+    // Listening Practice still reads "Coming soon"; Word Builder is now live
+    expect(screen.getByText("Coming soon")).toBeInTheDocument();
+    expect(screen.queryByText("Word Phonetics")).not.toBeInTheDocument();
   });
 });
