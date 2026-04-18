@@ -21,4 +21,9 @@ None.
 ## Next Steps
 1. M3 still has 2 open items: CI coverage fix (76% → 80%) and v0.1.0 release tag
 2. M7 Word Builder and M8 Audio & Pronunciation are PLANNED
-3. M2 Staging is effectively done — needs formal close
+
+## Roadmap Reconciliation (2026-04-18)
+- M2 Staging Environment formally closed (was IN_PROGRESS on paper; had been live since cycle-10)
+- PRD Section 6 rewritten: all 8 milestones now reflected, stale names corrected, maturity set to Beta
+- PRD bumped to v0.2.0
+- `planning.current_milestone` unchanged — M3 remains the sole NOW milestone

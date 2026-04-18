@@ -1,6 +1,6 @@
 # Kids Words — Product Requirements Document
 
-**Version:** 0.1.0
+**Version:** 0.2.0
 **Created:** 2026-04-04
 **Author:** calebdunn
 **Status:** Draft
@@ -77,31 +77,73 @@ Young children (ages 4-6) need engaging, interactive tools to build word recogni
 
 ## 6. Milestones & Roadmap
 
-### Current Maturity: Alpha
+### Current Maturity: Beta (promoted from Alpha on 2026-04-05)
 
 ### Roadmap
 
 | Milestone | Goal | Target Maturity | Status | Success Criteria |
 |-----------|------|-----------------|--------|------------------|
-| M1: Word Recognition | Core matching activity works | Alpha | NOW | Kids can match words to images with visual feedback |
-| M2: Progress Tracking | Track and display learning progress | Alpha | NEXT | Parents can see accuracy and words learned |
-| M3: iOS App | Ship Capacitor iOS build | Beta | LATER | App runs on iPad via TestFlight |
+| M3: Infrastructure Hardening | Safe, repeatable deploys; no data loss on schema changes | Beta | NOW | Alembic migrations + idempotent seed + CI coverage ≥ 80% + v0.1.0 tag |
+| M7: Word Builder | Prefix/suffix game mode with adaptive difficulty | Beta | NEXT | 3 difficulty levels, ~100 combos, adaptive unlock, profile-scoped progress |
+| M8: Audio & Pronunciation | Tap-to-hear via Web Speech API | Beta | NEXT | Tapping words/images speaks them on iOS + web |
+| M1: Word Recognition | Core matching activity works | Alpha | COMPLETE | Kids can match words to images with visual feedback |
+| M2: Staging Environment | Stand up staging at kids-words.staging.calebdunn.tech | Alpha | COMPLETE | App functional end-to-end on staging |
+| M4: Profile Enhancements | Edit/delete profiles | Beta | COMPLETE | Edit/delete flows shipped via PR #11 |
+| M5: Dark Mode | Device auto-detect + manual toggle | Beta | COMPLETE | Dark mode shipped via PR #12 |
+| M6: New Categories | Add Shapes + Body Parts word sets | Beta | COMPLETE | Shapes (20) + Body Parts (25) live on home |
 
 ### Milestone Detail
 
-#### M1: Word Recognition [NOW]
-**Goal:** Build the core word-image matching activity that kids can use on a tablet.
-**Appetite:** 2-3 weeks
-**Target maturity:** Alpha
+#### M3: Infrastructure Hardening [NOW]
+**Goal:** Make deployments safe and repeatable. No more data loss on schema changes.
+**Appetite:** 1 week
+**Target maturity:** Beta
 **Features:**
-- word-image-matching — Core activity where kids match words to images
-- word-sets — Curated age-appropriate word categories (animals, colors, etc.)
-- visual-feedback — Encouraging animations for correct/incorrect answers
+- Alembic Migrations — specs/database-migrations.md (VERIFIED, PR #7 + #14)
+- Idempotent Seed — specs/database-migrations.md (VERIFIED, PR #7 + #14)
+- Frontend Test Coverage (COMPLETE — 86.2%, PR #13)
+- CI Coverage Fix — raise backend coverage 75% → 80% (IN_PROGRESS; root-cause fix for FastAPI dep_overrides in CI still pending)
+- v0.1.0 Release Tag — first semver tag, triggers versioned image push (NOT_STARTED)
 **Success criteria:**
-- [ ] Child can complete a word matching round
-- [ ] At least 3 word categories available
-- [ ] Visual feedback is encouraging and age-appropriate
-- [ ] Works on tablet-sized screens
+- [x] `alembic upgrade head` applies schema changes without data loss
+- [x] Seed script is idempotent (6 integration tests)
+- [x] Docker entrypoint auto-runs migrations on start
+- [ ] CI backend coverage ≥ 80%
+- [x] Frontend coverage ≥ 80% (86.2%)
+- [ ] v0.1.0 tag pushed, versioned images in registry
+- [ ] Staging deploy works without manual DB reset
+
+#### M7: Word Builder [NEXT]
+**Goal:** New game mode teaching prefix/suffix patterns with adaptive difficulty.
+**Appetite:** 1-2 weeks
+**Target maturity:** Beta
+**Features:**
+- Word Builder backend — 4 new tables, 3 endpoints, migration
+- Word Builder frontend — Build screen, snap animation, level indicator
+- Seed data (100+ combos) across 3 levels
+- Adaptive difficulty — auto-unlock levels via star mastery
+**Success criteria:**
+- [ ] Word Builder mode on home screen
+- [ ] Build-a-word interaction with snap animation
+- [ ] 3 difficulty levels with ~100 word combos
+- [ ] Adaptive unlock (70%+ mastery → next level)
+- [ ] Star progress per pattern
+- [ ] Profile-scoped progress
+**Dependencies:** M6 (validates seed pattern — DONE); Alembic migration for new tables.
+
+#### M8: Audio & Pronunciation [NEXT]
+**Goal:** Tap any word or image to hear it spoken via the Web Speech API. Reinforces the link between written and spoken language with zero hosting cost.
+**Appetite:** 2-3 days
+**Target maturity:** Beta
+**Features:**
+- Word Pronunciation — specs/word-pronunciation.md (SPECCED)
+**Success criteria:**
+- [ ] Tapping a word in Match Round speaks it aloud
+- [ ] Tapping an image card speaks the matching word
+- [ ] Speech rate tuned slower for children (~0.85)
+- [ ] Works across Match Round, Word List, and (eventually) Word Builder
+- [ ] Works on iOS Capacitor build
+- [ ] No external audio assets
 
 ### Maturity Promotion Path
 
@@ -139,3 +181,4 @@ Positive, encouraging feedback for correct answers (animations, stars, celebrati
 | Date | Version | Author | Changes |
 |------|---------|--------|---------|
 | 2026-04-04 | 0.1.0 | calebdunn | Initial draft from /add:init interview |
+| 2026-04-18 | 0.2.0 | calebdunn | Section 6 reconciled with docs/milestones/; M2 formally closed; maturity corrected to Beta; M4-M8 added to roadmap table |
