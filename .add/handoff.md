@@ -1,71 +1,67 @@
 # Session Handoff
-**Written:** 2026-04-18 (cycle-13 + cycle-14 closed; cycle-15 direction captured)
+**Written:** 2026-04-18 (cycle-15 agent-done; PAT pending)
 
-## Session summary
+## Completed this session (away mode, ~1h used of 12h budget)
 
-Long session covering: roadmap reconciliation → cycle-11 (CI fix) → retro → cycle-12 (Word Builder backend) → M3 closure → /add:ux Word Builder → cycle-13 (Word Builder frontend) → PAT → cycle-14 (gating) → product redesign direction for cycle-15.
+### Primary: cycle-15 Word Builder clue redesign + M8 Phonetics — AGENT_DONE
+- PR #21 squash-merged as `bb6b9e0`
+- 14 files changed, +669 / −81 lines
+- 9 new Vitest tests (+useSpeech); total 98/98 pass; backend 81/81 pass
+- Lint + types clean; CI green across 3 consecutive runs (stability gate)
 
-## State on main
+### Shipped
+- **`useSpeech` hook** — Web Speech API wrapper; iOS warm-up; kid-friendly rate/pitch/lang
+- **Word Builder clue redesign** — clue sentence above base word, auto-plays on challenge load, tap to re-hear
+- **Word Builder un-gated** — WordBuilderCard clickable again; cycle-14's "Coming soon" reverted
+- **Match Round tap-to-hear** — target word + image cards speak (M8 feature proper)
+- **Listening Practice card** — renamed from Word Phonetics; stays "Coming soon" placeholder
+- **Seed clue audit** — 28 L1 combos updated to approved pattern-disciplined wording (FISH+-S dropped; idempotent seed auto-removed on staging)
+- **Specs updated** — word-builder.md v0.3.0, word-builder-ux.md v1.1, word-pronunciation.md → Implementing
 
-```
-4a5d1cd  chore: gate Word Builder behind Coming soon (cycle-14) (#20)
-d12e928  chore(add): cycle-13 agent-done — AWAITING_PAT
-e507610  feat: Word Builder frontend (M7 cycle-13) (#19)
-9e8d0aa  chore(add): plan cycle-13 — M7 Word Builder frontend
-145ae69  docs(ux): sign off Word Builder (M7) UX design
-7d6ad9b  docs: close M3 milestone — 7/7 success criteria met
-...
-```
+### Staging verified at `bb6b9e0`
+- `/api/health` healthy, DB 54.8ms, fresh uptime
+- `/api/word-builder/round?count=3` returns new clue wording: "a person who plays", "playing right now", "more than one dog"
+- JS bundle: "Listening Practice" × 2, "Hear the clue" × 1, zero "Word Phonetics" references
 
-Staging at `4a5d1cd` running Python 3.14.4. Both game cards gated as "Coming soon"; Word Matching fully functional.
+## ➡ PAT CHECKLIST (for you on iPad at https://kids-words.staging.calebdunn.tech/)
 
-## Cycles closed this session
+1. [ ] Home shows Word Builder card **clickable** (not "Coming soon")
+2. [ ] Home shows "Listening Practice — Coming soon" (renamed from Word Phonetics)
+3. [ ] Tap Word Builder card → Length Picker with 5/10/20 options
+4. [ ] Pick 5 → Build Screen renders with **clue sentence above base word**
+5. [ ] Clue **auto-plays** on load (iOS Safari: may need one initial tap anywhere to warm up)
+6. [ ] Tap the clue button → hear it re-spoken
+7. [ ] Pattern tiles still work: correct = slide + glow; wrong = shake + bounce back
+8. [ ] Play a 5-word round — verify each clue unambiguously points to one pattern (the cycle-13 PAT regression test)
+9. [ ] Complete the round → Round Complete shows per-pattern stars
+10. [ ] Tap "Play Again" → returns to Length Picker (not direct replay)
+11. [ ] Return Home → tap Animals → in Match Round, tap the target word at top → hear it spoken
+12. [ ] Tap any image card in Match Round → hear the word; matching logic still fires correctly
+13. [ ] Toggle dark mode → clue button, speaker icon, Match Round word button render cleanly
 
-- **cycle-11** — CI coverage root-cause fix (Python 3.14 alignment). COMPLETE.
-- **cycle-12** — M7 Word Builder backend. COMPLETE. Closed M3's last criterion in the process.
-- **cycle-13** — M7 Word Builder frontend. COMPLETE — PAT outcome "ship + gate."
-- **cycle-14** — Gate Word Builder card as "Coming soon" (PAT response). COMPLETE.
+**If PAT passes:** run `/add:cycle --complete` to write the learnings checkpoint, update M7 + M8 hill charts, and append to `cycle_history`. Likely candidate to close M7 + M8 both if all criteria met.
 
-## PAT outcome → cycle-15 direction (captured, not yet planned)
+**If PAT reveals clue-wording issues:** clue text lives in `backend/app/seed_word_builder.py` — 5-minute edit + re-deploy via idempotent seed. Much smaller than a full cycle.
 
-PAT on cycle-13 surfaced a challenge-model ambiguity: English morphology is generative, so many challenges have multiple valid English answers that the current single-correct-pattern model treats as wrong (e.g., tapping `-S` on PAINT builds PAINTS, a real word, but challenge marked `-ED` correct).
-
-**Product direction (approved in-session):**
-- Word Builder redesign uses a **spoken clue** per challenge (e.g., "a person who paints" → -ER)
-- Couples with **M8 Phonetics** — tapping the clue speaks it aloud so pre-readers can play
-- **Cycle-15 scope:** useSpeech hook + Word Builder redesign + Match Round tap-to-hear + placeholder "Listening Practice" card on Home
-- **Cycle-16 (later):** Listening Practice new game mode (after `/add:spec` + `/add:ux`)
-- **Approved L1 clue table captured in `.add/cycle-15-direction.md`**
-
-## ➡ Next steps (for when you return)
-
-1. **Invoke `/add:cycle --plan`** when ready to plan cycle-15. Pre-answered cycle-questions captured in `.add/cycle-15-direction.md` to shorten the interview.
-2. **Alternative:** invoke `/add:spec specs/listening-practice.md` first if you want to spec the Listening Practice game now so cycle-15 can include it.
-3. **Declare `/add:away` for cycle-15 execution** — estimated ~10-16h for the combined Word Builder redesign + M8 TTS + Match Round audio. Away mode matches the shape well (similar to cycle-12 + cycle-13).
-
-## Milestones state
-
-- **M1-M6:** COMPLETE
-- **M3:** COMPLETE (closed this session — 7/7 success criteria, including staging-deploy-without-reset validated by cycle-12 migration)
-- **M7 Word Builder:** IN_PROGRESS. Backend VERIFIED (cycle-12). Frontend built + shipped but gated (cycle-13 + cycle-14). Redesign planned for cycle-15.
-- **M8 Audio & Pronunciation:** PLANNED → will be delivered in cycle-15 alongside the Word Builder redesign.
+**If PAT reveals deeper UX issues:** log for cycle-16 (which was already planned for Listening Practice anyway).
 
 ## Config state
 - `planning.current_milestone`: `M7-word-builder`
-- `planning.current_cycle`: `null` (both cycle-13 + cycle-14 closed; cycle-15 not yet planned)
-- `cycle_history`: 9, 11, 12, 13, 14 appended
+- `planning.current_cycle`: `cycle-15` (stays IN_PROGRESS until PAT; `/add:cycle --complete` will set to null)
+- `cycle_history`: 9, 11, 12, 13, 14 — cycle-15 appends on formal close
 
-## Known stubs / deferred
+## Milestones
+- **M1-M6, M3:** COMPLETE
+- **M7 Word Builder:** IN_PROGRESS — backend VERIFIED cycle-12; frontend+clue redesign shipped cycle-15; awaits PAT
+- **M8 Audio & Pronunciation:** IN_PROGRESS — shipped alongside cycle-15 via useSpeech + Match Round audio + Word Builder clue; awaits PAT
 
-- **Level-up modal detection** — LevelUpModal is built + wired in cycle-13; pre/post-round progress diff is a no-op stub. Cycle-15 or later can consume the backend `unlocked` flag.
-- **L2 + L3 Word Builder seed** — deferred until after cycle-15's clue redesign.
-- **Listening Practice spec + UX artifact** — prerequisite for cycle-16.
-- **Configurable TTS rate / voice** — future parent-settings polish.
-- **`.add/learnings.md` → JSON migration** — retro action item deferred now for 3rd time. Should be promoted above a cycle soon.
+## Deferred (for cycle-16 and beyond)
+- Listening Practice game (needs `/add:spec` + `/add:ux` first)
+- L2 + L3 Word Builder seed expansion
+- Full Word Builder E2E Playwright (happy path, wrong-tap, level-up)
+- iPad Capacitor build verification
+- Configurable TTS rate / voice selection
+- `learnings.md` → JSON migration (3rd retro action-item deferral; due for promotion above a cycle)
 
-## Open learnings from this session (summarized)
-
-- **PAT-gated cycle closure worked well.** Cycle-13's two-stage close (agent-done + human-PAT) cleanly separated shipping from design validation. Worth keeping as a Beta pattern for user-facing feature cycles.
-- **Product-design issues should close as cycle success, not failure.** Cycle-13 delivered per spec; spec needed revision. Closing cycle-13 as COMPLETE + opening cycle-15 is the right framing — not "cycle-13 failed."
-- **English morphology lesson.** Any pattern-matching game built on verb/adjective/noun forms must handle generative morphology explicitly (clue-based, multi-correct, or curated). Worth promoting to `~/.claude/add/library.md` at next retro.
-- **Cycle-15's coupling of M7 + M8.** When two planned milestones turn out to share infrastructure (Web Speech API), combining them is often better than sequencing them. Watch for this pattern on future dependencies.
+## Known stubs still in code
+- Level-up modal detection (LevelUpModal renders when triggered but the pre/post-round progress diff is still a no-op; backend `unlocked` flag ready to consume when needed)
