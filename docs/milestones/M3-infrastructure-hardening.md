@@ -2,9 +2,10 @@
 
 **Goal:** Make deployments safe and repeatable. No more data loss on schema changes.
 **Appetite:** 1 week
-**Status:** IN_PROGRESS
+**Status:** COMPLETE
 **Started:** 2026-04-05
-**Target Maturity:** Beta (promotion target after completion)
+**Closed:** 2026-04-18 (all 7 success criteria met; last one validated by cycle-12's migration 002 auto-deploy)
+**Target Maturity:** Beta (promotion target reached pre-M3; M3 was the first Beta-scale milestone)
 
 ## Hill Chart
 

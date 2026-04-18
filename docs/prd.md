@@ -1,6 +1,6 @@
 # Kids Words — Product Requirements Document
 
-**Version:** 0.2.0
+**Version:** 0.2.1
 **Created:** 2026-04-04
 **Author:** calebdunn
 **Status:** Draft
@@ -83,37 +83,18 @@ Young children (ages 4-6) need engaging, interactive tools to build word recogni
 
 | Milestone | Goal | Target Maturity | Status | Success Criteria |
 |-----------|------|-----------------|--------|------------------|
-| M3: Infrastructure Hardening | Safe, repeatable deploys; no data loss on schema changes | Beta | NOW | Alembic migrations + idempotent seed + CI coverage ≥ 80% + v0.1.0 tag |
-| M7: Word Builder | Prefix/suffix game mode with adaptive difficulty | Beta | NEXT | 3 difficulty levels, ~100 combos, adaptive unlock, profile-scoped progress |
+| M7: Word Builder | Prefix/suffix game mode with adaptive difficulty | Beta | NOW | 3 difficulty levels, ~100 combos, adaptive unlock, profile-scoped progress |
 | M8: Audio & Pronunciation | Tap-to-hear via Web Speech API | Beta | NEXT | Tapping words/images speaks them on iOS + web |
 | M1: Word Recognition | Core matching activity works | Alpha | COMPLETE | Kids can match words to images with visual feedback |
 | M2: Staging Environment | Stand up staging at kids-words.staging.calebdunn.tech | Alpha | COMPLETE | App functional end-to-end on staging |
+| M3: Infrastructure Hardening | Safe, repeatable deploys; no data loss on schema changes | Beta | COMPLETE | 7/7 — Alembic migrations + idempotent seed + CI ≥ 80% + release tags + staging deploy validated by cycle-12 migration |
 | M4: Profile Enhancements | Edit/delete profiles | Beta | COMPLETE | Edit/delete flows shipped via PR #11 |
 | M5: Dark Mode | Device auto-detect + manual toggle | Beta | COMPLETE | Dark mode shipped via PR #12 |
 | M6: New Categories | Add Shapes + Body Parts word sets | Beta | COMPLETE | Shapes (20) + Body Parts (25) live on home |
 
 ### Milestone Detail
 
-#### M3: Infrastructure Hardening [NOW]
-**Goal:** Make deployments safe and repeatable. No more data loss on schema changes.
-**Appetite:** 1 week
-**Target maturity:** Beta
-**Features:**
-- Alembic Migrations — specs/database-migrations.md (VERIFIED, PR #7 + #14)
-- Idempotent Seed — specs/database-migrations.md (VERIFIED, PR #7 + #14)
-- Frontend Test Coverage (COMPLETE — 86.2%, PR #13)
-- CI Coverage Fix — raise backend coverage 75% → 80% (IN_PROGRESS; root-cause fix for FastAPI dep_overrides in CI still pending)
-- v0.1.0 Release Tag — first semver tag, triggers versioned image push (NOT_STARTED)
-**Success criteria:**
-- [x] `alembic upgrade head` applies schema changes without data loss
-- [x] Seed script is idempotent (6 integration tests)
-- [x] Docker entrypoint auto-runs migrations on start
-- [ ] CI backend coverage ≥ 80%
-- [x] Frontend coverage ≥ 80% (86.2%)
-- [ ] v0.1.0 tag pushed, versioned images in registry
-- [ ] Staging deploy works without manual DB reset
-
-#### M7: Word Builder [NEXT]
+#### M7: Word Builder [NOW]
 **Goal:** New game mode teaching prefix/suffix patterns with adaptive difficulty.
 **Appetite:** 1-2 weeks
 **Target maturity:** Beta
@@ -144,6 +125,19 @@ Young children (ages 4-6) need engaging, interactive tools to build word recogni
 - [ ] Works across Match Round, Word List, and (eventually) Word Builder
 - [ ] Works on iOS Capacitor build
 - [ ] No external audio assets
+
+#### M3: Infrastructure Hardening [COMPLETE — 2026-04-18]
+**Goal:** Make deployments safe and repeatable. No more data loss on schema changes.
+**Appetite:** 1 week | **Delivered:** ~13 days across cycles 7, 8, 9, 11, 12
+**Target maturity:** Beta | **Closed:** 2026-04-18
+**Success criteria (7/7):**
+- [x] `alembic upgrade head` applies schema changes without data loss (cycle-9 tests)
+- [x] Seed script is idempotent (cycle-9, 6 tests)
+- [x] Docker entrypoint auto-runs migrations on start (cycle-7)
+- [x] CI backend coverage ≥ 80% (cycle-11 — 93.33% × 3 green runs after Python 3.14 alignment)
+- [x] Frontend coverage ≥ 80% (cycle-8 — 86.2%)
+- [x] Release tags pushed (v0.1.0 MVP + v0.2.0 covering M3-M6)
+- [x] Staging deploy works without manual DB reset (cycle-12 migration 002 auto-applied cleanly)
 
 ### Maturity Promotion Path
 
@@ -182,3 +176,4 @@ Positive, encouraging feedback for correct answers (animations, stars, celebrati
 |------|---------|--------|---------|
 | 2026-04-04 | 0.1.0 | calebdunn | Initial draft from /add:init interview |
 | 2026-04-18 | 0.2.0 | calebdunn | Section 6 reconciled with docs/milestones/; M2 formally closed; maturity corrected to Beta; M4-M8 added to roadmap table |
+| 2026-04-18 | 0.2.1 | calebdunn | M3 Infrastructure Hardening closed (7/7 criteria met via cycles 7-12); M7 promoted Next → Now; M3 detail block moved to COMPLETE section |
