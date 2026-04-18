@@ -2,8 +2,8 @@
 
 **Milestone:** M3 — Infrastructure Hardening
 **Maturity:** Beta
-**Status:** PLANNED
-**Started:** TBD (planned 2026-04-18)
+**Status:** IN_PROGRESS
+**Started:** 2026-04-18
 **Completed:** TBD
 **Duration Budget:** 1-3h focused session (same-day)
 **Branch Strategy:** Single feature branch `fix/ci-coverage-dep-overrides`, stacked commit, revert-if-red rollback
