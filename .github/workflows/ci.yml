@@ -21,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: "3.14"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v4
@@ -41,16 +41,13 @@ jobs:
       - name: Tests with coverage
         env:
           PYTHONPATH: .
-        # CI coverage threshold is 75% (CLI override below). Local threshold
-        # is 80% (in pyproject.toml [tool.coverage.report]). The gap exists
-        # because FastAPI dependency_overrides do not fully take effect in
-        # CI for the routes that use them — local hits ~93%, CI hits ~76%.
-        # The route files affected are profiles.py, progress.py, results.py,
-        # categories.py. Fixing the underlying dep_override + import-mode
-        # interaction is tracked as a separate cycle item (cycle-10 candidate).
-        # Migration + seed tests use their own engines and don't suffer this
-        # gap, which is what raised CI coverage from ~68% to ~76%.
-        run: . .venv/bin/activate && pytest tests/ --cov=app --cov-report=term-missing --cov-fail-under=75
+        # Coverage threshold is 80% from pyproject.toml [tool.coverage.report].
+        # cycle-11 (2026-04-18) resolved the long-standing CI-vs-local gap:
+        # on Python 3.13, coverage + pytest-asyncio + httpx.AsyncClient lost
+        # trace context through asyncio task switching inside FastAPI DI, so
+        # route handler bodies showed as unexecuted even though tests passed.
+        # Aligning CI to Python 3.14 (which local dev already uses) fixes it.
+        run: . .venv/bin/activate && pytest tests/ --cov=app --cov-report=term-missing
 
   frontend:
     name: Frontend (TypeScript)
