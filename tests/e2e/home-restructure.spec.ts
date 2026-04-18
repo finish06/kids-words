@@ -34,22 +34,23 @@ test.describe("Home restructure regression", () => {
     });
   });
 
-  test("HR-002: Word Builder card is present with level info", async ({
+  test("HR-002: Word Builder card is present and gated Coming soon (cycle-14)", async ({
     page,
   }) => {
     await expect(page.getByText("Word Builder")).toBeVisible();
-    // Either current level or the subtitle — both are valid states on fresh data
-    const levelOrSubtitle = page
-      .locator(".game-card--word-builder")
-      .getByText(/Level|Build words/);
-    await expect(levelOrSubtitle).toBeVisible();
+    // Card is disabled pending design iteration post-PAT
+    await expect(
+      page.locator(".game-card--word-builder.game-card--disabled"),
+    ).toBeVisible();
   });
 
   test("HR-003: Word Phonetics placeholder is present and disabled", async ({
     page,
   }) => {
     await expect(page.getByText("Word Phonetics")).toBeVisible();
-    await expect(page.getByText("Coming soon")).toBeVisible();
+    // Both game cards now show Coming soon pending design work
+    const comingSoon = page.getByText("Coming soon");
+    await expect(comingSoon.first()).toBeVisible();
   });
 
   test("HR-004: existing Animals category still navigates (regression)", async ({
@@ -62,19 +63,6 @@ test.describe("Home restructure regression", () => {
     });
     await page.screenshot({
       path: "tests/screenshots/home-restructure/step-04-animals-length-picker.png",
-      fullPage: true,
-    });
-  });
-
-  test("HR-005: Word Builder card routes to length picker", async ({ page }) => {
-    await page.locator(".game-card--word-builder").click();
-    await expect(page.getByText("How many words?")).toBeVisible({
-      timeout: 5000,
-    });
-    // Title should reflect Word Builder context
-    await expect(page.getByText("Word Builder")).toBeVisible();
-    await page.screenshot({
-      path: "tests/screenshots/home-restructure/step-05-word-builder-picker.png",
       fullPage: true,
     });
   });

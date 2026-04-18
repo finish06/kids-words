@@ -6,30 +6,15 @@ import { HomeScreen } from "../HomeScreen";
 
 vi.mock("../../api/client", () => ({
   getCategories: vi.fn(),
-  getWordBuilderProgress: vi.fn(),
 }));
 
-import { getCategories, getWordBuilderProgress } from "../../api/client";
+import { getCategories } from "../../api/client";
 const mockGetCategories = vi.mocked(getCategories);
-const mockGetProgress = vi.mocked(getWordBuilderProgress);
 
 describe("HomeScreen", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockGetCategories.mockResolvedValue({ categories: mockCategories });
-    mockGetProgress.mockResolvedValue({
-      levels: [
-        {
-          level: 1,
-          unlocked: true,
-          patterns: [
-            { text: "RE-", star_level: 0, mastered: false },
-            { text: "UN-", star_level: 0, mastered: false },
-          ],
-          mastery_percentage: 0,
-        },
-      ],
-    });
   });
 
   it("renders the app title", async () => {
@@ -55,7 +40,7 @@ describe("HomeScreen", () => {
     });
   });
 
-  it("includes the Word Builder card and Word Phonetics placeholder in Games", async () => {
+  it("shows both game cards as Coming soon (cycle-14 gating)", async () => {
     render(
       <MemoryRouter>
         <HomeScreen />
@@ -64,7 +49,9 @@ describe("HomeScreen", () => {
     await waitFor(() => {
       expect(screen.getByText("Word Builder")).toBeInTheDocument();
       expect(screen.getByText("Word Phonetics")).toBeInTheDocument();
-      expect(screen.getByText("Coming soon")).toBeInTheDocument();
     });
+    // Both cards should carry "Coming soon" until their design is finalized
+    const comingSoon = screen.getAllByText("Coming soon");
+    expect(comingSoon.length).toBeGreaterThanOrEqual(2);
   });
 });
