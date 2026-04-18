@@ -7,6 +7,7 @@ import { BodyPartImage } from "./BodyPartImage";
 import { ColorCircle } from "./ColorCircle";
 import { isBodyPartUrl, isColorUrl, isShapeUrl, parseBodyPartName, parseColorHex, parseShapeName } from "./colorUtils";
 import { ShapeImage } from "./ShapeImage";
+import { useSpeech } from "../hooks/useSpeech";
 import { Icon } from "./Icon";
 import { LengthPicker } from "./LengthPicker";
 import { RoundComplete } from "./RoundComplete";
@@ -54,6 +55,7 @@ function MatchGame({
     handleSelect,
   } = useRound(words);
   const navigate = useNavigate();
+  const speech = useSpeech();
 
   if (isComplete) {
     return (
@@ -81,9 +83,17 @@ function MatchGame({
       </div>
 
       <div className="word-display">
-        <h1 className={`word-text ${isCorrect === true ? "correct" : ""}`}>
+        <button
+          type="button"
+          className={`word-text word-text--speakable ${isCorrect === true ? "correct" : ""}`}
+          onClick={() => {
+            speech.warmUp();
+            speech.speak(currentWord.text);
+          }}
+          aria-label={`Hear the word ${currentWord.text}`}
+        >
           {currentWord.text}
-        </h1>
+        </button>
       </div>
 
       <div className="image-grid">
@@ -99,8 +109,13 @@ function MatchGame({
             <button
               key={option.id}
               className={cardClass}
-              onClick={() => handleSelect(option)}
+              onClick={() => {
+                speech.warmUp();
+                speech.speak(option.text);
+                handleSelect(option);
+              }}
               disabled={isCorrect === true}
+              aria-label={`${option.text} — tap to match`}
             >
               {isColorUrl(option.image_url) ? (
                 <ColorCircle color={parseColorHex(option.image_url)} />

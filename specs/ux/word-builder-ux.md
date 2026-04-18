@@ -1,11 +1,35 @@
 # UX Design: Word Builder (M7)
 
 **Spec:** specs/word-builder.md
-**Status:** APPROVED
-**Approved:** 2026-04-18
-**Iterations:** 1 (5 core questions + 2 concern re-asks)
+**Status:** APPROVED (v1.1)
+**Approved:** 2026-04-18 (v1.0); revised 2026-04-18 (v1.1 — clue header)
+**Iterations:** 1 (v1.0) + 1 cycle-15 redesign (v1.1)
 **Target viewport:** iPad landscape (primary), iPad portrait (secondary)
 **Maturity:** Beta — full state matrix + explicit approval + spec notes required
+
+## v1.1 Update (2026-04-18, cycle-15)
+
+Resolves the cycle-13 PAT finding (generative-morphology ambiguity). Each challenge gains a **spoken clue** above the base word:
+
+```
+┌──────────────────────────────────────────────┐
+│  🔊  "a person who paints"                   │  ← tap to hear
+└──────────────────────────────────────────────┘
+              PAINT
+      [UN-]  [-ER]  [-ED]
+```
+
+- Clue text = `WordCombo.definition` (existing field, re-used semantically)
+- Tap clue → `useSpeech.speak(definition)` (M8 TTS infrastructure)
+- Speaker icon pulses while speech plays
+- Auto-plays on new challenge load so pre-readers don't have to tap first
+- Pattern-disciplined clue shapes (UN-: "not X"; RE-: "X it again"; -ING: "Xing right now"; -ED: "Xed yesterday"; -S: "more than one X"; -ER: "a person who Xs") — disambiguates across same-base challenges
+
+State matrix addition: **clue tapped** — speaker icon pulses while speech plays; auto-play fires on each challenge load; cancels prior speech on rapid nav.
+
+Below: the v1.0 artifact for historical reference.
+
+---
 
 ## Context: Home Screen Restructure
 

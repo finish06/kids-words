@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getWordBuilderRound } from "../api/client";
 import { useBuildRound } from "../hooks/useBuildRound";
+import { useSpeech } from "../hooks/useSpeech";
 import type { RoundResponse } from "../types";
 import { BuildRoundComplete } from "./BuildRoundComplete";
 import { Icon } from "./Icon";
@@ -31,7 +32,38 @@ function Build({
     patternResults,
     handleSelect,
   } = useBuildRound(round.challenges);
+  const speech = useSpeech();
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [dismissedLevelUp, setDismissedLevelUp] = useState(false);
+
+  const handleClueTap = async () => {
+    if (!currentChallenge) return;
+    speech.warmUp();
+    setIsSpeaking(true);
+    await speech.speak(currentChallenge.definition);
+    setIsSpeaking(false);
+  };
+
+  // Auto-play the clue when a new challenge loads. Pre-readers hear it without
+  // needing to tap. Skipped when speech isn't supported.
+  useEffect(() => {
+    if (!currentChallenge || !speech.isSupported) return;
+    let cancelled = false;
+    const text = currentChallenge.definition;
+    (async () => {
+      speech.warmUp();
+      if (cancelled) return;
+      setIsSpeaking(true);
+      await speech.speak(text);
+      if (!cancelled) setIsSpeaking(false);
+    })();
+    return () => {
+      cancelled = true;
+      speech.cancel();
+      setIsSpeaking(false);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentChallenge?.base_word, currentChallenge?.correct_pattern.id]);
 
   if (isComplete) {
     return (
@@ -75,6 +107,21 @@ function Build({
           Round {progress.current} of {progress.total}
         </div>
       </div>
+
+      <button
+        type="button"
+        className={`build-clue${isSpeaking ? " build-clue--speaking" : ""}`}
+        onClick={handleClueTap}
+        aria-label={`Hear the clue: ${currentChallenge.definition}`}
+      >
+        <span
+          className="build-clue-speaker"
+          aria-hidden="true"
+        >
+          🔊
+        </span>
+        <span className="build-clue-text">{currentChallenge.definition}</span>
+      </button>
 
       <div className="build-play-area">
         <div className="build-flank build-flank--left">

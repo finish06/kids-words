@@ -34,23 +34,22 @@ test.describe("Home restructure regression", () => {
     });
   });
 
-  test("HR-002: Word Builder card is present and gated Coming soon (cycle-14)", async ({
+  test("HR-002: Word Builder card is live and clickable (cycle-15 un-gate)", async ({
     page,
   }) => {
     await expect(page.getByText("Word Builder")).toBeVisible();
-    // Card is disabled pending design iteration post-PAT
+    // No longer disabled — un-gated after cycle-15's clue redesign
     await expect(
-      page.locator(".game-card--word-builder.game-card--disabled"),
+      page.locator(".game-card--word-builder:not(.game-card--disabled)"),
     ).toBeVisible();
   });
 
-  test("HR-003: Word Phonetics placeholder is present and disabled", async ({
+  test("HR-003: Listening Practice card is present and disabled (placeholder)", async ({
     page,
   }) => {
-    await expect(page.getByText("Word Phonetics")).toBeVisible();
-    // Both game cards now show Coming soon pending design work
-    const comingSoon = page.getByText("Coming soon");
-    await expect(comingSoon.first()).toBeVisible();
+    // Renamed from Word Phonetics in cycle-15; actual game deferred to cycle-16
+    await expect(page.getByText("Listening Practice")).toBeVisible();
+    await expect(page.getByText("Coming soon")).toBeVisible();
   });
 
   test("HR-004: existing Animals category still navigates (regression)", async ({
@@ -63,6 +62,19 @@ test.describe("Home restructure regression", () => {
     });
     await page.screenshot({
       path: "tests/screenshots/home-restructure/step-04-animals-length-picker.png",
+      fullPage: true,
+    });
+  });
+
+  test("HR-005: Word Builder card navigates to length picker (cycle-15 re-enable)", async ({
+    page,
+  }) => {
+    await page.locator(".game-card--word-builder").click();
+    await expect(page.getByText("How many words?")).toBeVisible({
+      timeout: 5000,
+    });
+    await page.screenshot({
+      path: "tests/screenshots/home-restructure/step-05-word-builder-picker.png",
       fullPage: true,
     });
   });

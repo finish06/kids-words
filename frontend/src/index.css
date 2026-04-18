@@ -1539,3 +1539,62 @@ body {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* =============================================================
+   Cycle-15 — clue-based Word Builder + M8 TTS
+   ============================================================= */
+
+.build-clue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  margin: 1rem auto 0.5rem;
+  background: var(--card-bg, rgba(255, 255, 255, 0.1));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  color: inherit;
+  font: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+  align-self: center;
+}
+
+.build-clue:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.build-clue-speaker {
+  font-size: 1.2rem;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.build-clue--speaking .build-clue-speaker {
+  animation: clue-speaker-pulse 0.7s ease-in-out infinite;
+}
+
+.build-clue-text {
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.word-text--speakable {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease;
+}
+
+.word-text--speakable:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@keyframes clue-speaker-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}

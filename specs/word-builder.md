@@ -1,12 +1,13 @@
 # Spec: Word Builder — Prefix/Suffix Learning Mode
 
-**Version:** 0.2.0
+**Version:** 0.3.0
 **Created:** 2026-04-07
-**Updated:** 2026-04-18 (UX signed off; backend VERIFIED via cycle-12)
+**Updated:** 2026-04-18 (cycle-15: clue-based challenge model; couples with M8 Phonetics)
 **PRD Reference:** docs/prd.md
 **Milestone:** M7
-**Status:** Implementing
-**UI Design:** specs/ux/word-builder-ux.md (APPROVED 2026-04-18)
+**Status:** Implementing (PAT pending)
+**UI Design:** specs/ux/word-builder-ux.md v1.1 (APPROVED 2026-04-18)
+**Coupled with:** M8 Audio & Pronunciation (specs/word-pronunciation.md) — Word Builder's spoken clue requires the `useSpeech` hook
 
 ## 1. Overview
 
@@ -196,7 +197,9 @@ As a child (4-8), I want to build words by adding pieces to them, so that I lear
 
 ## 6. UI Behavior
 
-> **UI design approved — see `specs/ux/word-builder-ux.md` for wireframes, state matrix, and flow diagrams.** The notes below describe the overall approach; the UX artifact is the source of truth for screen layout, timing, and edge-case behavior.
+> **Clue-based challenge model (cycle-15 redesign):** each challenge shows a spoken clue sentence above the base word (e.g., "a person who paints" → PAINT with tiles UN-/-ER/-ED). Tap the clue to hear it spoken via `useSpeech` (M8). The clue disambiguates which pattern is correct — this resolves the cycle-13 PAT finding where multiple patterns could form valid English words for the same base.
+>
+> **UI design approved — see `specs/ux/word-builder-ux.md` v1.1 for wireframes, state matrix, and flow diagrams.** The notes below describe the overall approach; the UX artifact is the source of truth for screen layout, timing, and edge-case behavior.
 
 ### Home Screen
 - **Home is restructured** into a `Games` row (Word Builder + Phonetics placeholder for M8) and a `Word Matching` section that keeps the existing 5 category cards. This is a home-navigation change, not a card-styling change.
@@ -245,3 +248,4 @@ As a child (4-8), I want to build words by adding pieces to them, so that I lear
 |------|---------|--------|---------|
 | 2026-04-07 | 0.1.0 | calebdunn | Initial spec |
 | 2026-04-18 | 0.2.0 | calebdunn | Backend VERIFIED (cycle-12, PR #17); UX signed off (specs/ux/word-builder-ux.md); §6 notes updated to reflect home-screen restructure + pointer to UX artifact; status Draft → Implementing |
+| 2026-04-18 | 0.3.0 | calebdunn | Cycle-15: clue-based challenge model resolves cycle-13 PAT finding (generative-morphology ambiguity). Each challenge shows a spoken clue ("a person who paints" → -ER). Couples with M8 Phonetics via `useSpeech` hook. Seed definitions updated to pattern-disciplined wording; FISH+-S dropped (not a word). Word Builder card un-gated on Home. Status stays Implementing pending PAT. |

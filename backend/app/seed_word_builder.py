@@ -51,44 +51,170 @@ BASE_WORDS: list[dict[str, Any]] = [
     {"text": "BOOK", "level": 1},
 ]
 
-# (base_word, pattern, result_word, definition)
+# (base_word, pattern, result_word, definition used as spoken clue)
+# Clue pattern discipline (cycle-15):
+#   UN-   → "not X"
+#   RE-   → "X it again"
+#   -ING  → "Xing right now"
+#   -ED   → "Xed yesterday"
+#   -S    → "more than one X"
+#   -ER   → "a person who Xs"
+# Each clue unambiguously points to its pattern so challenges have
+# no false-negative feedback (cycle-13 PAT finding, resolved cycle-15).
 COMBOS: list[dict[str, str]] = [
     # UN- (not)
     {"base": "HAPPY", "pattern": "UN-", "result": "UNHAPPY", "def": "not happy"},
     {"base": "KIND", "pattern": "UN-", "result": "UNKIND", "def": "not kind"},
     # RE- (again)
-    {"base": "PLAY", "pattern": "RE-", "result": "REPLAY", "def": "play again"},
-    {"base": "READ", "pattern": "RE-", "result": "REREAD", "def": "read again"},
-    {"base": "WRITE", "pattern": "RE-", "result": "REWRITE", "def": "write again"},
-    {"base": "PAINT", "pattern": "RE-", "result": "REPAINT", "def": "paint again"},
-    # -ING (action)
-    {"base": "PLAY", "pattern": "-ING", "result": "PLAYING", "def": "doing play"},
-    {"base": "RUN", "pattern": "-ING", "result": "RUNNING", "def": "doing run"},
-    {"base": "JUMP", "pattern": "-ING", "result": "JUMPING", "def": "doing jump"},
-    {"base": "SING", "pattern": "-ING", "result": "SINGING", "def": "doing sing"},
-    {"base": "DANCE", "pattern": "-ING", "result": "DANCING", "def": "doing dance"},
-    {"base": "READ", "pattern": "-ING", "result": "READING", "def": "doing read"},
-    {"base": "PAINT", "pattern": "-ING", "result": "PAINTING", "def": "doing paint"},
+    {"base": "PLAY", "pattern": "RE-", "result": "REPLAY", "def": "play it again"},
+    {"base": "READ", "pattern": "RE-", "result": "REREAD", "def": "read it again"},
+    {
+        "base": "WRITE",
+        "pattern": "RE-",
+        "result": "REWRITE",
+        "def": "write it again",
+    },
+    {
+        "base": "PAINT",
+        "pattern": "RE-",
+        "result": "REPAINT",
+        "def": "paint it again",
+    },
+    # -ING (action right now)
+    {
+        "base": "PLAY",
+        "pattern": "-ING",
+        "result": "PLAYING",
+        "def": "playing right now",
+    },
+    {
+        "base": "RUN",
+        "pattern": "-ING",
+        "result": "RUNNING",
+        "def": "running right now",
+    },
+    {
+        "base": "JUMP",
+        "pattern": "-ING",
+        "result": "JUMPING",
+        "def": "jumping right now",
+    },
+    {
+        "base": "SING",
+        "pattern": "-ING",
+        "result": "SINGING",
+        "def": "singing right now",
+    },
+    {
+        "base": "DANCE",
+        "pattern": "-ING",
+        "result": "DANCING",
+        "def": "dancing right now",
+    },
+    {
+        "base": "READ",
+        "pattern": "-ING",
+        "result": "READING",
+        "def": "reading right now",
+    },
+    {
+        "base": "PAINT",
+        "pattern": "-ING",
+        "result": "PAINTING",
+        "def": "painting right now",
+    },
     # -ED (past)
-    {"base": "PLAY", "pattern": "-ED", "result": "PLAYED", "def": "played before"},
-    {"base": "JUMP", "pattern": "-ED", "result": "JUMPED", "def": "jumped before"},
-    {"base": "PAINT", "pattern": "-ED", "result": "PAINTED", "def": "painted before"},
-    {"base": "DANCE", "pattern": "-ED", "result": "DANCED", "def": "danced before"},
+    {
+        "base": "PLAY",
+        "pattern": "-ED",
+        "result": "PLAYED",
+        "def": "played yesterday",
+    },
+    {
+        "base": "JUMP",
+        "pattern": "-ED",
+        "result": "JUMPED",
+        "def": "jumped yesterday",
+    },
+    {
+        "base": "PAINT",
+        "pattern": "-ED",
+        "result": "PAINTED",
+        "def": "painted yesterday",
+    },
+    {
+        "base": "DANCE",
+        "pattern": "-ED",
+        "result": "DANCED",
+        "def": "danced yesterday",
+    },
     # -S (plural)
     {"base": "DOG", "pattern": "-S", "result": "DOGS", "def": "more than one dog"},
     {"base": "CAT", "pattern": "-S", "result": "CATS", "def": "more than one cat"},
-    {"base": "FISH", "pattern": "-S", "result": "FISHS", "def": "more than one fish"},
-    {"base": "BOOK", "pattern": "-S", "result": "BOOKS", "def": "more than one book"},
-    # -ER (one who)
-    {"base": "PLAY", "pattern": "-ER", "result": "PLAYER", "def": "one who plays"},
-    {"base": "RUN", "pattern": "-ER", "result": "RUNNER", "def": "one who runs"},
-    {"base": "JUMP", "pattern": "-ER", "result": "JUMPER", "def": "one who jumps"},
-    {"base": "READ", "pattern": "-ER", "result": "READER", "def": "one who reads"},
-    {"base": "WRITE", "pattern": "-ER", "result": "WRITER", "def": "one who writes"},
-    {"base": "TEACH", "pattern": "-ER", "result": "TEACHER", "def": "one who teaches"},
-    {"base": "SING", "pattern": "-ER", "result": "SINGER", "def": "one who sings"},
-    {"base": "DANCE", "pattern": "-ER", "result": "DANCER", "def": "one who dances"},
-    {"base": "PAINT", "pattern": "-ER", "result": "PAINTER", "def": "one who paints"},
+    # FISH + -S = FISHS dropped (FISHS is not a valid English word; the real
+    # plural is FISHES, and -ES is not a Level-1 pattern). Drop removes it
+    # from the DB on next seed via idempotent-seed's auto-remove logic.
+    {
+        "base": "BOOK",
+        "pattern": "-S",
+        "result": "BOOKS",
+        "def": "more than one book",
+    },
+    # -ER (a person who does the thing)
+    {
+        "base": "PLAY",
+        "pattern": "-ER",
+        "result": "PLAYER",
+        "def": "a person who plays",
+    },
+    {
+        "base": "RUN",
+        "pattern": "-ER",
+        "result": "RUNNER",
+        "def": "a person who runs",
+    },
+    {
+        "base": "JUMP",
+        "pattern": "-ER",
+        "result": "JUMPER",
+        "def": "a person who jumps",
+    },
+    {
+        "base": "READ",
+        "pattern": "-ER",
+        "result": "READER",
+        "def": "a person who reads",
+    },
+    {
+        "base": "WRITE",
+        "pattern": "-ER",
+        "result": "WRITER",
+        "def": "a person who writes",
+    },
+    {
+        "base": "TEACH",
+        "pattern": "-ER",
+        "result": "TEACHER",
+        "def": "a person who teaches",
+    },
+    {
+        "base": "SING",
+        "pattern": "-ER",
+        "result": "SINGER",
+        "def": "a person who sings",
+    },
+    {
+        "base": "DANCE",
+        "pattern": "-ER",
+        "result": "DANCER",
+        "def": "a person who dances",
+    },
+    {
+        "base": "PAINT",
+        "pattern": "-ER",
+        "result": "PAINTER",
+        "def": "a person who paints",
+    },
 ]
 
 
