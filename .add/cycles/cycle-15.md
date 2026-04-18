@@ -2,10 +2,10 @@
 
 **Milestone:** M7 — Word Builder (primary) + M8 Audio & Pronunciation (coupled)
 **Maturity:** Beta
-**Status:** AWAITING_PAT (agent work complete; human sign-off pending)
+**Status:** COMPLETE (PAT-validated via iterative clue fix)
 **Started:** 2026-04-18
 **Agent-Done:** 2026-04-18 (PR #21 merged; staging verified at bb6b9e0)
-**Completed:** TBD (gated on human PAT play-through)
+**Completed:** 2026-04-18 (clue-leak PAT finding fixed in `c03a3e8` seed patch; staging re-verified; home-restructure spec captured follow-up work as cycle-16)
 **Duration Budget:** 10-16h (away mode 12h+ per Q1)
 **Branch Strategy:** Single feature branch `feat/word-builder-clues-and-tts`, single squash commit, revert-if-red rollback
 **Ordering:** TDD-strict for `useSpeech` hook (mock speechSynthesis); design-first for BuildScreen clue visuals
