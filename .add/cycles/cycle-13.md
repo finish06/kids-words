@@ -2,9 +2,10 @@
 
 **Milestone:** M7 — Word Builder
 **Maturity:** Beta
-**Status:** PLANNED
-**Started:** TBD (planned 2026-04-18)
-**Completed:** TBD (cycle stays IN_PROGRESS post-merge, awaiting human PAT sign-off)
+**Status:** AWAITING_PAT (agent work complete; human sign-off pending)
+**Started:** 2026-04-18
+**Agent-Done:** 2026-04-18 (code merged + staging smoke green)
+**Completed:** TBD (gated on human PAT play-through)
 **Duration Budget:** ~12-20h single-cycle execution (away mode)
 **Branch Strategy:** Single feature branch `feat/word-builder-frontend`, single squash commit, revert-if-red rollback
 **Ordering:** TDD-strict for state logic; design-first for pure-visual components
@@ -234,3 +235,77 @@ Log in `.add/away-log.md` + `.add/handoff.md`, skip, proceed. Do not sit and wai
 - **Word Phonetics card is a forward investment** — it's placeholder-only in this cycle, but shipping it now means M8 doesn't need another home restructure. Small trade for significant future effort savings.
 - **Existing MatchRound tests (6) + frontend total (75) are the regression safety net.** Do not modify MatchRound's logic; only extract shared LengthPicker. If MatchRound tests start failing, that's a signal to pause and reconsider the extraction.
 - **No backend changes.** Cycle-12's migration + endpoints + seed are final. If PAT surfaces a backend gap, it's a new cycle, not a cycle-13 scope expansion.
+
+## Execution Outcome (2026-04-18 — agent-done, PAT pending)
+
+Shipped in ~3-4h of focused session (well inside the 12-20h budget). TDD-strict discipline held for state-logic components; pure-visual pieces were built by eye.
+
+### Work item 1 — Word Builder Frontend: AGENT_VERIFIED (PAT pending)
+
+- **Branch:** `feat/word-builder-frontend`
+- **PR:** [#19](https://github.com/finish06/kids-words/pull/19) — squash-merged as `e507610`
+- **Tests added (net +14):**
+  - `useBuildRound.test.ts` (8 RED tests, all GREEN — TDD-strict per Q3)
+  - `client.test.ts` (+4 tests for Word Builder endpoints, all GREEN)
+  - `WordMatchingSection.test.tsx` (5 tests, replaces CategoryList.test)
+  - `HomeScreen.test.tsx` (3 tests)
+  - `home-restructure.spec.ts` (5 Playwright regression scenarios)
+- **Tests removed:** `CategoryList.test.tsx` (6 tests — superseded by WordMatchingSection)
+- **Total frontend suite:** 75 → 89 Vitest tests, 0 regressions
+- **Coverage:** 83.5% stmt / 86.3% line (≥80% threshold)
+- **Lint + types:** clean
+
+### What shipped
+
+- `HomeScreen` + `GamesSection` + `WordMatchingSection` + `WordBuilderCard` + `WordPhoneticsCard` (disabled placeholder)
+- `LengthPicker` extracted from MatchRound (behavior-neutral shim preserves existing MatchRound)
+- `BuildScreen` + `BuildPicker` + `PatternTile` + `LevelIndicator` + `LevelUpModal` + `BuildRoundComplete`
+- `useBuildRound` hook with 2.4s correct-tap dwell (slide → glow → definition → advance) and 600ms wrong-tap bounce-back
+- 9 TypeScript interfaces + 3 API client functions
+- Routes `/build` (picker) and `/build/play` (gameplay)
+- CSS keyframes: `tile-slide`, `tile-shake`, `glow-bounce`, `fade-in-slow`, `level-up-slide-in`, `skeleton-shimmer` (pure CSS, no new dep)
+
+### Staging verification (agent-done bar)
+
+- Auto-deploy webhook fired on merge; staging caught up to `e507610` in ~4 min
+- `/api/health`: healthy, version 0.2.0, DB 2.2ms
+- `/api/word-builder/progress`: returns L1 with 6 patterns, unlocked:true, 0% mastery (expected fresh state)
+- Home page HTML loads cleanly at https://kids-words.staging.calebdunn.tech/
+
+### Deliberate deferrals (out of cycle-13 scope per Q6)
+
+- **Full Word Builder E2E Playwright** — happy path, wrong-tap, level-up modal: deferred to a post-PAT cycle
+- **Level-up modal detection** — the `LevelUpModal` component is built and wired, but the detection logic (diff pre/post round progress) is stubbed (`levelUp = null`). Safe no-op; backend already exposes `unlocked` flag for a follow-up cycle to consume
+- **L2 + L3 seed content** — deferred to post-PAT (benefits from UI feedback on content tuning)
+
+### What worked
+
+- **TDD-strict for the hook + API client.** `useBuildRound`'s 8 tests locked the state machine shape before any implementation; zero test rewrites during GREEN.
+- **LengthPicker extraction stayed behavior-neutral.** MatchRound's 6 existing tests passed unchanged after the refactor — the shim preserved the existing call shape.
+- **Home restructure in-place refactor** landed cleanly. `WordMatchingSection.test.tsx` mirrors `CategoryList.test.tsx`'s assertions so regression risk was bounded to a like-for-like swap.
+- **Q7's PAT gate** is novel for this project. It cleanly separates "agent-shipped code" from "product-acceptance-approved design," which matches cycle-13's risk profile (first big UI change since M1).
+
+### What was bumpy
+
+- **One ESLint error surfaced late:** `LengthPicker.tsx` exported both a component and a constant (`QUIZ_LENGTHS`), which tripped `react-refresh/only-export-components`. Fixed by making the constant module-local. Small but a reminder to run lint earlier in the GREEN phase, not only at the verify gate.
+- **CategoryList removal:** `git add -A` was tempting during the file swap but the project rule is explicit — prefer explicit file adds. Worked through the adds one file at a time, including the `CategoryList.test.tsx` → `WordMatchingSection.test.tsx` rename (git detected it automatically as R71%).
+- **Two system reminders hit on task tracking** during execution. I held to the "don't mention reminder to user" rule but note that a TaskCreate would have been appropriate for this 20+ subtask cycle if the harness supported it cleanly.
+
+### Validation criteria (cycle success — agent-owned portion)
+
+- [x] All RED-phase state-logic tests wrote and failed before implementation
+- [x] All GREEN-phase tests pass (89/89)
+- [x] Pure-visual components render correctly at iPad-landscape viewport (local docker compose smoke-checked)
+- [x] ≥80% Vitest coverage on new files (project-wide 83.5%)
+- [x] No regressions in 75 existing Vitest tests
+- [x] Home-restructure Playwright regression file shipped (will run in CI / future E2E pass)
+- [x] CI green on PR (first run — no flake)
+- [x] PR squash-merged to main
+- [x] Staging auto-deploy clean
+- [x] Agent-reachable smoke endpoints green on staging
+
+### Validation criteria (human-gated)
+
+- [ ] PAT sign-off from human — play through Word Builder on staging per handoff checklist
+- [ ] Formal `/add:cycle --complete` (awaits PAT)
+- [ ] `.add/learnings.md` post-verify checkpoint (will write at `--complete`, not agent-done)
