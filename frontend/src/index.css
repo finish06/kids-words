@@ -1135,3 +1135,407 @@ body {
     font-size: 3.5rem;
   }
 }
+
+/* =============================================================
+   M7 Word Builder — cycle-13
+   Home restructure, BuildScreen, tiles, animations.
+   Dark-mode-safe via CSS variables; iPad landscape-first.
+   ============================================================= */
+
+.home-screen {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 3rem;
+}
+
+.section-heading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  opacity: 0.7;
+  margin: 1.5rem 0 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.games-section {
+  margin-bottom: 2rem;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border: none;
+  border-radius: 1rem;
+  background: var(--card-bg, rgba(255, 255, 255, 0.08));
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  min-height: 96px;
+  font: inherit;
+}
+
+.game-card:not(.game-card--disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.game-card--word-builder {
+  background: linear-gradient(135deg,
+    rgba(99, 102, 241, 0.18),
+    rgba(217, 70, 239, 0.18));
+}
+
+.game-card--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.game-card-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.game-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.game-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.game-card-level {
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+.game-card-mastery {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+}
+
+.mastery-dot {
+  opacity: 0.45;
+}
+
+.mastery-dot--filled {
+  opacity: 1;
+}
+
+.game-card-subtitle,
+.game-card-tease {
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+/* Word Matching section reuses existing .category-card styling */
+.word-matching-section {
+  margin-bottom: 2rem;
+}
+
+/* =============================================================
+   Build Screen
+   ============================================================= */
+
+.build-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - 80px);
+  padding: 1rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.build-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.build-round-counter {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.build-play-area {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) minmax(280px, 2fr) minmax(100px, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+}
+
+.build-flank {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.build-flank--empty {
+  width: 100%;
+  min-height: 80px;
+}
+
+.build-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 240px;
+  justify-content: center;
+}
+
+.build-base-word {
+  font-size: 3rem;
+  font-weight: 800;
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  background: var(--card-bg, rgba(255, 255, 255, 0.08));
+  letter-spacing: 0.04em;
+  min-width: 240px;
+  text-align: center;
+}
+
+.build-base-word--skeleton {
+  opacity: 0.4;
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.05));
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s ease-in-out infinite;
+  color: transparent;
+}
+
+.build-base-word--combined {
+  animation: glow-bounce 500ms ease-out;
+}
+
+.build-definition {
+  font-size: 1.1rem;
+  opacity: 0;
+  animation: fade-in-slow 600ms ease-out 400ms forwards;
+  font-style: italic;
+}
+
+/* =============================================================
+   Pattern Tiles (prefix / suffix)
+   ============================================================= */
+
+.pattern-tile {
+  min-height: 64px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid transparent;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  color: #fff;
+  font-family: inherit;
+}
+
+.pattern-tile--prefix {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+}
+
+.pattern-tile--suffix {
+  background: linear-gradient(135deg, #22c55e, #10b981);
+}
+
+.pattern-tile:not(:disabled):hover {
+  transform: scale(1.03);
+}
+
+.pattern-tile--correct {
+  animation: tile-slide 300ms ease-out;
+}
+
+.pattern-tile--wrong {
+  animation: tile-shake 500ms ease-in-out;
+}
+
+/* =============================================================
+   Level indicator + Level-up modal
+   ============================================================= */
+
+.level-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.level-badge {
+  padding: 0.25rem 0.75rem;
+  background: var(--card-bg, rgba(255, 255, 255, 0.1));
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+.level-mastery-dots {
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.level-up-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: grid;
+  place-items: center;
+  z-index: 50;
+}
+
+.level-up-modal {
+  background: linear-gradient(135deg, #fbbf24, #f97316);
+  color: #000;
+  padding: 2rem 2.5rem;
+  border-radius: 1.5rem;
+  text-align: center;
+  max-width: 400px;
+  animation: level-up-slide-in 400ms ease-out;
+}
+
+.level-up-modal-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.level-up-modal-body {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.level-up-modal-button {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* =============================================================
+   Build Round Complete
+   ============================================================= */
+
+.build-round-complete .celebration-patterns {
+  margin: 1.5rem 0;
+}
+
+.celebration-patterns-heading {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  opacity: 0.85;
+}
+
+.celebration-patterns-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem 2rem;
+}
+
+.pattern-star-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pattern-star-text {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.pattern-star-value {
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+}
+
+.round-complete-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 0.75rem 2rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+}
+
+.secondary-button {
+  background: var(--card-bg, rgba(255, 255, 255, 0.1));
+  color: inherit;
+}
+
+/* =============================================================
+   Keyframes
+   ============================================================= */
+
+@keyframes tile-slide {
+  0% { transform: translateX(0) scale(1); }
+  60% { transform: translateX(8%) scale(1.08); }
+  100% { transform: translateX(0) scale(1); }
+}
+
+@keyframes tile-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+@keyframes glow-bounce {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
+  40% { transform: scale(1.08); box-shadow: 0 0 24px rgba(99, 102, 241, 0.6); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
+}
+
+@keyframes fade-in-slow {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes level-up-slide-in {
+  from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
