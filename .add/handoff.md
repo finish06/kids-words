@@ -1,29 +1,23 @@
 # Session Handoff
-**Written:** 2026-04-12 (cycle-10 away session)
+**Written:** 2026-04-18 (cycle-11 complete)
 
 ## Completed This Session
-- **Cycle-10 / M6 New Categories — COMPLETE**
-  - Created `seed_shapes.py` (20 words) and `seed_bodyparts.py` (25 words)
-  - Updated `seed.py` to include Shapes (order 4) and Body Parts (order 5)
-  - Heart appears in both categories: shape (2764) and anatomical (1FAC0)
-  - Updated seed tests from hardcoded `== 3` to `== len(SEED_DATA)`
-  - PR #15: CI green, merged to main
-  - Added auto-seed to Docker entrypoint (idempotent, safe on every restart)
-  - Staging verified: 5 categories showing, Shapes quiz round played successfully
-  - M6 milestone closed, spec status bumped to Implemented
+- **Roadmap reconciliation** — M2 formally closed; PRD Section 6 rewritten to reflect all 8 milestones; PRD bumped to v0.2.0; maturity corrected to Beta.
+- **Cycle-11 / M3 CI Coverage Root-Cause Fix — COMPLETE**
+  - Root cause: Python 3.13 + pytest-asyncio + httpx.AsyncClient + FastAPI DI lose async trace context, so route handler bodies under-report in CI while tests pass.
+  - Fix: aligned CI Python 3.13 → 3.14 to match local dev (PR #16, squash `fc65454`).
+  - Result: 3 consecutive green CI runs at **93.33%** on the 80% threshold (cycle success criterion met).
+- **v0.2.0 release tag** — user asked mid-cycle to reconcile the deployed version with the repo tag. Bumped `backend/pyproject.toml` 0.1.0 → 0.2.0, populated `CHANGELOG.md` (Added / Changed / Fixed covering M3-M6), cut annotated tag `v0.2.0` at `f746104`, pushed. Staging verified at 0.2.0 / `f746104` / healthy / DB 56ms.
 
 ## Decisions Made
-- **Auto-seed in Docker entrypoint:** Added `python -m app.seed` after `alembic upgrade head`. New categories deploy automatically without SSH. Safe because seed is idempotent (6 tests).
+- **CI Python upgrade bounded to CI only.** Production `backend/Dockerfile` stays on `python:3.13-slim`. Aligning CI to 3.14 fixes the async tracing gap without touching what ships.
+- **Tag push confirmed with user** before `git push origin v0.2.0` (hard-to-reverse publication). Main push was autonomous.
 
 ## Blockers
 None.
 
 ## Next Steps
-1. M3 still has 2 open items: CI coverage fix (76% → 80%) and v0.1.0 release tag
-2. M7 Word Builder and M8 Audio & Pronunciation are PLANNED
-
-## Roadmap Reconciliation (2026-04-18)
-- M2 Staging Environment formally closed (was IN_PROGRESS on paper; had been live since cycle-10)
-- PRD Section 6 rewritten: all 8 milestones now reflected, stale names corrected, maturity set to Beta
-- PRD bumped to v0.2.0
-- `planning.current_milestone` unchanged — M3 remains the sole NOW milestone
+1. **M3 remaining:** "Staging deploy works without manual DB reset" success criterion is still untested — needs a real schema change to validate the Alembic-upgrade-on-entrypoint path end-to-end. Queue for the next M3-touching cycle (likely alongside M7 backend, which needs a migration).
+2. **Next milestones:** M7 Word Builder and M8 Audio & Pronunciation are PLANNED; M7 has the larger scope (4 tables, 3 endpoints, adaptive difficulty).
+3. **Optional bookkeeping:** `backend/Dockerfile` could be bumped to Python 3.14 to fully align local / CI / prod — not urgent, but eliminates the "CI sees one Python, prod sees another" asymmetry.
+4. `/add:retro` candidate: formal retro to (a) migrate `.add/learnings.md` to the JSON schema per `rules/learning.md`, (b) consider evidence-based Beta → GA gap analysis (coverage is now blocking at 80%+, release tags exist, conventional commits enforced — getting closer).
