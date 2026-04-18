@@ -1,26 +1,38 @@
 # Away Mode Log
 
-**Started:** 2026-04-12
-**Expected Return:** ~12 hours
+**Started:** 2026-04-18 (cycle-12 away session)
+**Expected Return:** +12h
 **Duration:** 12 hours
-**Cycle:** cycle-10 (M6 New Categories — Shapes & Body Parts)
+**Cycle:** cycle-12 (M7 Word Builder backend)
 
-## Work Plan
+## Work Plan (approved)
 
-1. Create `backend/app/seed_shapes.py` (~20 words)
-2. Create `backend/app/seed_bodyparts.py` (~25 words)
-3. Update `backend/app/seed.py` with new categories
-4. Run seed locally, verify counts
-5. Full test suite (pytest + vitest)
-6. Commit → push → PR → CI green
-7. Merge to main (authorized)
-8. Verify staging deployment
-9. Staging smoke test (Shapes quiz round)
-10. Update M6 → COMPLETE
-11. Handoff + learnings
+### Primary — cycle-12 end-to-end
+1. RED phase — failing integration tests from spec §2 ACs
+2. GREEN phase — migration + models + schemas + routes + L1 seed
+3. REFACTOR + VERIFY — cleanup + quality gates
+4. PR + self-merge (single squash commit)
+5. Staging verify — `/api/health`, `/progress`, `/round`; confirm auto-migration ran without manual DB reset
+6. Close M3's last success criterion
+7. Run `/add:cycle --complete` bookkeeping
+
+### Stretch (only if primary green with time left)
+8. Docker Python 3.13 → 3.14 bump
+9. Frontend lint audit (`useRound.ts` Math.random purity)
+
+## Queued for return
+- Frontend cycle plan (UI-gated; awaits `/add:ux`)
+- Run `/add:ux specs/word-builder.md`
+- Production deploy of Word Builder API
+- `learnings.md` → JSON migration
+- Level 2 + 3 seed content
 
 ## Progress Log
 
 | Time | Task | Status | Notes |
 |------|------|--------|-------|
-| T+0 | Away mode started | STARTED | Beginning seed file creation |
+| T+0 | Away log init, branch `feat/word-builder-backend` created | COMPLETE | On branch, main is at 42b975f |
+| T+0 | RED phase: write 4 test files (updated migrations, added 3 new) | COMPLETE | pytest collection errors confirm RED — imports for BaseWord/Pattern/etc. fail as expected. 0 tests pass. |
+| T+1 | GREEN phase: models + migration + schemas + route + seed + wiring | COMPLETE | Pattern/BaseWord/WordCombo/PatternProgress models; migration 002 with upgrade+downgrade; 3 endpoints in word_builder.py; L1 seed (6 patterns, 15 base words, 29 combos); entrypoint.sh + main.py wired |
+| T+2 | REFACTOR + VERIFY: ruff + mypy + full suite + coverage | COMPLETE | 81/81 tests pass, 94% coverage, all gates clean. No regressions to existing 48 tests. word_builder.py at 94%, seed_word_builder.py at 90%. |
+| T+2 | Commit + push + PR | STARTED | Single commit to feat/word-builder-backend → PR |

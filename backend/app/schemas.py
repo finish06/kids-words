@@ -143,3 +143,62 @@ class CategoryProgressResponse(BaseModel):
 class AllProgressResponse(BaseModel):
     progress: list[WordProgressResponse]
     summary: ProgressSummary
+
+
+# --- Word Builder (M7) ---
+
+
+class PatternOption(BaseModel):
+    id: uuid.UUID
+    text: str
+    type: str  # "prefix" | "suffix"
+
+
+class Challenge(BaseModel):
+    base_word: str
+    correct_pattern: PatternOption
+    options: list[PatternOption]
+    result_word: str
+    definition: str
+
+
+class RoundResponse(BaseModel):
+    level: int
+    challenges: list[Challenge]
+
+
+class WordBuilderAttempt(BaseModel):
+    pattern_id: uuid.UUID
+    is_correct: bool
+    attempt_number: int
+
+
+class PatternStarUpdate(BaseModel):
+    pattern_id: uuid.UUID
+    new_count: int
+    new_star_level: int
+    just_mastered: bool
+
+
+class WordBuilderResultResponse(BaseModel):
+    id: uuid.UUID
+    recorded: bool
+    responded_at: datetime
+    star_update: PatternStarUpdate | None = None
+
+
+class LevelPatternProgress(BaseModel):
+    text: str
+    star_level: int
+    mastered: bool
+
+
+class LevelProgress(BaseModel):
+    level: int
+    unlocked: bool
+    patterns: list[LevelPatternProgress]
+    mastery_percentage: float
+
+
+class WordBuilderProgressResponse(BaseModel):
+    levels: list[LevelProgress]
