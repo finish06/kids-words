@@ -1,10 +1,12 @@
 # Spec: Word Builder — Prefix/Suffix Learning Mode
 
-**Version:** 0.1.0
+**Version:** 0.2.0
 **Created:** 2026-04-07
+**Updated:** 2026-04-18 (UX signed off; backend VERIFIED via cycle-12)
 **PRD Reference:** docs/prd.md
 **Milestone:** M7
-**Status:** Draft
+**Status:** Implementing
+**UI Design:** specs/ux/word-builder-ux.md (APPROVED 2026-04-18)
 
 ## 1. Overview
 
@@ -194,10 +196,12 @@ As a child (4-8), I want to build words by adding pieces to them, so that I lear
 
 ## 6. UI Behavior
 
+> **UI design approved — see `specs/ux/word-builder-ux.md` for wireframes, state matrix, and flow diagrams.** The notes below describe the overall approach; the UX artifact is the source of truth for screen layout, timing, and edge-case behavior.
+
 ### Home Screen
-- New "Word Builder" card alongside existing category cards
-- Shows current level and mastery percentage
-- Different visual treatment (different icon/illustration to distinguish from matching mode)
+- **Home is restructured** into a `Games` row (Word Builder + Phonetics placeholder for M8) and a `Word Matching` section that keeps the existing 5 category cards. This is a home-navigation change, not a card-styling change.
+- Word Builder card shows current level + mastery dots + rotating tease of active patterns
+- Word Phonetics card ships in cycle-13 as a disabled "Coming soon" placeholder so M8 lands without another home restructure
 
 ### Build Screen
 - Base word large and centered (3rem+)
@@ -240,3 +244,4 @@ As a child (4-8), I want to build words by adding pieces to them, so that I lear
 | Date | Version | Author | Changes |
 |------|---------|--------|---------|
 | 2026-04-07 | 0.1.0 | calebdunn | Initial spec |
+| 2026-04-18 | 0.2.0 | calebdunn | Backend VERIFIED (cycle-12, PR #17); UX signed off (specs/ux/word-builder-ux.md); §6 notes updated to reflect home-screen restructure + pointer to UX artifact; status Draft → Implementing |
