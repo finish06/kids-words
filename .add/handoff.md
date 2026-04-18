@@ -22,6 +22,10 @@
 - v0.2.0 release tag cut + pushed; staging aligned
 - Retro 2026-04-18 — scores 8.0 / 7.5 / 7.0; archive at `.add/retros/retro-2026-04-18.md`
 
+### Stretch goals (completed during away window, post cycle-12 close)
+- **Docker Python 3.13 → 3.14 bump** — PR #18 squash-merged as `43fd912`. Both `backend/Dockerfile` and `backend/Dockerfile.prod` updated. deploy.yml built + pushed the new images successfully; staging redeployed and is running on **Python 3.14.4** with `/api/health` green and DB 55.2ms. Local / CI / staging / prod now all aligned on the same Python major+minor. Production remains on the previous image until human-approved deploy.
+- **Frontend lint audit** — no-op. `useRound.ts` Math.random purity issues flagged in retro 2026-04-12 were already resolved in commit `711e65e`. Current `npm run lint`: 0 errors, 3 warnings (all in generated `coverage/` files — gitignored).
+
 ## Decisions Made
 - **TDD-strict is the default for new backend feature code** (cycle-12 Q3 answer; first application was clean)
 - **Self-merge authorization extended** from cycle-11 (test-harness-only) to cycle-12 (real application code + migration), gated on green CI and tight scope

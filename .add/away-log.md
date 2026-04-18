@@ -38,3 +38,6 @@
 | T+2 | Commit + push + PR | COMPLETE | PR #17; squash-merged as b7c6d1e; CI green first run (Backend 30s, Frontend 18s); coverage 93.59% |
 | T+3 | Staging auto-deploy verified (M3 closure) | COMPLETE | Staging caught up to b7c6d1e; migration 002 auto-applied, no manual DB reset; /health healthy; /progress + /round return valid JSON |
 | T+3 | Cycle-12 --complete bookkeeping | COMPLETE | cycle-12.md outcome section; M7 hill chart + success criteria updated; M3 last criterion ticked; learnings.md retro entry; handoff rewritten; config current_cycle → null |
+| T+4 | Stretch #9: frontend lint audit | COMPLETE (no-op) | useRound.ts already fixed (commit 711e65e). Only 3 warnings, all in generated coverage/ files (gitignored). Nothing to do. |
+| T+4 | Stretch #8: Docker Python 3.13 → 3.14 bump | COMPLETE | PR #18 merged as 43fd912. Both backend/Dockerfile and Dockerfile.prod updated. deploy.yml built + pushed new images successfully. Staging verified on Python 3.14.4 (uptime 22.7s, health green, DB 55.2ms). Local / CI / staging / prod now all aligned. |
+| T+4 | Final away-log close | COMPLETE | All primary + stretch goals shipped. Waiting on user return. |
