@@ -48,3 +48,15 @@
 | Time | Task | Status | Notes |
 |------|------|--------|-------|
 | start | Plan approved, away log created, prior log archived | COMPLETE | 5 tasks tracked |
+| T+0 | Branch `chore/away-2026-05-07-quality-baseline` from main | COMPLETE | clean baseline at 783b08f |
+| T+0 | Task 1 — /add:verify baseline | COMPLETE | ruff clean, CI mypy clean, pytest 81/81, vitest 107/107, coverage 93.59% backend / 83.63% frontend. Local strict mypy: 14→8 errors, remaining 8 in test_word_builder.py (M7 boundaried). |
+| T+0 | Task 1 — mechanical fixes | COMPLETE | conftest.py fixture annotation; frontend eslint coverage/ ignore; package-lock reconciled. Commits 61f42f2 + d4c9666. |
+| T+0 | Task 3 — cvc-builder impact analysis | COMPLETE | docs/cvc-builder-impact-analysis.md — ~2,398 LOC M7 inventory; 3 migration options laid out; no decision made. Commit 931d744. |
+| T+0 | Task 4 — L1 image shopping list | COMPLETE | docs/cvc-builder-image-shopping-list.md — 10 words specced with subject/framing/style + gen prompt template. Commit 931d744. |
+| T+0 | Task 2 — coverage gap audit | COMPLETE | colorUtils.test.ts + ShapeImage.test.tsx (incl. BodyPartImage). 16 new tests, 107→123 passing. Frontend coverage 83.63→85.87%. Commit df669a6. |
+| T+0 | Task 5 — cycle-17 memo | COMPLETE | .add/cycle-17-memo.md — triage + 3 candidate cycle shapes per M7 option. Commit ffaa79e. |
+| T+0 | PR #23 opened | COMPLETE | https://github.com/finish06/kids-words/pull/23 — feature branch pushed; not merged. Awaiting human return. |
+
+## Status at human return
+
+All 5 planned tasks complete. PR #23 ready for review; merge gated on human approval (boundary preserved). M7 closure decision queued. Uncommitted at session end: `.add/security/` and `tests/screenshots/` — both pre-existed this session, intentionally untouched.
