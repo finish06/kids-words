@@ -52,7 +52,7 @@ async def client(
 @pytest.fixture
 async def seeded_db(
     db: AsyncSession,
-) -> dict[str, Category | list[Word]]:
+) -> dict[str, Category | Word | Profile]:
     """Seed test database with sample categories and words."""
     guest = Profile(
         id=uuid.uuid4(),
@@ -129,7 +129,7 @@ async def seeded_db(
 
 @pytest.fixture
 async def seeded_client(
-    seeded_db: dict[str, Category | list[Word]],
+    seeded_db: dict[str, Category | Word | Profile],
 ) -> AsyncGenerator[AsyncClient]:
     async def override_get_db() -> AsyncGenerator[AsyncSession]:
         async with test_session() as session:
