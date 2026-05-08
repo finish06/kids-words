@@ -20,6 +20,16 @@ router = APIRouter(prefix="/api/progress", tags=["progress"])
 
 DB = Annotated[AsyncSession, Depends(get_db)]
 
+# Categories that exist in the database but are hidden from the Word Matching
+# Home card (cycle-13 hide decision in `WordMatchingCard.tsx`). Their words must
+# not contribute to the Word Matching progress bar (`stars_earned` /
+# `stars_possible`) because the bar reflects what the kid can see.
+# Promoting this to an `is_hidden` flag on `Category` is a separate cycle.
+HIDDEN_CATEGORY_SLUGS: frozenset[str] = frozenset({"body-parts"})
+
+# Per spec/word-image-matching.md the star ladder caps at 3 stars per word.
+MAX_STARS_PER_WORD = 3
+
 
 async def resolve_profile_id(
     db: AsyncSession, x_profile_id: str | None
@@ -70,12 +80,21 @@ async def get_all_progress(
     mastered = sum(1 for i in items if i.star_level >= 3)
     total = len(items)
 
+    # Word Matching aggregate: scope to visible (non-hidden) categories so the
+    # Home progress bar reflects what the kid can actually see and play.
+    visible_items = [i for i in items if i.category_slug not in HIDDEN_CATEGORY_SLUGS]
+    stars_possible = len(visible_items) * MAX_STARS_PER_WORD
+    stars_earned = sum(min(i.star_level, MAX_STARS_PER_WORD) for i in visible_items)
+    stars_earned = min(stars_earned, stars_possible)  # AC-022 defensive cap
+
     return AllProgressResponse(
         progress=items,
         summary=ProgressSummary(
             total_words=total,
             mastered=mastered,
             mastery_percentage=(round(mastered / total * 100, 1) if total > 0 else 0.0),
+            stars_earned=stars_earned,
+            stars_possible=stars_possible,
         ),
     )
 

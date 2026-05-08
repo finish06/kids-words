@@ -49,6 +49,8 @@ router = APIRouter(prefix="/api/word-builder", tags=["word-builder"])
 DB = Annotated[AsyncSession, Depends(get_db)]
 
 UNLOCK_THRESHOLD_PERCENT = 70.0
+# Per spec/word-builder.md AC-012: pattern star ladder caps at 3 stars.
+MAX_STARS_PER_PATTERN = 3
 
 
 async def resolve_profile_id(
@@ -308,4 +310,20 @@ async def get_progress(
             )
         )
 
-    return WordBuilderProgressResponse(levels=levels_out)
+    # Game-progress-bar fields (specs/game-progress-bar.md AC-009/011/022).
+    # Scope to unlocked levels so the Home bar reflects what the kid can play.
+    unlocked_patterns = [
+        p
+        for level_obj in levels_out
+        if level_obj.unlocked
+        for p in level_obj.patterns
+    ]
+    stars_possible = len(unlocked_patterns) * MAX_STARS_PER_PATTERN
+    stars_earned = sum(min(p.star_level, MAX_STARS_PER_PATTERN) for p in unlocked_patterns)
+    stars_earned = min(stars_earned, stars_possible)  # AC-022 defensive cap
+
+    return WordBuilderProgressResponse(
+        levels=levels_out,
+        stars_earned=stars_earned,
+        stars_possible=stars_possible,
+    )
