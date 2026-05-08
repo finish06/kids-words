@@ -15,6 +15,7 @@ from app.schemas import (
     ProgressSummary,
     WordProgressResponse,
 )
+from app.star_math import compute_star_summary
 
 router = APIRouter(prefix="/api/progress", tags=["progress"])
 
@@ -82,10 +83,10 @@ async def get_all_progress(
 
     # Word Matching aggregate: scope to visible (non-hidden) categories so the
     # Home progress bar reflects what the kid can actually see and play.
-    visible_items = [i for i in items if i.category_slug not in HIDDEN_CATEGORY_SLUGS]
-    stars_possible = len(visible_items) * MAX_STARS_PER_WORD
-    stars_earned = sum(min(i.star_level, MAX_STARS_PER_WORD) for i in visible_items)
-    stars_earned = min(stars_earned, stars_possible)  # AC-022 defensive cap
+    stars_earned, stars_possible = compute_star_summary(
+        (i.star_level for i in items if i.category_slug not in HIDDEN_CATEGORY_SLUGS),
+        max_per_item=MAX_STARS_PER_WORD,
+    )
 
     return AllProgressResponse(
         progress=items,

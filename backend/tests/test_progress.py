@@ -295,7 +295,7 @@ async def test_ac011_stars_earned_excludes_hidden_body_parts_progress(
         headers={"X-Profile-ID": guest_id},
     )
     summary = response.json()["summary"]
-    # Should reflect ONLY the visible-category cat star (1), not the hidden hand stars (3)
+    # Should reflect ONLY the visible cat star (1), not the hidden hand stars (3)
     assert summary["stars_earned"] == 1, (
         "stars_earned must exclude hidden-category progress"
     )

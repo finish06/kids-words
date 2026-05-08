@@ -43,6 +43,7 @@ from app.schemas import (
     WordBuilderProgressResponse,
     WordBuilderResultResponse,
 )
+from app.star_math import compute_star_summary
 
 router = APIRouter(prefix="/api/word-builder", tags=["word-builder"])
 
@@ -312,15 +313,15 @@ async def get_progress(
 
     # Game-progress-bar fields (specs/game-progress-bar.md AC-009/011/022).
     # Scope to unlocked levels so the Home bar reflects what the kid can play.
-    unlocked_patterns = [
-        p
-        for level_obj in levels_out
-        if level_obj.unlocked
-        for p in level_obj.patterns
-    ]
-    stars_possible = len(unlocked_patterns) * MAX_STARS_PER_PATTERN
-    stars_earned = sum(min(p.star_level, MAX_STARS_PER_PATTERN) for p in unlocked_patterns)
-    stars_earned = min(stars_earned, stars_possible)  # AC-022 defensive cap
+    stars_earned, stars_possible = compute_star_summary(
+        (
+            p.star_level
+            for level_obj in levels_out
+            if level_obj.unlocked
+            for p in level_obj.patterns
+        ),
+        max_per_item=MAX_STARS_PER_PATTERN,
+    )
 
     return WordBuilderProgressResponse(
         levels=levels_out,

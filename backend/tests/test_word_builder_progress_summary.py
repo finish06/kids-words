@@ -22,7 +22,9 @@ async def _seed_patterns_l1_only(db: AsyncSession) -> list[Pattern]:
     patterns = [
         Pattern(id=uuid.uuid4(), text="UN-", type="prefix", level=1, meaning="not"),
         Pattern(id=uuid.uuid4(), text="RE-", type="prefix", level=1, meaning="again"),
-        Pattern(id=uuid.uuid4(), text="-ING", type="suffix", level=1, meaning="ongoing"),
+        Pattern(
+            id=uuid.uuid4(), text="-ING", type="suffix", level=1, meaning="ongoing"
+        ),
         Pattern(id=uuid.uuid4(), text="-ED", type="suffix", level=1, meaning="past"),
         Pattern(id=uuid.uuid4(), text="-S", type="suffix", level=1, meaning="plural"),
         Pattern(id=uuid.uuid4(), text="-ER", type="suffix", level=1, meaning="agent"),
@@ -32,12 +34,16 @@ async def _seed_patterns_l1_only(db: AsyncSession) -> list[Pattern]:
     return patterns
 
 
-async def _seed_patterns_l1_and_l2(db: AsyncSession) -> tuple[list[Pattern], list[Pattern]]:
+async def _seed_patterns_l1_and_l2(
+    db: AsyncSession,
+) -> tuple[list[Pattern], list[Pattern]]:
     """Seed 6 L1 + 3 L2 patterns. Returns (l1, l2) tuple."""
     l1 = [
         Pattern(id=uuid.uuid4(), text="UN-", type="prefix", level=1, meaning="not"),
         Pattern(id=uuid.uuid4(), text="RE-", type="prefix", level=1, meaning="again"),
-        Pattern(id=uuid.uuid4(), text="-ING", type="suffix", level=1, meaning="ongoing"),
+        Pattern(
+            id=uuid.uuid4(), text="-ING", type="suffix", level=1, meaning="ongoing"
+        ),
         Pattern(id=uuid.uuid4(), text="-ED", type="suffix", level=1, meaning="past"),
         Pattern(id=uuid.uuid4(), text="-S", type="suffix", level=1, meaning="plural"),
         Pattern(id=uuid.uuid4(), text="-ER", type="suffix", level=1, meaning="agent"),
