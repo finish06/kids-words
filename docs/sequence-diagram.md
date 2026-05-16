@@ -134,26 +134,79 @@ sequenceDiagram
 
 ## Progress Tracking
 
-How the app tracks and displays word mastery.
+How the app tracks and displays word mastery, plus the Home progress bar
+aggregate (`stars_earned` / `stars_possible`) per spec/game-progress-bar.md.
 
 ```mermaid
 sequenceDiagram
     participant React as React Frontend
     participant API as FastAPI Backend
+    participant Star as star_math.compute_star_summary
     participant DB as PostgreSQL
 
-    Note over React, DB: View all categories progress
-    React->>API: GET /api/progress?profile_id=...
-    API->>DB: SELECT categories with word_progress aggregation
-    DB-->>API: Category[] with mastery_percentage per category
-    API-->>React: AllProgressResponse
+    Note over React, DB: View all categories progress (Home bar source)
+    React->>API: GET /api/progress (X-Profile-ID)
+    API->>DB: SELECT words + word_progress (eager category)
+    DB-->>API: Word[] + per-word star_level
+    API->>Star: levels, max_per_item=3 (skip hidden categories)
+    Star-->>API: (stars_earned, stars_possible)
+    API-->>React: AllProgressResponse{progress[], summary{mastered, stars_earned, stars_possible}}
 
     Note over React, DB: View single category word list
-    React->>API: GET /api/progress/{slug}?profile_id=...
-    API->>DB: SELECT words + word_progress for category
+    React->>API: GET /api/progress/{slug} (X-Profile-ID)
+    API->>DB: SELECT category + words + word_progress
     DB-->>API: Word[] with star_level per word
-    API-->>React: CategoryProgressResponse {words with stars}
+    API-->>React: CategoryProgressResponse{words[], summary}
     React->>React: Render word list with star indicators
+```
+
+## Word Builder (M7 Prefix/Suffix)
+
+Adaptive round + mastery flow for `/api/word-builder/*`. Level 1 is
+always unlocked; level N+1 unlocks when level N reaches ≥70% mastery
+(3 stars per pattern), per spec/word-builder.md AC-011.
+
+```mermaid
+sequenceDiagram
+    participant Child as Child (Browser)
+    participant React as React Frontend
+    participant API as FastAPI Backend
+    participant Star as star_math.compute_star_summary
+    participant DB as PostgreSQL
+
+    Note over Child, DB: 1. Start a round
+    Child->>React: Tap Word Builder card
+    React->>API: GET /api/word-builder/round?count=5 (X-Profile-ID)
+    API->>DB: SELECT max-unlocked level (PatternProgress)
+    API->>DB: SELECT WordCombo JOIN BaseWord JOIN Pattern WHERE level=N
+    DB-->>API: combo rows
+    API->>API: random.choices(combos, k=count); shuffle 2-3 options
+    API-->>React: RoundResponse{level, challenges[]}
+
+    Note over Child, DB: 2. Per-challenge attempt
+    loop Each challenge
+        React->>Child: Show base word + pattern options
+        Child->>React: Tap a pattern
+        React->>API: POST /api/word-builder/results {pattern_id, is_correct, attempt_number}
+        alt First-attempt-correct
+            API->>DB: UPSERT PatternProgress (++first_attempt_correct_count)
+            API->>API: compute_star_level (2→1★, 4→2★, 7+→3★)
+            alt Just hit 3★
+                API->>DB: set mastered_at = now()
+            end
+            API-->>React: {recorded, star_update}
+        else Retry or wrong
+            API-->>React: {recorded, star_update: null}
+        end
+    end
+
+    Note over Child, DB: 3. Round complete / Home progress
+    React->>API: GET /api/word-builder/progress (X-Profile-ID)
+    API->>DB: SELECT Pattern[] + PatternProgress[]
+    API->>API: per-level mastery %, walk-unlock from L1
+    API->>Star: levels (unlocked only), max_per_item=3
+    Star-->>API: (stars_earned, stars_possible)
+    API-->>React: WordBuilderProgressResponse{levels[], stars_earned, stars_possible}
 ```
 
 ## Health Check
@@ -220,4 +273,4 @@ sequenceDiagram
 
 ---
 
-*Last updated: 2026-04-12. Generated from source by `/add:docs`. 13 routes across 5 handler groups.*
+*Last updated: 2026-05-16. Generated from source by `/add:docs`. 16 routes across 6 handler groups (infra, categories, profiles, progress, results, word-builder).*
