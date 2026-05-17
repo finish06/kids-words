@@ -132,6 +132,8 @@ class ProgressSummary(BaseModel):
     total_words: int
     mastered: int
     mastery_percentage: float
+    stars_earned: int = 0
+    stars_possible: int = 0
 
 
 class CategoryProgressResponse(BaseModel):
@@ -202,3 +204,5 @@ class LevelProgress(BaseModel):
 
 class WordBuilderProgressResponse(BaseModel):
     levels: list[LevelProgress]
+    stars_earned: int = 0
+    stars_possible: int = 0

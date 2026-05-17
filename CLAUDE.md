@@ -55,29 +55,38 @@ npx tsc --noEmit                     # Type check (frontend)
 kids_words/
 ├── backend/
 │   ├── app/
-│   │   ├── main.py              # FastAPI app, health/version endpoints
-│   │   ├── models.py            # SQLAlchemy models (6 tables)
+│   │   ├── main.py              # FastAPI app, health/version endpoints, CORS
+│   │   ├── models.py            # SQLAlchemy models (10 tables)
 │   │   ├── schemas.py           # Pydantic request/response schemas
 │   │   ├── database.py          # Async session factory
 │   │   ├── config.py            # Pydantic settings
-│   │   ├── seed.py              # Idempotent seed script
+│   │   ├── star_math.py         # Shared star aggregate (stars_earned/possible)
+│   │   ├── seed.py              # Idempotent seed orchestrator
+│   │   ├── seed_animals.py      # 100 animal words + OpenMoji codes
+│   │   ├── seed_foods.py        # 63 food words + OpenMoji codes
+│   │   ├── seed_shapes.py       # 22 shape words
+│   │   ├── seed_bodyparts.py    # 25 body-part words
+│   │   ├── seed_word_builder.py # M7 patterns/base words/combos
 │   │   └── routes/
 │   │       ├── categories.py    # GET /api/categories, GET /api/categories/{slug}/words
 │   │       ├── profiles.py      # CRUD + PIN setup/verify
-│   │       ├── progress.py      # GET /api/progress, GET /api/progress/{slug}
-│   │       └── results.py       # POST /api/results (match recording + star tracking)
+│   │       ├── progress.py      # Word-Matching mastery + stars_earned aggregate
+│   │       ├── results.py       # POST /api/results (match recording + star tracking)
+│   │       └── word_builder.py  # M7 prefix/suffix round + results + progress
 │   ├── alembic/                 # Database migrations
-│   ├── tests/                   # 48 pytest tests (93% coverage)
+│   ├── tests/                   # 99 pytest tests
 │   ├── entrypoint.sh            # Docker: auto-migrate + start uvicorn
 │   └── pyproject.toml
 ├── frontend/
 │   ├── src/
-│   │   ├── App.tsx              # Router + profile state
-│   │   ├── components/          # CategoryList, MatchRound, ProfilePicker, etc.
+│   │   ├── App.tsx              # Router + profile state (/, /matching, ...)
+│   │   ├── components/          # HomeScreen, MatchingScreen, MatchRound, BuildScreen, ...
 │   │   ├── hooks/useRound.ts    # Quiz round state machine
+│   │   ├── hooks/useBuildRound.ts # Word Builder round state
+│   │   ├── hooks/useSpeech.ts   # TTS wrapper (M8)
 │   │   ├── api/client.ts        # API client functions
 │   │   └── types/               # TypeScript interfaces
-│   └── package.json             # 75 vitest tests (87% coverage)
+│   └── package.json             # 107 vitest tests
 ├── .add/                        # ADD methodology (config, learnings, retros)
 ├── .claude/                     # Claude Code config (rules, settings)
 ├── docs/
@@ -91,7 +100,7 @@ kids_words/
 └── CHANGELOG.md
 ```
 
-### API Routes (13 endpoints)
+### API Routes (16 endpoints)
 
 | Method | Path | Handler | Purpose |
 |--------|------|---------|---------|
@@ -105,13 +114,18 @@ kids_words/
 | POST | /api/profiles/verify-pin | profiles.py | Verify parent PIN |
 | PUT | /api/profiles/{id} | profiles.py | Update profile name/color |
 | DELETE | /api/profiles/{id} | profiles.py | Delete profile + progress |
-| GET | /api/progress | progress.py | All categories mastery % |
+| GET | /api/progress | progress.py | Word-Matching mastery + `stars_earned`/`stars_possible` |
 | GET | /api/progress/{slug} | progress.py | Per-word star levels for category |
 | POST | /api/results | results.py | Record match result + update stars |
+| GET | /api/word-builder/round | word_builder.py | Adaptive prefix/suffix round at unlocked level |
+| POST | /api/word-builder/results | word_builder.py | Record attempt + update pattern mastery |
+| GET | /api/word-builder/progress | word_builder.py | Per-level mastery + `stars_earned`/`stars_possible` |
 
-### Database Models (6 tables)
+### Database Models (10 tables)
 
-Profile, ParentSettings, Category, Word, MatchResult, WordProgress
+Word-Matching core: Profile, ParentSettings, Category, Word, MatchResult, WordProgress
+
+Word Builder (M7): Pattern, BaseWord, WordCombo, PatternProgress
 
 ### Environments
 
