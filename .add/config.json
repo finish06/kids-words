@@ -149,7 +149,7 @@
   },
   "planning": {
     "current_milestone": "M7-word-builder",
-    "current_cycle": "cycle-16",
+    "current_cycle": null,
     "wip_limit": 3,
     "parallel_agents": 1,
     "cycle_history": [
@@ -158,7 +158,8 @@
       {"cycle": "cycle-12", "milestone": "M7-word-builder", "completed": "2026-04-18", "outcome": "success", "notes": "Word Builder backend via TDD-strict; PR #17; 33 new tests (81/81 pass at 94% coverage); staging auto-deploy applied migration 002 cleanly. Closed M3 last success criterion — M3 now 7/7."},
       {"cycle": "cycle-13", "milestone": "M7-word-builder", "completed": "2026-04-18", "outcome": "success-with-pat-finding", "notes": "Word Builder frontend (PR #19, e507610). 14 new Vitest tests, 89/89 pass, 83.5% coverage. Shipped per approved UX. PAT surfaced generative-morphology ambiguity in challenge model — gated via cycle-14; redesign direction captured in .add/cycle-15-direction.md."},
       {"cycle": "cycle-14", "milestone": "M7-word-builder", "completed": "2026-04-18", "outcome": "success", "notes": "Surgical patch gating Word Builder card as 'Coming soon' (PR #20, 4a5d1cd). PAT-response cycle. All cycle-12 + cycle-13 code preserved; only Home entry point hidden. Staging verified via JS bundle inspection."},
-      {"cycle": "cycle-15", "milestone": "M7-word-builder", "completed": "2026-04-18", "outcome": "success-with-pat-iteration", "notes": "Word Builder clue redesign + M8 Phonetics (PR #21, bb6b9e0). useSpeech hook + BuildScreen clue header + MatchRound tap-to-hear + seed clue audit + un-gate + Listening Practice rename. PAT found clue leak (inflected forms revealed answers); fixed in c03a3e8 seed patch (bare base verbs). M7 + M8 both Implemented."}
+      {"cycle": "cycle-15", "milestone": "M7-word-builder", "completed": "2026-04-18", "outcome": "success-with-pat-iteration", "notes": "Word Builder clue redesign + M8 Phonetics (PR #21, bb6b9e0). useSpeech hook + BuildScreen clue header + MatchRound tap-to-hear + seed clue audit + un-gate + Listening Practice rename. PAT found clue leak (inflected forms revealed answers); fixed in c03a3e8 seed patch (bare base verbs). M7 + M8 both Implemented."},
+      {"cycle": "cycle-16", "milestone": "M7-word-builder", "completed": "2026-05-16", "outcome": "success", "notes": "Home Games/Practice restructure + /matching route (PR #22, 783b08f). 107/107 Vitest pass; lint+tsc+CI clean. iPad PAT passed on 2026-05-16 — all 12 checklist items (Games+Practice sections, WordMatching card → /matching, category-to-length flow, back-nav, dark-mode, iPad landscape). Closes M7."}
     ]
   }
 }

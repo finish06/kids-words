@@ -1,62 +1,45 @@
 # Session Handoff
-**Written:** 2026-04-18 (cycle-16 agent-done; PAT pending)
+**Written:** 2026-05-16 (cycle-16 PAT passed; M7 closed; game-progress-bar Phase 1 shipped)
 
-## Completed this session (interactive, then half-day focused)
+## State summary
 
-### Late additions after cycle-15 closed
-- **Clue leak fix (c03a3e8):** PAT caught that "-ING/-ED/-ER" clues contained inflected forms revealing the answer. Switched to bare-base-verb wording ("jump right now", "did jump", "people who jump"). Seed-only patch; idempotent auto-update on staging.
-- **New spec: `specs/home-games-practice.md`** — restructure Home into Games + Practice sections, relocate 5 category cards to new `/matching` route.
-- **Cycle-16 planned + executed:** PR #22 → `783b08f` staging live.
+- **`main` at `a8e5431`** — game-progress-bar Phase 1 backend merged (PR #24, squash).
+- **cycle-16 COMPLETE** — iPad PAT passed all 12 checklist items on 2026-05-16. Closes M7.
+- **M7 Word Builder COMPLETE** — backend (cycle-12) + frontend (cycles 13-15) + Home restructure (cycle-16) all VERIFIED. L2/L3 seed expansion deferred to post-M7 backlog.
+- **`planning.current_cycle: null`** in config — no in-flight cycle.
+- **`planning.current_milestone`** still `M7-word-builder` as the most recent — next `/add:cycle` should advance to whatever ships Phase 2 (M8 closure or a new milestone for game-progress-bar UX).
 
-### Cycle-16 shipped
-- **New components:** MatchingScreen, WordMatchingCard, PracticeSection
-- **Updated:** HomeScreen (Games + Practice layout), GamesSection (WB + WM), App.tsx routing (new `/matching`)
-- **Removed:** WordMatchingSection + its test (replaced by MatchingScreen)
-- **New tests:** MatchingScreen (7), WordMatchingCard (4), HomeScreen (6 rewrites)
-- **E2E regression rewritten** — 9 scenarios covering home layout + back nav + WB unchanged + category-to-length flow
-- **CSS:** Games grid, Practice grid, ghost card, MatchingScreen header
-- **107/107 Vitest pass; lint + tsc clean; CI green first run**
+## Recently shipped this session
 
-### Staging verified at `783b08f`
-- Backend healthy, DB 53.2ms
-- JS bundle contains: Games + Practice headings, Word Matching card, Listening Practice placeholder, "More coming soon" ghost, "Pick a category" subtitle, `/matching` route, `game-card--ghost` class
+- Cycle-16 iPad PAT — all 12 items confirmed; M7 closed.
+- `/add:docs` re-sync (`d2fd118`): manifest + diagrams + CLAUDE.md + README.md drift across 5 weeks fixed (3 routes, 4 models, 47 seed words, star_math helper).
+- `.add/learnings.md` → `.add/learnings.json` migration (`af25e01`): 28 entries structured for smart filtering. Closes the 2026-04-18 retro action item (L-022).
+- Game-progress-bar Phase 1 backend merged (`a8e5431` via PR #24): `stars_earned`/`stars_possible` on `/api/progress` + `/api/word-builder/progress`, `compute_star_summary` helper, 18 new tests, 93.75% coverage.
+- Local branch prune: 10 squash-merged feature branches deleted; 11 stale origin refs pruned.
 
-## ➡ PAT CHECKLIST (for you on iPad at https://kids-words.staging.calebdunn.tech/)
+## Open work
 
-1. [ ] Home shows **Games** + **Practice** as section headings
-2. [ ] Games row: Word Builder card + Word Matching card (both clickable)
-3. [ ] Practice row: Listening Practice "Coming soon" + dashed "More coming soon" ghost
-4. [ ] **No** category cards (Animals/Colors/Food/Shapes) visible directly on Home
-5. [ ] Tap **Word Matching** card → `/matching` screen with "Pick a category!" heading + 5 category cards
-6. [ ] Tap **Animals** → Length Picker
-7. [ ] Tap **5** → Match Round plays as before (including cycle-15's tap-to-hear audio)
-8. [ ] Back from Length Picker → returns to `/matching` (not Home)
-9. [ ] Back from `/matching` → returns to Home
-10. [ ] Tap **Word Builder** card → clue-based round still works (cycle-15 state preserved)
-11. [ ] Toggle dark mode → both sections + MatchingScreen render cleanly
-12. [ ] iPad landscape layout looks good (Games grid side-by-side; Practice grid side-by-side)
+- **PR #23** — `chore/away-2026-05-07-quality-baseline`: cycle-17 prep + cvc-builder spec + impact analysis + baseline tidy. Open since 2026-05-08, mergeable. Read its diff before merging.
+- **Phase 2 frontend** for game-progress-bar (docs/plans/game-progress-bar-plan.md) — 17 ACs / ~17h / 2-3 days. Unblocked now that Phase 1 backend is on main.
+- **M7 backlog** — L2/L3 seed expansion, full Word Builder Playwright E2E, level-up modal detection, configurable TTS rate/voice.
 
-**If PAT passes:** `/add:cycle --complete` writes learnings, updates M7 closure bookkeeping, appends to `cycle_history`, and sets `current_cycle` to null.
+## Next decisions
 
-**If PAT reveals issues:** file them for cycle-17. Spec is versioned so iteration is cheap.
+1. Land PR #23, or close it if cycle-17 direction has changed.
+2. Open a new cycle (cycle-17) for game-progress-bar Phase 2, or define a new milestone if Phase 2 is large enough to warrant one.
+3. Run `/add:retro` — three completed cycles (14/15/16) and a milestone closure (M7) since the last retro on 2026-04-18.
 
-## Config state
-- `planning.current_milestone`: `M7-word-builder`
-- `planning.current_cycle`: `cycle-16` (stays IN_PROGRESS until PAT + `/add:cycle --complete`)
-- `cycle_history`: 9, 11, 12, 13, 14, 15 — cycle-16 appends on formal close
+## Staging
 
-## Milestones
-- **M1-M6 + M3:** COMPLETE
-- **M7 Word Builder:** IN_PROGRESS — all user-facing work shipped through cycle-16; awaits PAT + `/add:cycle --complete` to formally close. Successful PAT would close M7.
-- **M8 Audio & Pronunciation:** Implemented via cycle-15; awaits PAT confirmation through cycle-16's Match Round path.
+Should now reflect `a8e5431` via the merge-to-main auto-deploy webhook. Worth confirming once:
 
-## Deferred (for later cycles)
-- Listening Practice game (needs `/add:spec` + `/add:ux` first)
-- L2 + L3 Word Builder seed expansion
-- Full Word Builder E2E Playwright (happy path, wrong-tap, level-up)
-- Level-up modal detection (backend flag is ready to consume)
-- Configurable TTS rate / voice
-- `.add/learnings.md` → JSON migration (4th retro action deferral)
+```
+curl -s https://kids-words.staging.calebdunn.tech/api/version | jq
+# expect: build_date / git_commit reflect today's deploy
 
-## Branch state
-- `main` at `783b08f` (PR #22 merged, cycle-16 feature branch deleted)
+curl -s https://kids-words.staging.calebdunn.tech/api/progress | jq '.summary'
+# expect: stars_possible=585, total_words=220, body-parts excluded
+
+curl -s https://kids-words.staging.calebdunn.tech/api/word-builder/progress | jq '{stars_earned, stars_possible}'
+# expect: stars_possible=18 (L1 only, 6 patterns × 3)
+```

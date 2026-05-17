@@ -50,6 +50,8 @@
   Quiz length picker (5/10/20) implemented client-side: full word list fetched from `/api/categories/{slug}/words`, then sliced to chosen length. No backend changes needed. Keeps API surface small and round-config concerns on the frontend where the player picks length.
 
 ## Process
+- **[high] Two-stage PAT-gated cycle closure paid off across cycles 13-16** (L-029, 2026-05-16 · scope: `workstation`)
+  Pattern: agent-done = code shipped + staging smoke green; formal close = human PAT play-through on iPad. Across cycles 13/14/15/16 it caught two real design issues (cycle-13 morphology ambiguity, cycle-15 clue-leak) before they reached users, while letting code-correctness ship continuously. Cycle-16 PAT (Home Games/Practice + /matching route) passed cleanly on 2026-05-16, closing M7. Worth keeping as default closure shape for user-facing feature cycles at Beta.
 - **[high] cycle-11 complete: timeboxed investigation closed the M3 coverage unknown** (L-021, 2026-04-18 · stack: python, github, ci)
   Investigation timebox (30 min) held — root cause isolated at ~25 min by diffing CI vs local coverage per-file and reproducing locally in the same venv shape. 3 consecutive green CI runs at 93.33% on the 80% threshold. Cut v0.2.0 (M3-M6 + Alpha→Beta promotion). Bumpy: local roadmap commit was never pushed on its own, so GitHub's squash merge of PR #16 produced a local/remote main divergence requiring git reset origin/main. Lesson: push the base commit before branching, or accept that the squash will supersede it. Also: `git reset --hard` is blocked by permission layer — use soft reset + `git checkout HEAD -- <files>`.
 - **[medium] /add:docs caught 5 weeks of silent drift across CLAUDE.md/README/diagrams** (L-028, 2026-05-16 · stack: python, fastapi, typescript, react)
@@ -76,4 +78,4 @@
   Scores: collab 7.0, ADD effectiveness 6.0, swarm 7.0. Directives captured: (1) when CI is mis-wired but local tests are strong, just merge and let post-merge CI confirm; (2) when the human signals overwhelm, give ONE next step, not a list; (3) end-to-end staging smoke tests with the actual UI before declaring done; (4) cmux CLI is the right tool for headless staging verification during away mode.
 
 ---
-*28 entries. Last updated: 2026-05-16. Source: `.add/learnings.json`.*
+*29 entries. Last updated: 2026-05-16. Source: `.add/learnings.json`.*
